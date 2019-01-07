@@ -9,6 +9,9 @@
                 "-g",
                 "-IC:/msys64/mingw64/include/glib-2.0",
                 "-IC:/msys64/mingw64/lib/glib-2.0/include",
+                "-IC:/msys64/mingw64/include",
+                "-llibgcrypt",
+                "-llibgpg-error",
                 "-o",
                 "${fileBasenameNoExtension}",
                 "${file}"

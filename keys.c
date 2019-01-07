@@ -3,7 +3,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-// #include <glib.h>
+#include <gcrypt.h>
+#include <glib.h>
 
 uint32_t
 rand_ms(uint32_t *seedp)
@@ -93,13 +94,34 @@ test_increment_counter(void)
   }
 }
 
+static int
+initialise_gcrypt(void)
+{
+  // if (gcry_control(GCRYCTL_INITIALIZATION_FINISHED_P))
+  //   return 0;
+
+  // if (!gcry_check_version(GCRYPT_VERSION))
+  // {
+  //   fprintf(stderr, "Error: Incompatible gcrypt version.\n");
+  //   return 1;
+  // }
+
+  // gcry_control(GCRYCTL_DISABLE_SECMEM, 0);
+  // gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);
+
+  return 0;
+}
+
 static void
 test_pointer_increment(void)
 {
+  gcry_cipher_hd_t cipher;
   size_t len = 64;
   uint8_t ctr[16];
   uint8_t *bkp;
   size_t n, m;
+
+  initialise_gcrypt();
 
   uint8_t *bp = (uint8_t *)malloc(64);
   uint32_t seed = UINT32_C(0x608da0a2);
