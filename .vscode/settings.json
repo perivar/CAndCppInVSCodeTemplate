@@ -1,5 +1,12 @@
 {
     "files.exclude": {
         "**.exe": true
+    },
+    "C_Cpp.loggingLevel": "Debug",
+    "files.associations": {
+        "*.csproj": "msbuild",
+        "glib.h": "c",
+        "stdio.h": "c",
+        "gmessages.h": "c"
     }
 }

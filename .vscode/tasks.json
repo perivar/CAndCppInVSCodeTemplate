@@ -7,6 +7,8 @@
             "command": "g++",
             "args": [
                 "-g",
+                "-IC:/msys64/mingw64/include/glib-2.0",
+                "-IC:/msys64/mingw64/lib/glib-2.0/include",
                 "-o",
                 "${fileBasenameNoExtension}",
                 "${file}"
