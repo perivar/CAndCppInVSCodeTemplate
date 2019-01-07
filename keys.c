@@ -43,18 +43,23 @@ increment_counter(uint8_t *num, size_t len)
   }
 }
 
-int main(int argc, char **argv)
+static void
+test_generate_0110_base_key(void)
 {
-  // if (nks_0110_base_key == NULL)
-  //   generate_0110_base_key();
+  if (nks_0110_base_key == NULL)
+    generate_0110_base_key();
 
-  // int i;
-  // for (i = 0; i < 0x100; i++)
-  // {
-  //   printf("%d ", (int)nks_0110_base_key[i]);
-  // }
-  // printf("\n");
+  int i;
+  for (i = 0; i < 0x100; i++)
+  {
+    printf("%d ", (int)nks_0110_base_key[i]);
+  }
+  printf("\n");
+}
 
+static void
+test_increment_counter(void)
+{
   uint8_t *tmp_array = (uint8_t *)malloc(16);
   uint32_t seed = UINT32_C(0x608da0a2);
 
@@ -86,6 +91,59 @@ int main(int argc, char **argv)
     }
     printf("\n");
   }
+}
+
+static void
+test_pointer_increment(void)
+{
+  size_t len = 64;
+  uint8_t ctr[16];
+  uint8_t *bkp;
+  size_t n, m;
+
+  uint8_t *bp = (uint8_t *)malloc(64);
+  uint32_t seed = UINT32_C(0x608da0a2);
+  printf("bp orig:\n");
+  for (n = 0; n < len; n++)
+  {
+    bp[n] = rand_ms(&seed) & 0xff - 5;
+    printf("%d ", (int)bp[n]);
+  }
+  printf("\n");
+
+  if (nks_0110_base_key == NULL)
+    generate_0110_base_key();
+
+  bkp = nks_0110_base_key;
+
+  for (n = 0; 4 * n < len; n++)
+  {
+    // set bp from ctr
+
+    for (m = 0; m < 4; m++)
+    {
+      printf("bp: %d ", (int)bp[m]);
+      printf(", bkp: %d ", (int)bkp[m]);
+
+      bp[m] ^= bkp[m];
+
+      printf(" = %d\n", (int)bp[m]);
+    }
+
+    // increment_counter(ctr, 16);
+
+    bp += 4;
+    bkp += 4;
+  }
+}
+
+int main(int argc, char **argv)
+{
+  // test_generate_0110_base_key();
+
+  // test_increment_counter();
+
+  test_pointer_increment();
 
   return 0;
 }
