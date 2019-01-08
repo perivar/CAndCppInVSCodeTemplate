@@ -2,12 +2,9 @@
     "configurations": [
         {
             "name": "MinGW",
-            "intelliSenseMode": "gcc-x64",
-            "compilerPath": "C:/msys64/mingw64/bin/gcc.exe",
+            "intelliSenseMode": "clang-x64",
             "includePath": [
-                "${workspaceFolder}/include",
-                "C:/msys64/mingw64/include/glib-2.0",
-                "C:/msys64/mingw64/lib/glib-2.0/include"
+                "${workspaceFolder}/include"
             ],
             "defines": [],
             "cStandard": "c11",

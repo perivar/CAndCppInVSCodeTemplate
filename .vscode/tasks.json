@@ -7,14 +7,13 @@
             "command": "g++",
             "args": [
                 "-g",
-                "-IC:/msys64/mingw64/include/glib-2.0",
-                "-IC:/msys64/mingw64/lib/glib-2.0/include",
-                "-IC:/msys64/mingw64/include",
-                "-llibgcrypt",
-                "-llibgpg-error",
+                "-Wall",
+                // "-v",
+                "${file}",
                 "-o",
                 "${fileBasenameNoExtension}",
-                "${file}"
+                "-lgcrypt",
+                "-lgpg-error"
             ],
             "group": {
                 "kind": "build",
@@ -26,9 +25,12 @@
             "type": "shell",
             "command": "g++",
             "args": [
+                "-Wall",
+                "${file}",
                 "-o",
                 "${fileBasenameNoExtension}",
-                "${file}"
+                "-lgcrypt",
+                "-lgpg-error"
             ],
             "group": {
                 "kind": "build",

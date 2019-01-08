@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <gcrypt.h>
-#include <glib.h>
 
 uint32_t
 rand_ms(uint32_t *seedp)
@@ -163,9 +162,9 @@ int main(int argc, char **argv)
 {
   // test_generate_0110_base_key();
 
-  // test_increment_counter();
+  test_increment_counter();
 
-  test_pointer_increment();
+  // test_pointer_increment();
 
   return 0;
 }
