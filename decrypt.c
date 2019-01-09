@@ -62,6 +62,16 @@ increment_counter(uint8_t *num, size_t len)
 }
 
 static void
+print_array(uint8_t *num, size_t len)
+{
+    size_t n;
+    for (n = 0; n < len; n++)
+    {
+        printf("%d ", (int)num[n]);
+    }
+}
+
+static void
 generate_0110_base_key(void)
 {
     int n;
@@ -74,7 +84,17 @@ generate_0110_base_key(void)
     seed = UINT32_C(0x608da0a2);
 
     for (n = 0; n < 0x10000; n++)
+    {
         nks_0110_base_key[n] = rand_ms(&seed) & 0xff;
+    }
+
+    printf("key:\n");
+    print_array(nks_0110_base_key, 32);
+    printf("\n");
+
+    int out_fd_bin = open("C:/Users/perner/My Projects/Temp/0110_base_key.bin", O_WRONLY | O_CREAT | O_BINARY, 0666);
+    int err = write(out_fd_bin, nks_0110_base_key, 0x10000);
+    close(out_fd_bin);
 }
 
 static int
