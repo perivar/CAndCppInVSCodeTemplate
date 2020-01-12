@@ -2,36 +2,44 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build & debug file",
             "type": "shell",
-            "command": "g++",
+            "label": "g++.exe build active file with debugging",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
-                "-g",
-                "-Wall",
-                // "-v",
+                "-g",           // Generate debugging information`for gdp into the file
+                "-Wall",        // Recommended compiler warnings
+                // "-v",        // verbose
                 "${file}",
                 "-o",
-                "${fileBasenameNoExtension}",
-                "-lgcrypt",
-                "-lgpg-error"
+                "${fileBasenameNoExtension}.exe",
+                "-lgcrypt",     // linking
+                "-lgpg-error"   // linking 
             ],
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["absolute"]
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
         },
         {
-            "label": "build & run file",
             "type": "shell",
-            "command": "g++",
+            "label": "g++.exe build active file",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
-                "-Wall",
+                "-Wall",        // Recommended compiler warnings
                 "${file}",
                 "-o",
-                "${fileBasenameNoExtension}",
-                "-lgcrypt",
-                "-lgpg-error"
+                "${fileBasenameNoExtension}.exe",
+                "-lgcrypt",     // linking
+                "-lgpg-error"   // linking
             ],
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["absolute"]
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true

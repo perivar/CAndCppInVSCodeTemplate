@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run C/C++",
+            "name": "g++.exe build and run active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
@@ -20,10 +20,10 @@
                     "ignoreFailures": false
                 }
             ],
-            "preLaunchTask": "build & run file"
+            "preLaunchTask": "g++.exe build active file"
         },
         {
-            "name": "Debug C/C++",
+            "name": "g++.exe build and debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
@@ -41,7 +41,7 @@
                     "ignoreFailures": false
                 }
             ],
-            "preLaunchTask": "build & debug file"
+            "preLaunchTask": "g++.exe build active file with debugging"
         }
     ]
 }

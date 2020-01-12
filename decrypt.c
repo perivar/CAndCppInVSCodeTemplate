@@ -94,6 +94,9 @@ generate_0110_base_key(void)
 
     int out_fd_bin = open("C:/Users/perner/My Projects/Temp/0110_base_key.bin", O_WRONLY | O_CREAT | O_BINARY, 0666);
     int err = write(out_fd_bin, nks_0110_base_key, 0x10000);
+
+    if (err == 0) printf("error is 0\n");
+
     close(out_fd_bin);
 }
 
@@ -126,16 +129,16 @@ int nks_create_0110_key(uint8_t key[], size_t key_len, uint8_t iv[], size_t iv_l
     int r;
 
     if (key == NULL)
-        1;
+        fprintf(stderr, "Error: key is null.\n");
 
     if (key_len != 16 && key_len != 24 && key_len != 32)
-        1;
+        fprintf(stderr, "Error: key does not have length of 16, 24 or 32.\n");
 
     if (iv == NULL || iv_len != 16)
-        1;
+        fprintf(stderr, "Error: iv is null or length is not 16.\n");
 
     if (buffer == NULL || len < 16 || (len & 15) != 0)
-        1;
+        fprintf(stderr, "Error: buffer is null or buffer length is invalid.\n");
 
     r = initialise_gcrypt();
     if (r != 0)

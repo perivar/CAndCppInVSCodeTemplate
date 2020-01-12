@@ -2,13 +2,14 @@
     "configurations": [
         {
             "name": "MinGW",
-            "intelliSenseMode": "clang-x64",
             "includePath": [
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/**"
             ],
-            "defines": [],
+            "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
+            "compilerPath": "C:/msys64/mingw64/bin/gcc.exe",
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
         }
     ],
     "version": 4
