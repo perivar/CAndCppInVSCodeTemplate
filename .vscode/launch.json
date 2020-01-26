@@ -86,7 +86,7 @@
             "preLaunchTask": "gcc.exe build active file with debugging"
         },
         {
-            "name": "WXC Test Debug",
+            "name": "wcxtest - Debug",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
