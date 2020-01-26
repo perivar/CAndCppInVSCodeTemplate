@@ -42,6 +42,75 @@
                 }
             ],
             "preLaunchTask": "g++.exe build active file with debugging"
+        },
+        {
+            "name": "gcc.exe build and run active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                }
+            ],
+            "preLaunchTask": "gcc.exe build active file"
+        },
+        {
+            "name": "gcc.exe build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                }
+            ],
+            "preLaunchTask": "gcc.exe build active file with debugging"
+        },
+        {
+            "name": "WXC Test Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            "args": [
+                "-x",
+                "-v",
+                "C:\\Users\\perner\\My Projects\\PresetConverter\\PresetConverterProject\\WCXPlugins\\nkx.wcx64",
+                "C:\\Users\\perner\\Amazon Drive\\Documents\\My Projects\\Native Instruments GmbH\\Instruments\\Spitfire Symphonic Woodwinds.nicnt",
+                "C:\\Users\\perner\\My Projects\\Temp"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                }
+            ],
+            "preLaunchTask": "gcc.exe build active file with debugging"
         }
     ]
 }

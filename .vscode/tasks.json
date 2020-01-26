@@ -48,6 +48,54 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "type": "shell",
+            "label": "gcc.exe build active file with debugging",
+            "command": "C:/msys64/mingw64/bin/gcc.exe",
+            "args": [
+                "-g",           // Generate debugging information`for gdp into the file
+                // "-Wpedantic", // Issue all the warnings demanded by strict ISO C and ISO C++
+                "-Wall",        // Recommended compiler warnings
+                "-Wextra",      // This enables some extra warning flags that are not enabled by -Wall.
+                // "-Werror",   // Make all warnings into errors.
+                // "-v",        // verbose
+                "${file}",
+                "-o",
+                "${fileBasenameNoExtension}.exe",
+                "-lgcrypt",     // linking to a shared library. 
+                "-lgpg-error"   // linking to a shared library
+                // Note that the -lgcrypt option is not looking for gcrypt.o, but libgcrypt.so, or libgcrypt.a. Use LD_LIBRARY_PATH or -L<path> to set library search path.
+            ],
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["absolute"]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "gcc.exe build active file",
+            "command": "C:/msys64/mingw64/bin/gcc.exe",
+            "args": [
+                "-Wall",        // Recommended compiler warnings
+                "${file}",
+                "-o",
+                "${fileBasenameNoExtension}.exe",
+                "-lgcrypt",     // linking
+                "-lgpg-error"   // linking
+            ],
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["absolute"]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
