@@ -6,6 +6,7 @@
             "label": "g++.exe build active file with debugging",
             "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
+                "-I${workspaceFolder}",
                 "-g",           // Generate debugging information`for gdp into the file
                 // "-Wpedantic", // Issue all the warnings demanded by strict ISO C and ISO C++
                 "-Wall",        // Recommended compiler warnings
@@ -33,6 +34,7 @@
             "label": "g++.exe build active file",
             "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
+                "-I${workspaceFolder}",
                 "-Wall",        // Recommended compiler warnings
                 "${file}",
                 "-o",
@@ -54,6 +56,7 @@
             "label": "gcc.exe build active file with debugging",
             "command": "C:/msys64/mingw64/bin/gcc.exe",
             "args": [
+                "-I${workspaceFolder}",
                 "-g",           // Generate debugging information`for gdp into the file
                 // "-Wpedantic", // Issue all the warnings demanded by strict ISO C and ISO C++
                 "-Wall",        // Recommended compiler warnings
@@ -81,6 +84,7 @@
             "label": "gcc.exe build active file",
             "command": "C:/msys64/mingw64/bin/gcc.exe",
             "args": [
+                "-I${workspaceFolder}",
                 "-Wall",        // Recommended compiler warnings
                 "${file}",
                 "-o",

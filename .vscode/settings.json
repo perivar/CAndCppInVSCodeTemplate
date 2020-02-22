@@ -5,6 +5,8 @@
     "C_Cpp.loggingLevel": "Debug",
     "files.associations": {
         "*.csproj": "msbuild",
-        "gcrypt.h": "c"
+        "gcrypt.h": "c",
+        "xstring": "cpp",
+        "string": "cpp"
     }
 }
