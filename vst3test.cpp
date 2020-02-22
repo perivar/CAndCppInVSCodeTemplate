@@ -130,6 +130,7 @@ main(int argc, char *argv[])
                 if (result != kResultTrue)
                 {
                     // TODO: error handling
+                    handleError("Creating process instance failed", result);
                     return 1;
                 }
 
@@ -149,7 +150,7 @@ main(int argc, char *argv[])
                 result = component->initialize(gStandardPluginContext);
                 if (result != kResultTrue)
                 {
-                    handleError("Initializing failed", result);
+                    handleError("Initializing component failed", result);
                     // return 1;
                 }
 
@@ -163,12 +164,39 @@ main(int argc, char *argv[])
                 printf("\tController Class Id = %.*s\n\n",
                        16, edit_cid);
 
-                result = component->release();
+                Vst::IEditController *edit(nullptr);
+                result = factory->createInstance(edit_cid,
+                                                 Vst::IEditController_iid,
+                                                 (void **)&edit);
                 if (result != kResultTrue)
                 {
-                    handleError("Releasing failed", result);
+                    handleError("Creating edit instance failed", result);
                     // return 1;
                 }
+
+                // initialize the EditController component too.
+                result = edit->initialize(gStandardPluginContext);
+                if (result != kResultTrue)
+                {
+                    handleError("Initializing edit failed", result);
+                    // return 1;
+                }
+
+                //...
+
+                // now the two components are created.
+                // connect and setup them.
+
+                // use the plugin.
+
+                // ...
+
+                // don't forget destruction after using it.
+                edit->terminate();
+                component->terminate();
+
+                edit->release();
+                component->release();
             }
 
             factory->release();
@@ -180,5 +208,5 @@ main(int argc, char *argv[])
         FreeLibrary(hModule);
     }
 
-        return rc;
+    return rc;
 }
