@@ -4,10 +4,7 @@
     },
     "C_Cpp.loggingLevel": "Debug",
     "files.associations": {
-        "*.csproj": "msbuild",
-        "gcrypt.h": "c",
-        "xstring": "cpp",
-        "string": "cpp"
+        "*.csproj": "msbuild"
     },
     "cmake.mingwSearchDirs": [
         "C:\\msys64\\mingw64\\bin"

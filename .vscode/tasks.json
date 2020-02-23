@@ -7,6 +7,7 @@
             "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
                 "-I${workspaceFolder}",
+                "-I${workspaceFolder}/include",
                 "-g",           // Generate debugging information`for gdp into the file
                 // "-Wpedantic", // Issue all the warnings demanded by strict ISO C and ISO C++
                 "-Wall",        // Recommended compiler warnings
@@ -35,6 +36,7 @@
             "command": "C:/msys64/mingw64/bin/g++.exe",
             "args": [
                 "-I${workspaceFolder}",
+                "-I${workspaceFolder}/include",
                 "-Wall",        // Recommended compiler warnings
                 "${file}",
                 "-o",
@@ -57,6 +59,7 @@
             "command": "C:/msys64/mingw64/bin/gcc.exe",
             "args": [
                 "-I${workspaceFolder}",
+                "-I${workspaceFolder}/include",
                 "-g",           // Generate debugging information`for gdp into the file
                 // "-Wpedantic", // Issue all the warnings demanded by strict ISO C and ISO C++
                 "-Wall",        // Recommended compiler warnings
@@ -85,6 +88,7 @@
             "command": "C:/msys64/mingw64/bin/gcc.exe",
             "args": [
                 "-I${workspaceFolder}",
+                "-I${workspaceFolder}/include",
                 "-Wall",        // Recommended compiler warnings
                 "${file}",
                 "-o",

@@ -86,7 +86,7 @@
             "preLaunchTask": "gcc.exe build active file with debugging"
         },
         {
-            "name": "wcxtest - Debug",
+            "name": "wcxtest debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
@@ -113,7 +113,7 @@
             "preLaunchTask": "gcc.exe build active file with debugging"
         },
         {
-            "name": "vst3test - Debug",
+            "name": "vst3test debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
@@ -136,7 +136,30 @@
             "preLaunchTask": "g++.exe build active file with debugging"
         },
         {
-            "name": "open_binary_file_test - Debug",
+            "name": "vst3test debug cmake target",
+            "type": "cppdbg",
+            "request": "launch",
+            // Resolved by CMake Tools:
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [
+                "C:\\Users\\perner\\Downloads\\TAL-Filter-2-64.vst3"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                }
+            ]
+        },
+        {
+            "name": "open_binary_file debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
