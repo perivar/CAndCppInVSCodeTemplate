@@ -208,5 +208,9 @@ main(int argc, char *argv[])
         FreeLibrary(hModule);
     }
 
+    printf("Press Enter. ");
+    static char readBuf[256];
+    gets(readBuf);
+
     return rc;
 }

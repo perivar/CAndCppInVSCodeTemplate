@@ -8,5 +8,9 @@
         "gcrypt.h": "c",
         "xstring": "cpp",
         "string": "cpp"
-    }
+    },
+    "cmake.mingwSearchDirs": [
+        "C:\\msys64\\mingw64\\bin"
+    ],
+    "cmake.generator": "MinGW Makefiles"
 }
