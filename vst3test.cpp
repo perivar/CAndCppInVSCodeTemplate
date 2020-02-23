@@ -28,6 +28,11 @@ static const FIDString kExitModuleProcName = "ExitDll";
 
 #endif
 
+#define PROG_USAGE                                                                \
+	"Usage:\n"                                                                    \
+	"  vst3test <vst3 path>\n" \
+	"\n"                                                                          \
+
 static int verbose = 0;
 
 void handleError(char *text, tresult result)
@@ -75,6 +80,12 @@ main(int argc, char *argv[])
     Steinberg::tresult result = 0;
     int rc = 0;
     char *path;
+
+	if (argc < 2)
+	{
+		printf(PROG_USAGE);
+		return 0;
+	}
 
     strcpy(path, argv[1]);
 
