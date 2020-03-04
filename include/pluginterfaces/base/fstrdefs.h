@@ -30,6 +30,11 @@
 	#else
 		#define STR16(x) SMTG_CPP11_CAT_PRIVATE_DONT_USE(u,x)
 	#endif
+	// #if WINDOWS && !__MINGW32__
+	// 	#define STR16(x) SMTG_CPP11_CAT_PRIVATE_DONT_USE(L,x)
+	// #else
+	// 	#define STR16(x) SMTG_CPP11_CAT_PRIVATE_DONT_USE(u,x)
+	// #endif	
 #else
 	#include "conststringtable.h"
 	#define STR16(x) Steinberg::ConstStringTable::instance ()->getString (x)

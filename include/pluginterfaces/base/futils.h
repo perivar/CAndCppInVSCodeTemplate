@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "ftypes.h"
+#include "pluginterfaces/base/ftypes.h"
 
 namespace Steinberg {
 //----------------------------------------------------------------------------

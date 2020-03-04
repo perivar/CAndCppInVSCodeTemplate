@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "pluginterfaces/base/fplatform.h"
+#include "fplatform.h"
 
 //#define UNICODE_OFF 	// disable / enable unicode
 
@@ -91,8 +91,18 @@ namespace Steinberg
 //------------------------------------------------------------------
 // Char / Strings
 	typedef char char8;
+// #ifdef _NATIVE_WCHAR_T_DEFINED
+// 	typedef __wchar_t char16;
+// #elif SMTG_CPP11
+// 	typedef char16_t char16;
+// #else
+// 	typedef int16 char16;
+// #endif
+
 #ifdef _NATIVE_WCHAR_T_DEFINED
 	typedef __wchar_t char16;
+#elif defined(__MINGW32__)
+	typedef wchar_t char16;
 #elif SMTG_CPP11
 	typedef char16_t char16;
 #else

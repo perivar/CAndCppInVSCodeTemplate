@@ -18,7 +18,8 @@
 
 #if SMTG_OS_WINDOWS
 #include <stdio.h>
-#pragma warning (disable : 4996)
+// Changed by PIN: 25.02.2020
+// #pragma warning (disable : 4996)
 
 #elif SMTG_OS_MACOS
 #include <CoreFoundation/CoreFoundation.h>
