@@ -107,7 +107,8 @@ if(SMTG_WIN)
     set(CMAKE_SHARED_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Shared Library Linker Flags")
 
     # ensure the symbols GetPluginFactory are exported
-    add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)
+    # these are set in AddSMTGLibrary.cmake and not here!
+    # add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)
     
     add_compile_options(
         -g           # Generate debugging information`for gdp into the file

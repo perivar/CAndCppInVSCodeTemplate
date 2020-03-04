@@ -1,8 +1,15 @@
 # https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
 cmake_minimum_required (VERSION 3.4.3)
 
-# add_compile_definitions(DEVELOPMENT)
 set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
+
+# Stop CMake from prepending `lib` to library names
+# for some reason this needs to be set after the project() commands?!
+# if(WIN32)
+#     message("-- WIN32 is set. Stop CMake from prepending `lib` to library names.")
+#    set(CMAKE_SHARED_LIBRARY_PREFIX "")
+#    set(CMAKE_STATIC_LIBRARY_PREFIX "")
+# endif()
 
 #-------------------------------------------------------------------------------
 # Includes
@@ -124,4 +131,3 @@ endif()
 if(SDK_ROOT)
     message("-- SDK_ROOT is set to : ${SDK_ROOT}")
 endif()
-
