@@ -271,6 +271,9 @@ function(smtg_make_plugin_package target extension)
         # ensure the symbols GetPluginFactory are exported
         add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)   
         
+        # ensure the Threading Building Blocks is enabled (-ltbb)
+        # target_link_libraries(${target} tbb)
+    
         # In order not to have the PDB inside the plug-in package in release builds, we specify a different location.
         if(CMAKE_SIZEOF_VOID_P EQUAL 4)
             set(WIN_PDB WIN_PDB32)
@@ -309,17 +312,18 @@ function(smtg_make_plugin_package target extension)
         endif()
         # Disable warning LNK4221: "This object file does not define any previously undefined public symbols...".
         # Enable "Generate Debug Information" in release config by setting "/Zi" and "/DEBUG" flags.
-        if(MSVC)
-            target_compile_options(${target} 
-                PRIVATE 
-                    /wd4221
-                    $<$<CONFIG:RELEASE>:/Zi>
-            )
-            set_property(TARGET ${target} 
-                APPEND PROPERTY 
-                    LINK_FLAGS_RELEASE /DEBUG
-            )
-        endif()
+        # Changed by PIN: 07.03.2020
+        # if(MSVC)
+        #     target_compile_options(${target} 
+        #         PRIVATE 
+        #             /wd4221
+        #             $<$<CONFIG:RELEASE>:/Zi>
+        #     )
+        #     set_property(TARGET ${target} 
+        #         APPEND PROPERTY 
+        #             LINK_FLAGS_RELEASE /DEBUG
+        #     )
+        # endif()
     elseif(SMTG_LINUX)
         smtg_get_linux_architecture_name() # Sets var LINUX_ARCHITECTURE_NAME
         message(STATUS "Linux architecture name is ${LINUX_ARCHITECTURE_NAME}.")

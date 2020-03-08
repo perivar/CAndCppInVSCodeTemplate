@@ -8,18 +8,43 @@
             "args": [
                 "-I${workspaceFolder}",
                 "-I${workspaceFolder}/include",
-                "-g",           // Generate debugging information`for gdp into the file
-                // "-Wpedantic", // Issue all the warnings demanded by strict ISO C and ISO C++
-                "-Wall",        // Recommended compiler warnings
-                "-Wextra",      // This enables some extra warning flags that are not enabled by -Wall.
-                // "-Werror",   // Make all warnings into errors.
-                // "-v",        // verbose
+
+                "-g",               // Generate debugging information`for gdp into the file
+                // "-Wpedantic",       // Issue all the warnings demanded by strict ISO C and ISO C++
+                "-Wall",            // Recommended compiler warnings (enable a set of warning, actually not all.)
+                "-Wextra",          // This enables some extra warning flags that are not enabled by -Wall. (same as -W)
+                // "-Werror",       // Make all warnings into errors.
+                // "-v",            // verbose
+
                 "${file}",
                 "-o",
                 "${fileBasenameNoExtension}.exe",
-                "-lgcrypt",     // linking to a shared library. 
-                "-lgpg-error"   // linking to a shared library
+
+                // ---------------------------------------
+                // linking to libraries
                 // Note that the -lgcrypt option is not looking for gcrypt.o, but libgcrypt.so, or libgcrypt.a. Use LD_LIBRARY_PATH or -L<path> to set library search path.
+                // ---------------------------------------
+
+                // gcrypt support
+                "-lgcrypt",         // gcrypt
+                "-lgpg-error",      // gpg
+
+                // threading support
+                "-ltbb",            // Threading Building Blocks
+
+                "-luuid",
+
+                // opengl and graphics libraries
+                // "-D FREEGLUT_STATIC", // ensure freeglut is compiled into the executable
+                // "-lfreeglut_static",  // ensure freeglut is compiled into the executable
+                "-lfreeglut",       // ensure freeglut is dynamically linked into the executable
+                "-lopengl32",       // OpenGL Library
+                "-lglu32",          // OpenGL Utility Library
+                "-lglew32",         // OpenGL Extension Wrangler Library 
+                "-lgdi32",          // OpenGL pixel format functions & SwapBuffers
+                "-ldwmapi",         // Desktop Window Manager (DWM) 
+
+                // "-Wl',--subsystem',windows" // -Wl,-option passes the linker specific option -option to the linker. (note! escape the commas with ')
             ],
             "problemMatcher": {
                 "base": "$gcc",
@@ -41,8 +66,10 @@
                 "${file}",
                 "-o",
                 "${fileBasenameNoExtension}.exe",
-                "-lgcrypt",     // linking
-                "-lgpg-error"   // linking
+                "-lgcrypt",         // gcrypt
+                "-lgpg-error",      // gpg
+                "-ltbb",            // Threading Building Blocks
+                // Note that the -lgcrypt option is not looking for gcrypt.o, but libgcrypt.so, or libgcrypt.a. Use LD_LIBRARY_PATH or -L<path> to set library search path.
             ],
             "problemMatcher": {
                 "base": "$gcc",
@@ -69,8 +96,9 @@
                 "${file}",
                 "-o",
                 "${fileBasenameNoExtension}.exe",
-                "-lgcrypt",     // linking to a shared library. 
-                "-lgpg-error"   // linking to a shared library
+                "-lgcrypt",         // gcrypt
+                "-lgpg-error",      // gpg
+                "-ltbb",            // Threading Building Blocks
                 // Note that the -lgcrypt option is not looking for gcrypt.o, but libgcrypt.so, or libgcrypt.a. Use LD_LIBRARY_PATH or -L<path> to set library search path.
             ],
             "problemMatcher": {
@@ -93,8 +121,10 @@
                 "${file}",
                 "-o",
                 "${fileBasenameNoExtension}.exe",
-                "-lgcrypt",     // linking
-                "-lgpg-error"   // linking
+                "-lgcrypt",         // gcrypt
+                "-lgpg-error",      // gpg
+                "-ltbb",            // Threading Building Blocks
+                // Note that the -lgcrypt option is not looking for gcrypt.o, but libgcrypt.so, or libgcrypt.a. Use LD_LIBRARY_PATH or -L<path> to set library search path.
             ],
             "problemMatcher": {
                 "base": "$gcc",

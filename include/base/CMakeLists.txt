@@ -77,9 +77,10 @@ target_include_directories(base
         ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
-if(MSVC)
-    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /IGNORE:4221")
-endif()
+# # Changed by PIN: 07.03.2020
+# if(MSVC)
+#     set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} /IGNORE:4221")
+# endif()
 
 smtg_setup_universal_binary(base)
 

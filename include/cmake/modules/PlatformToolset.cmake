@@ -46,15 +46,14 @@ macro(setupPlatformToolset)
         # Changed by PIN: 25.02.2020
         # add_definitions(-D_UNICODE)
 
-        # set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
-        # set(CMAKE_CXX_STANDARD 14)
+        set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar")
         if(ANDROID)
             set(CMAKE_ANDROID_STL_TYPE c++_static)
             link_libraries(dl)
          else()
             # link_libraries(stdc++fs pthread dl)
-            # link_libraries(stdc++fs pthread mingw32)                         
+            link_libraries(pthread)
         endif()
 
         # add_compile_options(/fp:fast)                   # Floating Point Model

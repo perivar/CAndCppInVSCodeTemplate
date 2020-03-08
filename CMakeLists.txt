@@ -1,10 +1,27 @@
+# cmake_minimum_required(VERSION 3.5)
+# set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
+# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake/modules")
+# include(SMTG_VST3_SDK)
+# project(vstsdk)
+# setupPlatformToolset()
+# set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include")
+# set(SDK_ROOT "${ROOT}")
+# set(public_sdk_SOURCE_DIR ${SDK_ROOT}/public.sdk)
+# set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
+# if(SMTG_ADD_VSTGUI)
+#     set(VSTGUI_ROOT "${ROOT}")
+#     setupVstGuiSupport()
+# endif()
+# include_directories(${ROOT} ${SDK_ROOT})
+# return()
+
 # https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
 cmake_minimum_required (VERSION 3.4.3)
 
 set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
 
 # Stop CMake from prepending `lib` to library names
-# for some reason this needs to be set after the project() commands?!
+# disabled - rather use PREFIX in AddSMTGLibrary.cmake
 # if(WIN32)
 #     message("-- WIN32 is set. Stop CMake from prepending `lib` to library names.")
 #    set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -20,7 +37,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake/modules
 include(SMTG_VST3_SDK)
 
 # disable vst gui
-set(SMTG_ADD_VSTGUI 0)
+# set(SMTG_ADD_VSTGUI 0)
 
 #-------------------------------------------------------------------------------
 # SDK Project
