@@ -183,7 +183,7 @@ bool D2DBitmap::load (const CResourceDescription& resourceDesc)
 			*path += resourceDesc.u.name;
 			UTF8StringHelper wpath (*path);
 			IStream* stream = 0;
-			// PIN:
+			// PIN (used to be disabled):
 			if (SUCCEEDED (SHCreateStreamOnFileEx (wpath, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
 			{
 				result = loadFromStream (stream);
@@ -208,7 +208,7 @@ bool D2DBitmap::load (const CResourceDescription& resourceDesc)
 		// In DEBUG mode we allow to load the bitmap from a path so that the WYSIWYG editor is usable
 		UTF8StringHelper path (resourceDesc.u.name);
 		IStream* stream = 0;
-		// PIN:
+		// PIN (used to be disabled):
 		if (SUCCEEDED (SHCreateStreamOnFileEx (path, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
 		{
 			result = loadFromStream (stream);

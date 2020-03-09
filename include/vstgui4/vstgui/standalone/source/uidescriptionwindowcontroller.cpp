@@ -790,7 +790,7 @@ struct WindowController::EditImpl : WindowController::Impl
 			return;
 		if (force || uiEditController->getUndoManager ()->isSavePosition () == false)
 		{
-			// PIN:	
+			// PIN (used to be disabled):
 			if (uiEditController->getUndoManager ()->isSavePosition () == false)
 				Detail::saveSharedUIDescription ();
 			int32_t flags = UIDescription::kWriteImagesIntoXMLFile |
@@ -849,7 +849,7 @@ struct WindowController::EditImpl : WindowController::Impl
 		{
 			uiDesc->setController (this);
 			uiEditController = new UIEditController (uiDesc);
-			// PIN:	
+			// PIN (used to be disabled):
 			auto view = uiEditController->createEditView ();
 			auto viewSize = view->getViewSize ().getSize ();
 			frame->getTransform ().transform (viewSize);

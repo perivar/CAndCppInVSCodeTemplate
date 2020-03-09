@@ -55,7 +55,7 @@ public:
 			debugOptions.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
 			options = &debugOptions;
 		#endif
-			// PIN:			
+			// PIN (used to be disabled):
 			D2D1CreateFactory (D2D1_FACTORY_TYPE_MULTI_THREADED, __uuidof(ID2D1Factory), options, (void**)&factory);
 		}
 		return factory;
@@ -63,7 +63,7 @@ public:
 	
 	IDWriteFactory* getWriteFactory ()
 	{
-		// PIN:			
+		// PIN (used to be disabled):
 		if (!writeFactory)
 			DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&writeFactory);
 		return writeFactory;
@@ -73,7 +73,7 @@ public:
 	{
 		if (imagingFactory == nullptr)
 		{
-			// PIN:
+			// PIN (used to be disabled):
 #if _WIN32_WINNT > 0x601
 // make sure when building with the Win 8.0 SDK we work on Win7
 #define VSTGUI_WICImagingFactory CLSID_WICImagingFactory1
@@ -184,7 +184,7 @@ SharedPointer<IPlatformBitmap> IPlatformBitmap::createFromPath (UTF8StringPtr ab
 {
 	UTF8StringHelper path (absolutePath);
 	IStream* stream = 0;
-	// PIN:
+	// PIN (used to be disabled):
 	if (SUCCEEDED (SHCreateStreamOnFileEx (path, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
 	{
 		auto result = createFromIStream (stream);
