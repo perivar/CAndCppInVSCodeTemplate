@@ -2,6 +2,15 @@
     "files.exclude": {
         "**.exe": true
     },
+    "cSpell.diagnosticLevel": "Hint",    
+    "workbench.colorCustomizations": {
+
+        // will change the color of three dots to transparent
+        "editorHint.foreground": "#f000",
+      
+        // will underline the entire word with dots in your chosen color
+        "editorHint.border": "#ff0000"
+    },
     "C_Cpp.loggingLevel": "Debug",
     "files.associations": {
         "*.csproj": "msbuild",
