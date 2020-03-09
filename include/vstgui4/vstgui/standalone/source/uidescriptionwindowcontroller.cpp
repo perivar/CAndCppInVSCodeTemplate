@@ -791,8 +791,8 @@ struct WindowController::EditImpl : WindowController::Impl
 		if (force || uiEditController->getUndoManager ()->isSavePosition () == false)
 		{
 			// PIN:	
-			// if (uiEditController->getUndoManager ()->isSavePosition () == false)
-			// 	Detail::saveSharedUIDescription ();
+			if (uiEditController->getUndoManager ()->isSavePosition () == false)
+				Detail::saveSharedUIDescription ();
 			int32_t flags = UIDescription::kWriteImagesIntoXMLFile |
 			                CompressedUIDescription::kForceWriteCompressedDesc;
 			if (!uiDesc->save (uiDesc->getFilePath (), flags))
@@ -850,26 +850,26 @@ struct WindowController::EditImpl : WindowController::Impl
 			uiDesc->setController (this);
 			uiEditController = new UIEditController (uiDesc);
 			// PIN:	
-			// auto view = uiEditController->createEditView ();
-			// auto viewSize = view->getViewSize ().getSize ();
-			// frame->getTransform ().transform (viewSize);
-			// frame->setSize (viewSize.x, viewSize.y);
-			// frame->addView (view);
-			// frame->enableTooltips (true);
-			// CColor focusColor = kBlueCColor;
-			// uiEditController->getEditorDescription ()->getColor ("focus", focusColor);
-			// frame->setFocusColor (focusColor);
-			// frame->setFocusDrawingEnabled (true);
-			// frame->setFocusWidth (1);
-			// window->setSize (view->getViewSize ().getSize ());
-			// if (auto menuController = uiEditController->getMenuController ())
-			// {
-			// 	if (auto menu = menuController->getFileMenu ())
-			// 	{
-			// 		menu->removeAllEntry ();
-			// 		menu->setMouseEnabled (false);
-			// 	}
-			// }
+			auto view = uiEditController->createEditView ();
+			auto viewSize = view->getViewSize ().getSize ();
+			frame->getTransform ().transform (viewSize);
+			frame->setSize (viewSize.x, viewSize.y);
+			frame->addView (view);
+			frame->enableTooltips (true);
+			CColor focusColor = kBlueCColor;
+			uiEditController->getEditorDescription ()->getColor ("focus", focusColor);
+			frame->setFocusColor (focusColor);
+			frame->setFocusDrawingEnabled (true);
+			frame->setFocusWidth (1);
+			window->setSize (view->getViewSize ().getSize ());
+			if (auto menuController = uiEditController->getMenuController ())
+			{
+				if (auto menu = menuController->getFileMenu ())
+				{
+					menu->removeAllEntry ();
+					menu->setMouseEnabled (false);
+				}
+			}
 			if (!ignoreCheckFileExist)
 				checkFileExists ();
 		}

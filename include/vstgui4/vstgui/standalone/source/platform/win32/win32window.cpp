@@ -414,8 +414,8 @@ void Window::makeTransparent ()
 {
 	MARGINS margin = {-1};
 	// PIN
-	// auto res = DwmExtendFrameIntoClientArea (hwnd, &margin);
-	// vstgui_assert (res == S_OK);
+	auto res = DwmExtendFrameIntoClientArea (hwnd, &margin);
+	vstgui_assert (res == S_OK);
 }
 
 //------------------------------------------------------------------------
@@ -595,8 +595,8 @@ LRESULT CALLBACK Window::proc (UINT message, WPARAM wParam, LPARAM lParam)
 				{
 					auto child = reinterpret_cast<HWND> (lParam);
 					// PIN:	
-					// SetWindowSubclass (child, childWindowProc, 0,
-					//                    reinterpret_cast<DWORD_PTR> (this));
+					SetWindowSubclass (child, childWindowProc, 0,
+					                   reinterpret_cast<DWORD_PTR> (this));
 					break;
 				}
 				case WM_DESTROY:
@@ -604,7 +604,7 @@ LRESULT CALLBACK Window::proc (UINT message, WPARAM wParam, LPARAM lParam)
 					auto child = reinterpret_cast<HWND> (lParam);
 
 					// PIN:
-					// RemoveWindowSubclass (child, childWindowProc, 0);
+					RemoveWindowSubclass (child, childWindowProc, 0);
 					break;
 				}
 			}
@@ -661,19 +661,19 @@ LRESULT CALLBACK childWindowProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			case WM_CREATE:
 			{
 				// PIN:	
-				// auto child = reinterpret_cast<HWND> (lParam);
-				// SetWindowSubclass (child, childWindowProc, 0, reinterpret_cast<DWORD_PTR> (window));
+				auto child = reinterpret_cast<HWND> (lParam);
+				SetWindowSubclass (child, childWindowProc, 0, reinterpret_cast<DWORD_PTR> (window));
 				break;
 			}
 			case WM_DESTROY:
 			{
 				// PIN:	
-				// auto child = reinterpret_cast<HWND> (lParam);
-				// RemoveWindowSubclass (child, childWindowProc, 0);
+				auto child = reinterpret_cast<HWND> (lParam);
+				RemoveWindowSubclass (child, childWindowProc, 0);
 				break;
 			}
 			// PIN:
-			// default: return DefSubclassProc (hWnd, message, wParam, lParam);
+			default: return DefSubclassProc (hWnd, message, wParam, lParam);
 		}
 	}
 	else if (message == WM_NCHITTEST)
@@ -697,7 +697,7 @@ LRESULT CALLBACK childWindowProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM
 		}
 	}
 	// PIN:
-	// return DefSubclassProc (hWnd, message, wParam, lParam);
+	return DefSubclassProc (hWnd, message, wParam, lParam);
 }
 
 //------------------------------------------------------------------------

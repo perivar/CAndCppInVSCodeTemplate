@@ -184,11 +184,11 @@ bool D2DBitmap::load (const CResourceDescription& resourceDesc)
 			UTF8StringHelper wpath (*path);
 			IStream* stream = 0;
 			// PIN:
-			// if (SUCCEEDED (SHCreateStreamOnFileEx (wpath, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
-			// {
-			// 	result = loadFromStream (stream);
-			// 	stream->Release ();
-			// }
+			if (SUCCEEDED (SHCreateStreamOnFileEx (wpath, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
+			{
+				result = loadFromStream (stream);
+				stream->Release ();
+			}
 		}
 	}
 
@@ -209,11 +209,11 @@ bool D2DBitmap::load (const CResourceDescription& resourceDesc)
 		UTF8StringHelper path (resourceDesc.u.name);
 		IStream* stream = 0;
 		// PIN:
-		// if (SUCCEEDED (SHCreateStreamOnFileEx (path, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
-		// {
-		// 	result = loadFromStream (stream);
-		// 	stream->Release ();
-		// }
+		if (SUCCEEDED (SHCreateStreamOnFileEx (path, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
+		{
+			result = loadFromStream (stream);
+			stream->Release ();
+		}
 	}
 #endif
 	return result;

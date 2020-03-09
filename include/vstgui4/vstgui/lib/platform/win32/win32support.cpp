@@ -56,7 +56,7 @@ public:
 			options = &debugOptions;
 		#endif
 			// PIN:			
-			// D2D1CreateFactory (D2D1_FACTORY_TYPE_MULTI_THREADED, __uuidof(ID2D1Factory), options, (void**)&factory);
+			D2D1CreateFactory (D2D1_FACTORY_TYPE_MULTI_THREADED, __uuidof(ID2D1Factory), options, (void**)&factory);
 		}
 		return factory;
 	}
@@ -64,8 +64,8 @@ public:
 	IDWriteFactory* getWriteFactory ()
 	{
 		// PIN:			
-		// if (!writeFactory)
-		// 	DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&writeFactory);
+		if (!writeFactory)
+			DWriteCreateFactory (DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&writeFactory);
 		return writeFactory;
 	}
 
@@ -74,13 +74,13 @@ public:
 		if (imagingFactory == nullptr)
 		{
 			// PIN:
-// #if _WIN32_WINNT > 0x601
-// // make sure when building with the Win 8.0 SDK we work on Win7
-// #define VSTGUI_WICImagingFactory CLSID_WICImagingFactory1
-// #else
-// #define VSTGUI_WICImagingFactory CLSID_WICImagingFactory
-// #endif
-// 			CoCreateInstance (VSTGUI_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (void**)&imagingFactory);
+#if _WIN32_WINNT > 0x601
+// make sure when building with the Win 8.0 SDK we work on Win7
+#define VSTGUI_WICImagingFactory CLSID_WICImagingFactory1
+#else
+#define VSTGUI_WICImagingFactory CLSID_WICImagingFactory
+#endif
+			CoCreateInstance (VSTGUI_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory, (void**)&imagingFactory);
 		}
 		return imagingFactory;
 	}
@@ -185,12 +185,12 @@ SharedPointer<IPlatformBitmap> IPlatformBitmap::createFromPath (UTF8StringPtr ab
 	UTF8StringHelper path (absolutePath);
 	IStream* stream = 0;
 	// PIN:
-	// if (SUCCEEDED (SHCreateStreamOnFileEx (path, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
-	// {
-	// 	auto result = createFromIStream (stream);
-	// 	stream->Release ();
-	// 	return result;
-	// }
+	if (SUCCEEDED (SHCreateStreamOnFileEx (path, STGM_READ|STGM_SHARE_DENY_WRITE, 0, false, 0, &stream)))
+	{
+		auto result = createFromIStream (stream);
+		stream->Release ();
+		return result;
+	}
 	return nullptr;
 }
 
