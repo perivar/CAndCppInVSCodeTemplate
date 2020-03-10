@@ -44,6 +44,14 @@
                 "-lgdi32",          // OpenGL pixel format functions & SwapBuffers
                 "-ldwmapi",         // Desktop Window Manager (DWM) 
 
+                // DirectX and other windows libraries
+                "-ld2d1",           // Direct2D library like D2D1CreateFactory
+                "-ldwrite",         // DirectX Typography Services like DWriteCreateFactory
+                "-lcomctl32",       // The Common Controls Library - provider of the more interesting window controls
+                "-lshlwapi",        // Shell Light-Weight Application Programming Interface 
+                "-lwindowscodecs",  // Image formats like GUID_ContainerFormatPng and CLSID_WICImagingFactory
+                "-lole32",          // Component Object Model, as well as Object Linking and Embedding (CoCreateInstance and CoUninitialize)
+
                 // "-Wl',--subsystem',windows" // -Wl,-option passes the linker specific option -option to the linker. (note! escape the commas with ')
             ],
             "problemMatcher": {

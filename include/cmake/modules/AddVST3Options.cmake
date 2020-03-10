@@ -28,6 +28,8 @@ endif()
 smtg_get_default_vst3_path(DEFAULT_VST3_FOLDER)
 set(SMTG_PLUGIN_TARGET_PATH "${DEFAULT_VST3_FOLDER}" CACHE PATH "Here you can redefine the VST3 plug-ins folder")
 if (NOT ${SMTG_PLUGIN_TARGET_PATH} STREQUAL "")
+    # PIN 10.02.2020
+    # the add directory command will fail if not running as administrator since the default plugin path is 'C:\Program Files\Common Files' 
     file(MAKE_DIRECTORY ${SMTG_PLUGIN_TARGET_PATH})
     if(EXISTS ${SMTG_PLUGIN_TARGET_PATH})
         message(STATUS "SMTG_PLUGIN_TARGET_PATH is set to : " ${SMTG_PLUGIN_TARGET_PATH})

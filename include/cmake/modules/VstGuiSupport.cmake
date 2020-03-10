@@ -50,7 +50,7 @@ macro(setupVstGuiSupport)
     endif()
 
     if(SMTG_WIN)
-        # find_library(UUID_FRAMEWORK uuid HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})                      # IID_<> variables
+        find_library(UUID_FRAMEWORK uuid HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})                      # IID_<> variables
         # find_library(FREEGLUT_FRAMEWORK freeglut HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})              # Freeglut is dynamically linked 
         # find_library(OPENGL32_FRAMEWORK opengl32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})              # OpenGL Library
         # find_library(GLU32_FRAMEWORK glu32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})                    # OpenGL Utility Library
@@ -64,47 +64,47 @@ macro(setupVstGuiSupport)
         # find_library(WINDOWSCODECS_FRAMEWORK windowscodecs HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
 
         # find_library(UUID_FRAMEWORK uuid REQUIRED)                      # IID_<> variables
-        # find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
-        # find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
-        # find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
-        # find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
-        # find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
-        # find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
-        # find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
-        # find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
-        # find_library(COMCTL32_FRAMEWORK comctl32 REQUIRED)              # The Common Controls Library - provider of the more interesting window controls
-        # find_library(SHLWAPI_FRAMEWORK shlwapi REQUIRED)                # Shell Light-Weight Application Programming Interface 
-        # find_library(WINDOWSCODECS_FRAMEWORK windowscodecs REQUIRED)
+        find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
+        find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
+        find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
+        find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
+        find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
+        find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
+        find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
+        find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
+        find_library(COMCTL32_FRAMEWORK comctl32 REQUIRED)              # The Common Controls Library - provider of the more interesting window controls
+        find_library(SHLWAPI_FRAMEWORK shlwapi REQUIRED)                # Shell Light-Weight Application Programming Interface 
+        find_library(WINDOWSCODECS_FRAMEWORK windowscodecs REQUIRED)
 
-        # message(STATUS "Windows libraries found: 
-        #     ${UUID_FRAMEWORK}
-        #     ${FREEGLUT_FRAMEWORK}
-        #     ${OPENGL32_FRAMEWORK}
-        #     ${GLU32_FRAMEWORK}
-        #     ${GLEW32_FRAMEWORK}
-        #     ${GDI32_FRAMEWORK}
-        #     ${DWMAPI_FRAMEWORK}
-        #     ${D2D1_FRAMEWORK}
-        #     ${DWRITE_FRAMEWORK}
-        #     ${COMCTL32_FRAMEWORK}
-        #     ${SHLWAPI_FRAMEWORK}
-        #     ${WINDOWSCODECS_FRAMEWORK}
-        # " )
+        message(STATUS "Windows libraries found: 
+            ${UUID_FRAMEWORK}
+            ${FREEGLUT_FRAMEWORK}
+            ${OPENGL32_FRAMEWORK}
+            ${GLU32_FRAMEWORK}
+            ${GLEW32_FRAMEWORK}
+            ${GDI32_FRAMEWORK}
+            ${DWMAPI_FRAMEWORK}
+            ${D2D1_FRAMEWORK}
+            ${DWRITE_FRAMEWORK}
+            ${COMCTL32_FRAMEWORK}
+            ${SHLWAPI_FRAMEWORK}
+            ${WINDOWSCODECS_FRAMEWORK}
+        " )
 
-        # target_link_libraries(vstgui_support PRIVATE 
-        #     ${UUID_FRAMEWORK}
-        #     ${FREEGLUT_FRAMEWORK}
-        #     ${OPENGL32_FRAMEWORK}
-        #     ${GLU32_FRAMEWORK}
-        #     ${GLEW32_FRAMEWORK}
-        #     ${GDI32_FRAMEWORK}
-        #     ${DWMAPI_FRAMEWORK}
-        #     ${D2D1_FRAMEWORK}
-        #     ${DWRITE_FRAMEWORK}
-        #     ${COMCTL32_FRAMEWORK}
-        #     ${SHLWAPI_FRAMEWORK}
-        #     ${WINDOWSCODECS_FRAMEWORK}        
-        # )
+        target_link_libraries(vstgui_support PRIVATE 
+            ${UUID_FRAMEWORK}
+            ${FREEGLUT_FRAMEWORK}
+            ${OPENGL32_FRAMEWORK}
+            ${GLU32_FRAMEWORK}
+            ${GLEW32_FRAMEWORK}
+            ${GDI32_FRAMEWORK}
+            ${DWMAPI_FRAMEWORK}
+            ${D2D1_FRAMEWORK}
+            ${DWRITE_FRAMEWORK}
+            ${COMCTL32_FRAMEWORK}
+            ${SHLWAPI_FRAMEWORK}
+            ${WINDOWSCODECS_FRAMEWORK}        
+        )
 
         # link_libraries(
         #     uuid          # IID_<> variables
