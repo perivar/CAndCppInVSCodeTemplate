@@ -127,7 +127,10 @@ endif()
 add_library(${target} STATIC ${${target}_sources})
 
 target_compile_definitions(${target} ${VSTGUI_COMPILE_DEFINITIONS})
-vstgui_set_cxx_version(${target} 14)
+
+# PIN 10.03.2020 - change version to 17
+vstgui_set_cxx_version(${target} 17)
+
 vstgui_source_group_by_folder(${target})
 
 if(VSTGUI_STANDALONE_EXAMPLES)
@@ -140,4 +143,9 @@ if(LINUX)
     target_include_directories(${target} PRIVATE ${FREETYPE_INCLUDE_DIRS})
     target_include_directories(${target} PRIVATE ${SQLITE3_INCLUDE_DIRS})
     target_link_libraries(${target} PRIVATE vstgui_uidescription ${LINUX_LIBRARIES} dl ${SQLITE3_LIBRARIES})
+endif()
+
+# PIN 10.03.2020 - add libraries vstgui and windowscodecs
+if(SMTG_WIN)
+    target_link_libraries(${target} PRIVATE vstgui_uidescription vstgui windowscodecs)
 endif()

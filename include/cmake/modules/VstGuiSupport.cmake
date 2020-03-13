@@ -1,7 +1,9 @@
 
 macro(setupVstGuiSupport)
     set(VSTGUI_DISABLE_UNITTESTS 1)
-    set(VSTGUI_STANDALONE_EXAMPLES OFF)
+    # PIN: enabled the standalone examples
+    set(VSTGUI_STANDALONE_EXAMPLES ON)
+    # set(VSTGUI_STANDALONE_EXAMPLES OFF)
     if(SMTG_BUILD_UNIVERSAL_BINARY)
         set(VSTGUI_STANDALONE OFF)
         set(VSTGUI_TOOLS OFF)

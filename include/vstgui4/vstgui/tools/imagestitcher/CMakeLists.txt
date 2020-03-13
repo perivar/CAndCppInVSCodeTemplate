@@ -46,7 +46,7 @@ endif()
 
 vstgui_add_executable(${TargetName} "${${TargetName}_sources}")
 
-# PIN 10.03.2020 - add libraries vstgui 
+# PIN 10.03.2020 - add libraries vstgui and windowscodecs
 target_link_libraries(${TargetName} vstgui windowscodecs)
 
 vstgui_add_resources(${TargetName} "${${TargetName}_RESOURCES}")
