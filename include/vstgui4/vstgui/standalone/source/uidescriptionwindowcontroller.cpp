@@ -764,8 +764,8 @@ struct WindowController::EditImpl : WindowController::Impl
 		}
 		else
 		{
-			// PIN:	
-			// Async::schedule (Async::mainQueue (), [this] () { window->close (); });
+			// PIN (used to be disabled):
+			Async::schedule (Async::mainQueue (), [this] () { window->close (); });
 		}
 	}
 

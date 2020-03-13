@@ -684,24 +684,24 @@ void DocumentWindowController::setDirty ()
 	if (asyncUpdateTriggered)
 		return;
 	asyncUpdateTriggered = true;
-	// PIN:
-	// Async::schedule (Async::mainQueue (), [this] () {
-	// 	if (auto v = displayFrameValue->dynamicCast<IMutableStepValue> ())
-	// 		v->setNumSteps (static_cast<uint32_t> (imageList.size ()));
-	// 	if (imageView)
-	// 		imageView->setImageList (&imageList);
-	// 	if (movieBitmapView)
-	// 	{
-	// 		movieBitmapView->setHeightOfOneImage (docContext->getHeight ());
-	// 		movieBitmapView->setNumSubPixmaps (static_cast<int32_t> (imageList.size ()));
-	// 		movieBitmapView->setBackground (createStitchedBitmap ());
-	// 		auto size = movieBitmapView->getViewSize ();
-	// 		size.setWidth (docContext->getWidth ());
-	// 		size.setHeight (docContext->getHeight ());
-	// 		movieBitmapView->setViewSize (size);
-	// 	}
-	// 	asyncUpdateTriggered = false;
-	// });
+	// PIN (used to be disabled):
+	Async::schedule (Async::mainQueue (), [this] () {
+		if (auto v = displayFrameValue->dynamicCast<IMutableStepValue> ())
+			v->setNumSteps (static_cast<uint32_t> (imageList.size ()));
+		if (imageView)
+			imageView->setImageList (&imageList);
+		if (movieBitmapView)
+		{
+			movieBitmapView->setHeightOfOneImage (docContext->getHeight ());
+			movieBitmapView->setNumSubPixmaps (static_cast<int32_t> (imageList.size ()));
+			movieBitmapView->setBackground (createStitchedBitmap ());
+			auto size = movieBitmapView->getViewSize ();
+			size.setWidth (docContext->getWidth ());
+			size.setHeight (docContext->getHeight ());
+			movieBitmapView->setViewSize (size);
+		}
+		asyncUpdateTriggered = false;
+	});
 }
 
 //------------------------------------------------------------------------

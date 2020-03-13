@@ -903,11 +903,11 @@ void Window::hide ()
 void Window::close ()
 {
 	auto self = shared_from_this ();
-	// PIN:
-	// auto call = [self] () {
-	// 	self->onQuit (); // TODO: rename method !
-	// };
-	// Async::schedule (Async::mainQueue (), call);
+	// PIN (used to be disabled):
+	auto call = [self] () {
+		self->onQuit (); // TODO: rename method !
+	};
+	Async::schedule (Async::mainQueue (), call);
 }
 
 //------------------------------------------------------------------------

@@ -124,8 +124,8 @@ void Application::init (HINSTANCE instance, LPWSTR commandLine)
 		if (!needCommandUpdate)
 		{
 			needCommandUpdate = true;
-			// PIN
-			// Async::schedule (Async::mainQueue (), [this] () { onCommandUpdate (); });
+			// PIN (used to be disabled):
+			Async::schedule (Async::mainQueue (), [this] () { onCommandUpdate (); });
 		}
 	};
 	callbacks.showAlert = [this] (const AlertBoxConfig& config) { return showAlert (config); };
@@ -252,17 +252,17 @@ void Application::onCommandUpdate ()
 //------------------------------------------------------------------------
 void Application::quit ()
 {
-	// PIN:	
-	// Async::schedule (Async::mainQueue (), [] () {
-	// 	auto windows = IApplication::instance ().getWindows (); // Yes, copy the window list
-	// 	for (auto& w : windows)
-	// 	{
-	// 		if (auto winWindow = toWin32Window (w))
-	// 			winWindow->onQuit ();
-	// 	}
-	// 	IApplication::instance ().getDelegate ().onQuit ();
-	// 	PostQuitMessage (0);
-	// });
+	// PIN (used to be disabled):
+	Async::schedule (Async::mainQueue (), [] () {
+		auto windows = IApplication::instance ().getWindows (); // Yes, copy the window list
+		for (auto& w : windows)
+		{
+			if (auto winWindow = toWin32Window (w))
+				winWindow->onQuit ();
+		}
+		IApplication::instance ().getDelegate ().onQuit ();
+		PostQuitMessage (0);
+	});
 }
 
 //------------------------------------------------------------------------

@@ -424,13 +424,13 @@ void ImageFramesView::addImages (size_t position, const std::vector<std::string>
 	}
 	if (!alertDescription.empty ())
 	{
-		// PIN:
-		// Async::schedule (Async::mainQueue (), [alertDescription] () {
-		// 	AlertBoxConfig alert;
-		// 	alert.headline = "Error adding images!";
-		// 	alert.description = alertDescription;
-		// 	IApplication::instance ().showAlertBox (alert);
-		// });
+		// PIN (used to be disabled):
+		Async::schedule (Async::mainQueue (), [alertDescription] () {
+			AlertBoxConfig alert;
+			alert.headline = "Error adding images!";
+			alert.description = alertDescription;
+			IApplication::instance ().showAlertBox (alert);
+		});
 	}
 }
 

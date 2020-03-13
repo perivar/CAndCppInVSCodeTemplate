@@ -56,24 +56,24 @@ public:
 private:
 	void createNewDocument ()
 	{
-		// PIN:
-		// Async::schedule (Async::mainQueue (), [] () {
-		// 	auto commandHandler =
-		// 	    IApplication::instance ().getDelegate ().dynamicCast<ICommandHandler> ();
-		// 	assert (commandHandler);
-		// 	commandHandler->handleCommand (Commands::NewDocument);
-		// });
+		// PIN (used to be disabled):
+		Async::schedule (Async::mainQueue (), [] () {
+			auto commandHandler =
+			    IApplication::instance ().getDelegate ().dynamicCast<ICommandHandler> ();
+			assert (commandHandler);
+			commandHandler->handleCommand (Commands::NewDocument);
+		});
 	}
 
 	void openDocument ()
 	{
-		// PIN:
-		// Async::schedule (Async::mainQueue (), [] () {
-		// 	auto commandHandler =
-		// 	    IApplication::instance ().getDelegate ().dynamicCast<ICommandHandler> ();
-		// 	assert (commandHandler);
-		// 	commandHandler->handleCommand (Commands::OpenDocument);
-		// });
+		// PIN (used to be disabled):
+		Async::schedule (Async::mainQueue (), [] () {
+			auto commandHandler =
+			    IApplication::instance ().getDelegate ().dynamicCast<ICommandHandler> ();
+			assert (commandHandler);
+			commandHandler->handleCommand (Commands::OpenDocument);
+		});
 	}
 
 	UIDesc::ModelBindingPtr createModelBinding ()
