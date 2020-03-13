@@ -109,6 +109,7 @@ if(SMTG_WIN)
 
     # The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
     set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
     # ensure the symbols GetPluginFactory are exported
     # these are set in AddSMTGLibrary.cmake and not here!

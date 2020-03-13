@@ -45,10 +45,17 @@ if(SMTG_WIN)
 endif()
 
 vstgui_add_executable(${TargetName} "${${TargetName}_sources}")
+
+# PIN 10.03.2020 - add libraries vstgui 
+target_link_libraries(${TargetName} vstgui windowscodecs)
+
 vstgui_add_resources(${TargetName} "${${TargetName}_RESOURCES}")
 vstgui_set_target_infoplist(${TargetName} "resource/Info.plist")
 vstgui_set_target_rcfile(${TargetName} "resource/imagestitcher.rc")
-vstgui_set_cxx_version(${TargetName} 14)
+
+# PIN 10.03.2020 - change version to 17
+vstgui_set_cxx_version(${TargetName} 17)
+
 target_include_directories(${TargetName} PRIVATE ../../../)
 set_target_properties(${TargetName} PROPERTIES ${APP_PROPERTIES} ${VSTGUI_TOOLS_FOLDER})
 
