@@ -88,5 +88,14 @@ target_link_libraries(${target}
 # PIN 10.03.2020 - change version to 17
 vstgui_set_cxx_version(${target} 17)
 
+# PIN 15.03.2020 - copy Resource files as well
+if(SMTG_WIN)
+	set(gfxtest_uiresources
+		"resource/Window.uidesc"
+		"resource/DrawDeviceTests.uidesc"
+	)
+	vstgui_add_resources(${target} "${gfxtest_uiresources}")
+endif()
+
 set_target_properties(${target} PROPERTIES ${APP_PROPERTIES} FOLDER Tests)
 target_compile_definitions(${target} ${VSTGUI_COMPILE_DEFINITIONS})
