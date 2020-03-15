@@ -57,16 +57,31 @@ if(SMTG_WIN)
   )
 endif()
 
+# PIN 15.03.2020 - add libraries vstgui and the missing windows libraries
+if(SMTG_WIN)
+  set(${target}_PLATFORM_LIBS
+  "vstgui"
+  "windowscodecs"
+  "d2d1"
+  "dwrite"
+  "shlwapi"
+  "dwmapi"
+  "comctl32"
+  )
+endif()
+
 ##########################################################################################
 include_directories(../../../)
 add_executable(${target}
   ${${target}_sources}
   ${gfxtest_resources}
 )
+
+# Changed by PIN: 15.03.2020
 target_link_libraries(${target}
 	vstgui
-  vstgui_uidescription
-  vstgui_standalone
+  	vstgui_uidescription
+  	vstgui_standalone
 	${${target}_PLATFORM_LIBS}
 )
 

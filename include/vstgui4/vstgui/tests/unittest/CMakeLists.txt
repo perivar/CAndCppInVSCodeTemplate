@@ -116,6 +116,19 @@ if(SMTG_WIN)
 	)
 endif()
 
+# PIN 15.03.2020 - add libraries vstgui and the missing windows libraries
+if(SMTG_WIN)
+  set(${target}_PLATFORM_LIBS
+  "vstgui"
+  "windowscodecs"
+  "d2d1"
+  "dwrite"
+  "shlwapi"
+  "dwmapi"
+  "comctl32"
+  )
+endif()
+
 ##########################################################################################
 if(UNIX AND NOT CMAKE_HOST_APPLE)
 	set(${target}_sources

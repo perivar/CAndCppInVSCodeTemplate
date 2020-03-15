@@ -1,6 +1,8 @@
 
 macro(setupVstGuiSupport)
-    set(VSTGUI_DISABLE_UNITTESTS 1)
+    # PIN: enabled the unit tests
+    set(VSTGUI_DISABLE_UNITTESTS OFF)
+    # set(VSTGUI_DISABLE_UNITTESTS 1)
     # PIN: enabled the standalone examples
     set(VSTGUI_STANDALONE_EXAMPLES ON)
     # set(VSTGUI_STANDALONE_EXAMPLES OFF)
