@@ -303,7 +303,10 @@ endif()
 add_library(${target} STATIC ${${target}_sources})
 
 target_compile_definitions(${target} ${VSTGUI_COMPILE_DEFINITIONS})
-vstgui_set_cxx_version(${target} 11)
+
+# PIN 10.03.2020 - change version to 17
+vstgui_set_cxx_version(${target} 17)
+
 vstgui_source_group_by_folder(${target})
 
 if(LINUX)

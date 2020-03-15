@@ -190,8 +190,16 @@ function(vstgui_set_target_rcfile target rcfile)
   # endif(MSVC)
 
   # PIN; Disabled since windres throws errors on Windows using MSYS2
-  # if(SMTG_WIN)
-  #   target_sources(${target} PRIVATE ${rcfile})
-  # endif(SMTG_WIN)
+  if(SMTG_WIN)
+
+    # check if the rcfile is empty to avoid windres errors
+    file(READ ${rcfile} rcfile_content)
+    if(NOT ${rcfile_content} STREQUAL "")
+      message("Using resource file: ${rcfile}")
+
+      # call windres with the resource fil
+      target_sources(${target} PRIVATE ${rcfile})
+    endif()
+  endif(SMTG_WIN)
 
 endfunction()

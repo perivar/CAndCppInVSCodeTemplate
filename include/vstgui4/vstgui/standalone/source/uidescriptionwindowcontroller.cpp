@@ -1032,8 +1032,9 @@ bool WindowController::handleCommand (const Command& command)
 //------------------------------------------------------------------------
 IMenuBuilder* WindowController::getWindowMenuBuilder (const IWindow& window) const
 {
-	if (auto menuBuilder = dynamicPtrCast<IMenuBuilder> (impl->customization))
-		return menuBuilder.get ();
+	// PIN: TODO: don't know why I have to disable this
+	// if (auto menuBuilder = dynamicPtrCast<IMenuBuilder> (impl->customization))
+	// 	return menuBuilder.get ();
 	return nullptr;
 }
 

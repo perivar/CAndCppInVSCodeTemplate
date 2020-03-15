@@ -192,12 +192,13 @@ void Application::showAlertForWindow (const AlertBoxForWindowConfig& config)
 		    auto parentWinWindow = toWin32Window (parentWindow);
 		    vstgui_assert (parentWinWindow);
 		    parentWinWindow->setModalWindow (nullptr);
-		    // Async::schedule (Async::mainQueue (), [callback, r, parentWindow] () {
-			//     if (callback)
-			// 	    callback (r);
-			//     if (auto winWindow = toWin32Window (parentWindow))
-			// 	    winWindow->activate ();
-		    // });
+			// PIN (used to be disabled):
+		    Async::schedule (Async::mainQueue (), [callback, r, parentWindow] () {
+			    if (callback)
+				    callback (r);
+			    if (auto winWindow = toWin32Window (parentWindow))
+				    winWindow->activate ();
+		    });
 	    }))
 	{
 		auto parentWinWindow = toWin32Window (config.window);
