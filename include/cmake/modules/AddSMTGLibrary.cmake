@@ -269,20 +269,23 @@ function(smtg_make_plugin_package target extension)
         )
 
         # ensure the symbols GetPluginFactory are exported
-        add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)   
+        # add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)   
         
         # ensure the Threading Building Blocks is enabled (-ltbb)
         # target_link_libraries(${target} tbb)
+
+        # add release (strip flag)
+        # set_target_properties(${target} PROPERTIES LINK_FLAGS_RELEASE -s)
     
         # In order not to have the PDB inside the plug-in package in release builds, we specify a different location.
-        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-            set(WIN_PDB WIN_PDB32)
-        else()
-            set(WIN_PDB WIN_PDB64)
-        endif()
-        set_target_properties(${target} PROPERTIES
-            PDB_OUTPUT_DIRECTORY        ${PROJECT_BINARY_DIR}/${WIN_PDB}
-        )
+        # if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+        #     set(WIN_PDB WIN_PDB32)
+        # else()
+        #     set(WIN_PDB WIN_PDB64)
+        # endif()
+        # set_target_properties(${target} PROPERTIES
+        #     PDB_OUTPUT_DIRECTORY        ${PROJECT_BINARY_DIR}/${WIN_PDB}
+        # )
 
         # Create Bundle on Windows
         if(SMTG_CREATE_BUNDLE_FOR_WINDOWS)

@@ -2,6 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "g++.exe build active file as windows dll",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                }
+            ],
+            "preLaunchTask": "g++.exe build active file as windows dll"
+        },
+        {
             "name": "g++.exe build and run active file",
             "type": "cppdbg",
             "request": "launch",
@@ -118,7 +139,11 @@
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
             "args": [
-                "C:\\Users\\perner\\Downloads\\TAL-Filter-2-64.vst3"
+                // "C:\\Users\\perner\\Downloads\\TAL-Filter-2-64.vst3"
+                // "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST3\\Debug\\again.vst3\\Contents\\x86_64-win\\again.vst3"
+                // "${workspaceFolder}/windows_dll_test.dll"
+                // "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST3\\Debug\\mda-vst3.vst3\\Contents\\x86_64-win\\mda-vst3.vst3"
+                "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\freeverb.vst"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -136,13 +161,13 @@
             "preLaunchTask": "g++.exe build active file with debugging"
         },
         {
-            "name": "vst3test debug cmake target",
+            "name": "cmake debug target with argument",
             "type": "cppdbg",
             "request": "launch",
             // Resolved by CMake Tools:
-            "program": "${command:cmake.launchTargetPath}",
+            "program": "${command:cmake.launchTargetPath}",            
             "args": [
-                "C:\\Users\\perner\\Downloads\\TAL-Filter-2-64.vst3"
+                "${input:arg}"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -181,5 +206,19 @@
             ],
             "preLaunchTask": "gcc.exe build active file with debugging"
         }        
-    ]
+    ],
+	"inputs": [
+		{
+			"id": "programName",
+			"type": "promptString",
+			"default": "",
+			"description": "The program name"
+        },
+        {
+			"id": "arg",
+			"type": "promptString",
+			"default": "",
+			"description": "The arguments"
+		}
+	]
 }

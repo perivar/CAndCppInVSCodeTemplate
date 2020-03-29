@@ -44,9 +44,19 @@ if(SMTG_ADD_VSTGUI)
     smtg_add_vst3plugin(${target} ${again_sources})
     set_target_properties(${target} PROPERTIES ${SDK_IDE_PLUGIN_EXAMPLES_FOLDER})
     target_include_directories(${target} PUBLIC ${VSTGUI_ROOT}/vstgui4)
+    
+    # PIN 28.03.2020 added static libs
+    set(VST_LIBS)
 
     # PIN 10.03.2020 - add libraries vstgui and the missing windows libraries
-    target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+    # target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+    list(APPEND VST_LIBS base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+
+    # list(APPEND VST_LIBS "-lstdc++fs")
+    # list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread" "-municode")
+    list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
+
+    target_link_libraries(${target} ${VST_LIBS})
 
     smtg_add_vst3_resource(${target} "resource/again.uidesc")
     smtg_add_vst3_resource(${target} "resource/background.png")
@@ -105,7 +115,8 @@ if(SMTG_ADD_VSTGUI)
     target_include_directories(${targetsimple} PUBLIC ${VSTGUI_ROOT}/vstgui4)
 
     # PIN 10.03.2020 - add libraries vstgui and the missing windows libraries
-    target_link_libraries(${targetsimple} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+    # target_link_libraries(${targetsimple} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+    target_link_libraries(${targetsimple} ${VST_LIBS})
 
     smtg_add_vst3_resource(${targetsimple} "resource/again.uidesc")
     smtg_add_vst3_resource(${targetsimple} "resource/background.png")

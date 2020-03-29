@@ -103,13 +103,15 @@ add_compile_options($<$<CONFIG:RelWithDebInfo>:-DRELEASE=1>)
 if(SMTG_WIN)
     # Changed by PIN: 25.02.2020
     # -Wl,--no-undefined linker option can be used when building shared library, undefined symbols will be shown as linker errors.
-    set(common_linker_flags "-Wl,--no-undefined")
+    # set(common_linker_flags "-Wl,--no-undefined")
+    # PIN: Compile the runtime as static so that the vst3 work independently
+    # set(common_linker_flags "-static-libgcc -static-libstdc++ -Wl,--no-undefined")    
     set(CMAKE_MODULE_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Module Library Linker Flags")
     set(CMAKE_SHARED_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Shared Library Linker Flags")
 
     # The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
-    set(CMAKE_CXX_STANDARD 17)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    # set(CMAKE_CXX_STANDARD 17)
+    # set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
     # ensure the symbols GetPluginFactory are exported
     # these are set in AddSMTGLibrary.cmake and not here!
@@ -119,17 +121,17 @@ if(SMTG_WIN)
     # target_compile_options( ${target} PUBLIC -std=c++17 -fpermissive -w -Wall )
 
     add_compile_options(
-        -g                          # Generate debugging information`for gdp into the file
+        # -g                          # Generate debugging information`for gdp into the file
         
-        # -Wpedantic                # Issue all the warnings demanded by strict ISO C and ISO C++
-        # -Wextra                   # This enables some extra warning flags that are not enabled by -Wall. (same as -W)
-        -Wall                       # Recommended compiler warnings (enable a set of warning, actually not all.)
+        # # -Wpedantic                # Issue all the warnings demanded by strict ISO C and ISO C++
+        # # -Wextra                   # This enables some extra warning flags that are not enabled by -Wall. (same as -W)
+        # -Wall                       # Recommended compiler warnings (enable a set of warning, actually not all.)
 
-        -Wno-return-type            # ignore no return warnings
-        -Wno-conversion-null        # ignore null conversion warnings
-        -Wno-unused-parameter       # ignore unused parameter warnings
-        -Wno-unused-variable        # ignore unused variable warnings
-        -Wno-unused-but-set-variable# ignore unused and set variable warnings
+        # -Wno-return-type            # ignore no return warnings
+        # -Wno-conversion-null        # ignore null conversion warnings
+        # -Wno-unused-parameter       # ignore unused parameter warnings
+        # -Wno-unused-variable        # ignore unused variable warnings
+        # -Wno-unused-but-set-variable# ignore unused and set variable warnings
     )
 
     # add_compile_options(
