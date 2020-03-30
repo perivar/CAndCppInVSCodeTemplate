@@ -102,25 +102,37 @@ add_compile_options($<$<CONFIG:RelWithDebInfo>:-DRELEASE=1>)
 
 if(SMTG_WIN)
     # Changed by PIN: 25.02.2020
+
+    # turn on all warnings
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+    # -mstackrealign Realign the stack at entry. 
+    # On the Intel x86, the -mstackrealign option will generate an alternate prologue and epilogue 
+    # that realigns the runtime stack if necessary. 
+    # This supports mixing legacy codes that keep a 4-byte aligned stack with modern codes that keep a 
+    # 16-byte stack for SSE compatibility. See also the attribute force_align_arg_pointer, applicable to individual functions.
+    # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mstackrealign")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mstackrealign")
+    
     # -Wl,--no-undefined linker option can be used when building shared library, undefined symbols will be shown as linker errors.
-    # set(common_linker_flags "-Wl,--no-undefined")
     # PIN: Compile the runtime as static so that the vst3 work independently
     # set(common_linker_flags "-static-libgcc -static-libstdc++ -Wl,--no-undefined")    
+    # add subsystem windows to modules and shared libraries
+    set(common_linker_flags "-Wl,--no-undefined -Wl,--subsystem,windows")
     set(CMAKE_MODULE_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Module Library Linker Flags")
     set(CMAKE_SHARED_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Shared Library Linker Flags")
 
     # The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
-    # set(CMAKE_CXX_STANDARD 17)
-    # set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    # set CXX standard to 17
+    set(CMAKE_CXX_STANDARD 17) # C++17...
+    set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
+    set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 
     # ensure the symbols GetPluginFactory are exported
     # these are set in AddSMTGLibrary.cmake and not here!
     # add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)
     
-    # TODO: use target_compile_options instead of add_compile_options
-    # target_compile_options( ${target} PUBLIC -std=c++17 -fpermissive -w -Wall )
-
-    add_compile_options(
+    # add_compile_options(
         # -g                          # Generate debugging information`for gdp into the file
         
         # # -Wpedantic                # Issue all the warnings demanded by strict ISO C and ISO C++
@@ -132,39 +144,6 @@ if(SMTG_WIN)
         # -Wno-unused-parameter       # ignore unused parameter warnings
         # -Wno-unused-variable        # ignore unused variable warnings
         # -Wno-unused-but-set-variable# ignore unused and set variable warnings
-    )
-
-    # add_compile_options(
-    #     -g              # Generate debugging information`for gdp into the file
-    #     # -std=c++17    # use c++ 17 using set(CMAKE_CXX_STANDARD 17) instead
-    #     -Wpedantic      # Issue all the warnings demanded by strict ISO C and ISO C++
-    #     -fpermissive    # Downgrade some diagnostics about nonconformant code from errors to warnings. Thus, using -fpermissive will allow some nonconforming code to compile.
-    #     -Wextra         # This enables some extra warning flags that are not enabled by -Wall. (same as -W)
-    #     -Wall           # Recommended compiler warnings (enable a set of warning, actually not all.)
-
-    #     -ltbb           # Threading Building Blocks
-
-    #     # OpenGL libs
-    #     -lopengl32      # OpenGL Library
-    #     -lfreeglut      # Freeglut is dynamically linked 
-    #     -lglu32         # OpenGL Utility Library
-    #     -lgdi32         # OpenGL pixel format functions & SwapBuffers
-        
-    #     -ld2d1          # Direct2D library 
-    #     -ldwrite        # DirectX Typography Services
-    #     -lcomctl32      # The Common Controls Library - provider of the more interesting window controls
-    #     -lshlwapi       # Shell Light-Weight Application Programming Interface 
-    #     # -lwinmm       # For joystick and timer support
-    #     -ldwmapi        # Desktop Window Manager (DWM) 
-    #     -lwindowscodecs
-
-    
-    #     -luuid          # IID_<> variables
-
-    #     # -Wextra       # This enables some extra warning flags that are not enabled by -Wall.
-    #     # -Werror       # Make all warnings into errors.
-    #     # -v            # verbose
-    #     # -include stdint.h # to remove the 'int32_t' does not name a type errors
     # )
 
     # ORIGINAL:

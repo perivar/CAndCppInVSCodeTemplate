@@ -13,11 +13,14 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # this is the general configuration
 # disabled - use flags per target instead by using target_compile_options()
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
+# use set_target_properties instead of CMAKE_CXX_FLAGS to set the CXX_STANDARD flag
+
 set(PLUGIN_COMPILE_FLAGS)
 
 # flags used for Debug, Release and Tracer builds
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVST_API -DWIN32 -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -D_CRT_SECURE_NO_DEPRECATE")
 
+# TODO: use generator expressions instead $<$<CONFIG:RELEASE>:-O2->
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     message (STATUS "Building a debug build")
     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -D_DEBUG")
@@ -68,6 +71,16 @@ add_library(SDK2_4 STATIC
     ${SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
 )
 
+# define output directory
+set_target_properties(SDK2_4 PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
+
 # bring in the headers for the library
 target_include_directories(SDK2_4
   PUBLIC
@@ -90,6 +103,16 @@ add_library (FREEVERB_COMPONENTS STATIC
   ${FREEVERB_COMPONENT_ROOT}/revmodel.cpp
   ${FREEVERB_COMPONENT_ROOT}/revmodel.hpp
   ${FREEVERB_COMPONENT_ROOT}/tuning.h
+)
+
+# define output directory
+set_target_properties(FREEVERB_COMPONENTS PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
 )
 
 # bring in the headers for the library
@@ -127,13 +150,23 @@ add_library(${PLUGIN_NAME} SHARED
 	  ${RESOURCE_SRCS}
 )
 
+# define output directory
+set_target_properties(${PLUGIN_NAME} PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
+  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/VST2
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
+
 # ensure we don't add the 'lib' prefix and change the suffix to .vst
 set_target_properties(${PLUGIN_NAME} PROPERTIES 
   # stop CMake from prepending `lib` to library names
   PREFIX ""
 
-  # change the suffix to .vst
-  SUFFIX ".vst"
+  # For vst2's keep the dll suffix
+  # SUFFIX ".dll"
 
   # export no symbols by default
   C_VISIBILITY_PRESET hidden
