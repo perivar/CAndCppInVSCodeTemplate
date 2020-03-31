@@ -3,10 +3,14 @@ cmake_minimum_required(VERSION 3.5)
 # set verbose
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# call the Freeverb.cmake file
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
-include(Freeverb)
-# return()
+# call the CMakeLists.txt file in the freeverb directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
+
+# call the CMakeLists.txt file in the minihost directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
+
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
+return()
 
 # target path (SMTG_PLUGIN_TARGET_PATH)
 set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")

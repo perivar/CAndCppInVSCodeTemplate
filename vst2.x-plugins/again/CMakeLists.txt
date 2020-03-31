@@ -1,12 +1,16 @@
 cmake_minimum_required (VERSION 3.5)
-project (freeverb)
+project (AGain)
 
 message(STATUS  "Building on ${CMAKE_SYSTEM_NAME}")
 message(STATUS  "Build type: ${CMAKE_BUILD_TYPE}")
 message(STATUS  "Configuration types: ${CMAKE_CONFIGURATION_TYPES}")
+message(STATUS  "Project source dir: ${CMAKE_SOURCE_DIR}")
+message(STATUS  "Current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS  "Binary dir: ${CMAKE_BINARY_DIR}")
+message(STATUS  "Project binary dir: ${PROJECT_BINARY_DIR}")
 
 # Name your plugin here
-set(PLUGIN_NAME freeverb)
+set(PLUGIN_NAME AGain)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -40,6 +44,7 @@ set(PLUGIN_LINKER_FLAGS)
 list(APPEND PLUGIN_LINKER_FLAGS "-static" "-static-libgcc" "-static-libstdc++")
 
 # ensure we are using the windows subsystem
+# Note! this must be disabled for command line apps (non vsts)
 # set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--subsystem,windows")
 # set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--subsystem,windows")
 list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
@@ -55,81 +60,23 @@ list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
 # set(CMAKE_RC_COMPILE_OBJECT
 # "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 
-# build the SDK as a static library
-set(VST_SDK_2_4_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK")
-add_library(SDK2_4 STATIC
+# Add VST 2.4 SDK
+set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK"  CACHE PATH "Path to VST 2.4 SDK")
+set(VSTSDK2_4_PLUGIN_SOURCE
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffect.cpp
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffectx.cpp    
-    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp
+    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp # VST2 plugins must implement createEffectInstance and export __declspec(dllexport) VSTPluginMain
     
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffect.h
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffectx.h
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
 )
 
-# define output directory
-set_target_properties(SDK2_4 PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
-
-# bring in the headers for the library
-target_include_directories(SDK2_4
-  PUBLIC
-  ${VST_SDK_2_4_ROOT}
-)
-
-# compile options per target
-target_compile_options(SDK2_4
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
-)
-
-# build the Components as a static library
-set(FREEVERB_COMPONENT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/freeverb.components")
-add_library (FREEVERB_COMPONENTS STATIC
-  ${FREEVERB_COMPONENT_ROOT}/allpass.cpp
-  ${FREEVERB_COMPONENT_ROOT}/allpass.hpp
-  ${FREEVERB_COMPONENT_ROOT}/comb.cpp
-  ${FREEVERB_COMPONENT_ROOT}/comb.hpp
-  ${FREEVERB_COMPONENT_ROOT}/revmodel.cpp
-  ${FREEVERB_COMPONENT_ROOT}/revmodel.hpp
-  ${FREEVERB_COMPONENT_ROOT}/tuning.h
-)
-
-# define output directory
-set_target_properties(FREEVERB_COMPONENTS PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
-
-# bring in the headers for the library
-target_include_directories(FREEVERB_COMPONENTS
-  PUBLIC
-  ${FREEVERB_COMPONENT_ROOT}
-)
-
-# compile options per target
-target_compile_options(FREEVERB_COMPONENTS
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
-)
-
 # set plugin root and plugin sources
-set(PLUGIN_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/freeverb-vst2.4")
+set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/vst2.x-plugins/again")
 set(PLUGIN_SRCS
-  ${PLUGIN_ROOT}/freeverb.cpp
-  ${PLUGIN_ROOT}/freeverb.hpp
-  ${PLUGIN_ROOT}/FreeverbMain.cpp
-#   ${PLUGIN_ROOT}/Freeverb4.def
+  ${PLUGIN_ROOT}/source/again.cpp
+  ${VSTSDK2_4_PLUGIN_SOURCE}
 )
 
 # set plugin resources
@@ -141,16 +88,16 @@ set(RESOURCE_SRCS
 # http://gernotklingler.com/blog/creating-using-shared-libraries-different-compilers-different-operating-systems/
 
 # create a VST using MODULE or SHARED
-add_library(${PLUGIN_NAME} SHARED
+add_library(${PLUGIN_NAME} MODULE
 	  ${PLUGIN_SRCS}
 	  ${RESOURCE_SRCS}
 )
 
 # define output directory
 set_target_properties(${PLUGIN_NAME} PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/VST2
+  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/VST2 # note ! using VST2 directory for MODULE plugins
+  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/VST2 # note ! using VST2 directory for SHARED plugins
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED ON
   CXX_EXTENSIONS OFF
@@ -172,14 +119,12 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
 
 # Bring the headers, such as aeffeditor.h into the project
 target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
-target_include_directories(${PLUGIN_NAME} PUBLIC ${FREEVERB_COMPONENT_ROOT})
 
 # link to the sdk and components libraries
-target_link_libraries(${PLUGIN_NAME} 
-  PRIVATE 
-  SDK2_4 
-  FREEVERB_COMPONENTS
-)
+# target_link_libraries(${PLUGIN_NAME} 
+#   PRIVATE 
+#   SDK2_4 
+# )
 
 # set link flags per target
 target_link_options(${PLUGIN_NAME} 
