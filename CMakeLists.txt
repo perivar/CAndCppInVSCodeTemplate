@@ -94,6 +94,7 @@ add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/interappaudio)
 set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
 add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/again)
 add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/mda-vst3)
+add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/hostchecker)
 
 # Add hosting examples, it includes the validator
 set(SDK_IDE_HOSTING_EXAMPLES_FOLDER FOLDER "HostingExamples")
