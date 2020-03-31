@@ -8,14 +8,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 include(Freeverb)
 # return()
 
+# target path (SMTG_PLUGIN_TARGET_PATH)
 set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
 
+# folder to the cmake module files
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake/modules")
-
-# if(MINGW)
-# option(STATIC_LIBS "link with static libraries (libstdc++, libgcc and phread)" ON)
-# message("-- Linking with static libraries (libstdc++, libgcc and phread)")
-# endif()
 
 # call the SMTG_VST3_SDK.cmake file
 include(SMTG_VST3_SDK)
@@ -51,9 +48,6 @@ endif()
 
 include_directories(${ROOT} ${SDK_ROOT})
 
-# setupCoreAudioSupport()
-# setupAaxSupport()
-
 set(SDK_IDE_LIBS_FOLDER FOLDER "Libraries")
 
 #---Add base libraries---------------------------
@@ -63,33 +57,6 @@ add_subdirectory(${SDK_ROOT}/base)
 add_subdirectory(${SDK_ROOT}/public.sdk)
 add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/interappaudio)
 
-#---Add Wrappers (AU, AAX)-----------------------
-# if (SMTG_COREAUDIO_SDK_PATH)
-#     add_subdirectory(public.sdk/source/vst/auwrapper)
-# endif()
-
-# if(SMTG_AAX_SDK_PATH)
-#     add_subdirectory(public.sdk/source/vst/aaxwrapper)
-#     set_target_properties(aaxwrapper PROPERTIES ${SDK_IDE_LIBS_FOLDER})
-# endif()
-
-#-------------------------------------------------------------------------------
-# Here is added your own plugins folder location
-#-------------------------------------------------------------------------------
-# set(SDK_IDE_MYPLUGINS_FOLDER FOLDER "MyPlugIns")
-# if(EXISTS ${SMTG_MYPLUGINS_SRC_PATH})
-#     set(SMTG_MYPLUGINS_BIN_PATH "${SMTG_MYPLUGINS_SRC_PATH}/build")
-#     add_subdirectory(${SMTG_MYPLUGINS_SRC_PATH} ${SMTG_MYPLUGINS_BIN_PATH})
-# endif()
-
-#---Add VST3 examples (plug-ins and hosting)-----
-# if(SMTG_ADD_VST3_PLUGINS_SAMPLES)
-#     set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
-#     add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst)
-#     add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/auwrapper/again)
-#     add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/auv3wrapper)
-# endif()
-
 # add VST examples
 set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
 add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/again)
@@ -98,7 +65,6 @@ add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/hostchecker)
 
 # Add hosting examples, it includes the validator
 set(SDK_IDE_HOSTING_EXAMPLES_FOLDER FOLDER "HostingExamples")
-# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting)
 add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/validator)
 add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/editorhost)
 
@@ -108,14 +74,6 @@ return()
 cmake_minimum_required (VERSION 3.4.3)
 
 set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
-
-# Stop CMake from prepending `lib` to library names
-# disabled - rather use PREFIX in AddSMTGLibrary.cmake
-# if(WIN32)
-#     message("-- WIN32 is set. Stop CMake from prepending `lib` to library names.")
-#    set(CMAKE_SHARED_LIBRARY_PREFIX "")
-#    set(CMAKE_STATIC_LIBRARY_PREFIX "")
-# endif()
 
 #-------------------------------------------------------------------------------
 # Includes
@@ -221,12 +179,6 @@ if(SMTG_ADD_VSTGUI)
         set_target_properties(vstgui_standalone PROPERTIES ${SDK_IDE_LIBS_FOLDER})
     endif()
 endif()
-
-# Changed by PIN: 04.03.2020
-# https://blog.kitware.com/create-dlls-on-windows-without-declspec-using-new-cmake-export-all-feature/
-# these lines are not neccesary
-# include(GenerateExportHeader)
-# generate_export_header(sdk)
 
 if(SMTG_ADD_VST3_HOSTING_SAMPLES)
     message("-- SMTG_ADD_VST3_HOSTING_SAMPLES is set.")

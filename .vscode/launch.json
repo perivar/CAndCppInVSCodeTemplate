@@ -140,10 +140,10 @@
             "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
             "args": [
                 // "C:\\Users\\perner\\Downloads\\TAL-Filter-2-64.vst3"
-                // "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST3\\Debug\\again.vst3\\Contents\\x86_64-win\\again.vst3"
+                "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST3\\Debug\\again.vst3\\Contents\\x86_64-win\\again.vst3"
                 // "${workspaceFolder}/windows_dll_test.dll"
                 // "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST3\\Debug\\mda-vst3.vst3\\Contents\\x86_64-win\\mda-vst3.vst3"
-                "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\freeverb.vst"
+                // "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\freeverb.vst"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

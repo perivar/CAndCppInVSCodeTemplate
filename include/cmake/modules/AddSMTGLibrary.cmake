@@ -259,7 +259,9 @@ function(smtg_make_plugin_package target extension)
         endif()
         set_target_properties(${target} PROPERTIES 
             SUFFIX                      .${PLUGIN_EXTENSION}
-            # Changed by PIN: 25.02.2020
+            # Changed by PIN: 31.03.2020 
+            # This is a MVC property - when disabling this for g++ it's important that the GetPluginFactory symbol
+            # is exported by #define EXPORT_FACTORY	__declspec(dllexport) in pluginfactory.h
             # LINK_FLAGS                  /EXPORT:GetPluginFactory
             
             # Stop CMake from prepending `lib` to library names
@@ -268,15 +270,7 @@ function(smtg_make_plugin_package target extension)
             SMTG_PLUGIN_PACKAGE_PATH    ${PLUGIN_PACKAGE_PATH}
         )
 
-        # ensure the symbols GetPluginFactory are exported
-        # add_definitions(-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE -DBUILD_SHARED_LIBS=TRUE)   
-        
-        # ensure the Threading Building Blocks is enabled (-ltbb)
-        # target_link_libraries(${target} tbb)
-
-        # add release (strip flag)
-        # set_target_properties(${target} PROPERTIES LINK_FLAGS_RELEASE -s)
-    
+        # ORIGINAL:
         # In order not to have the PDB inside the plug-in package in release builds, we specify a different location.
         # if(CMAKE_SIZEOF_VOID_P EQUAL 4)
         #     set(WIN_PDB WIN_PDB32)
