@@ -1,18 +1,38 @@
-//-------------------------------------------------------------------------------------------------------
-// VST Plug-Ins SDK
-// Version 2.4       $Date: 2006/02/08 15:19:26 $
+//------------------------------------------------------------------------
+// Project     : VST SDK
+// Version     : 2.4
 //
-// Category     : VST 2.x Classes
-// Filename     : audioeffectx.h
-// Created by   : Steinberg Media Technologies
-// Description  : Class AudioEffectX extends AudioEffect with new features. You should derive
-//                your plug-in from AudioEffectX.
-//
-// © 2006, Steinberg Media Technologies, All Rights Reserved
-//-------------------------------------------------------------------------------------------------------
+// Category    : VST 2.x Classes
+// Filename    : public.sdk/source/vst2.x/audioeffectx.h
+// Created by  : Steinberg, 01/2004
+// Description : Class AudioEffectX extends AudioEffect with new features. You should derive your plug-in from AudioEffectX.
+// 
+//-----------------------------------------------------------------------------
+// LICENSE
+// (c) 2018, Steinberg Media Technologies GmbH, All Rights Reserved
+//-----------------------------------------------------------------------------
+// This Software Development Kit may not be distributed in parts or its entirety  
+// without prior written agreement by Steinberg Media Technologies GmbH. 
+// This SDK must not be used to re-engineer or manipulate any technology used  
+// in any Steinberg or Third-party application or software module, 
+// unless permitted by law.
+// Neither the name of the Steinberg Media Technologies nor the names of its
+// contributors may be used to endorse or promote products derived from this 
+// software without specific prior written permission.
+// 
+// THIS SDK IS PROVIDED BY STEINBERG MEDIA TECHNOLOGIES GMBH "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL STEINBERG MEDIA TECHNOLOGIES GMBH BE LIABLE FOR ANY DIRECT, 
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+// OF THE POSSIBILITY OF SUCH DAMAGE.
+//----------------------------------------------------------------------------------
 
-#ifndef __audioeffectx__
-#define __audioeffectx__
+#pragma once
 
 #include "audioeffect.h"	// Version 1.0 base class AudioEffect
 
@@ -73,10 +93,10 @@ public:
 
 	virtual bool setSpeakerArrangement (VstSpeakerArrangement* pluginInput, VstSpeakerArrangement* pluginOutput) { return false; } ///< Set the plug-in's speaker arrangements
 	virtual bool getSpeakerArrangement (VstSpeakerArrangement** pluginInput, VstSpeakerArrangement** pluginOutput) { *pluginInput = 0; *pluginOutput = 0; return false; } ///< Return the plug-in's speaker arrangements
-	virtual bool setBypass (bool onOff) { return false; }				///< For 'soft-bypass' (this could be automated).
+	virtual bool setBypass (bool onOff) { return false; }				///< For 'soft-bypass' (this could be automated (in Audio Thread) that why you could NOT call iochanged (if needed) in this function, do it in fxidle).
 
 #if VST_2_3_EXTENSIONS
-	virtual bool setPanLaw (VstInt32 type, float val) { return false; }	///< Set the Panning Law used by the Host.
+	virtual bool setPanLaw (VstInt32 type, float val) { return false; }	///< Set the Panning Law used by the Host @see VstPanLawType.
 #endif // VST_2_3_EXTENSIONS
 
 #if VST_2_4_EXTENSIONS
@@ -248,5 +268,3 @@ public:
 /// @endcond
 //-------------------------------------------------------------------------------------------------------
 };
-
-#endif //__audioeffectx__

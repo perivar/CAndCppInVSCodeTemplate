@@ -1,15 +1,36 @@
-//-------------------------------------------------------------------------------------------------------
-// VST Plug-Ins SDK
-// Version 2.4       $Date: 2006/02/08 15:19:26 $
+//------------------------------------------------------------------------
+// Project     : VST SDK
+// Version     : 2.4
 //
-// Category     : VST 2.x Classes
-// Filename     : audioeffectx.cpp
-// Created by   : Steinberg Media Technologies
-// Description  : Class AudioEffectX extends AudioEffect with new features. You should derive
-//                your plug-in from AudioEffectX.
-//
-// ï¿½ 2006, Steinberg Media Technologies, All Rights Reserved
-//-------------------------------------------------------------------------------------------------------
+// Category    : VST 2.x Classes
+// Filename    : public.sdk/source/vst2.x/audioeffectx.cpp
+// Created by  : Steinberg, 01/2004
+// Description : Class AudioEffectX extends AudioEffect with new features. You should derive your plug-in from AudioEffectX.
+// 
+//-----------------------------------------------------------------------------
+// LICENSE
+// (c) 2018, Steinberg Media Technologies GmbH, All Rights Reserved
+//-----------------------------------------------------------------------------
+// This Software Development Kit may not be distributed in parts or its entirety  
+// without prior written agreement by Steinberg Media Technologies GmbH. 
+// This SDK must not be used to re-engineer or manipulate any technology used  
+// in any Steinberg or Third-party application or software module, 
+// unless permitted by law.
+// Neither the name of the Steinberg Media Technologies nor the names of its
+// contributors may be used to endorse or promote products derived from this 
+// software without specific prior written permission.
+// 
+// THIS SDK IS PROVIDED BY STEINBERG MEDIA TECHNOLOGIES GMBH "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL STEINBERG MEDIA TECHNOLOGIES GMBH BE LIABLE FOR ANY DIRECT, 
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+// OF THE POSSIBILITY OF SUCH DAMAGE.
+//----------------------------------------------------------------------------------
 
 #include "audioeffectx.h"
 #include "aeffeditor.h"
@@ -23,7 +44,7 @@ namespace HostCanDos
 	const char* canDoSendVstTimeInfo = "sendVstTimeInfo"; ///< Host supports send of VstTimeInfo to plug-in
 	const char* canDoReceiveVstEvents = "receiveVstEvents"; ///< Host can receive Vst events from plug-in
 	const char* canDoReceiveVstMidiEvent = "receiveVstMidiEvent"; ///< Host can receive MIDI events from plug-in 
-	const char* canDoReportConnectionChanges = "reportConnectionChanges"; ///< Host will indicates the plug-in when something change in plug-inï¿½s routing/connections with #suspend/#resume/#setSpeakerArrangement 
+	const char* canDoReportConnectionChanges = "reportConnectionChanges"; ///< Host will indicates the plug-in when something change in plug-in´s routing/connections with #suspend/#resume/#setSpeakerArrangement 
 	const char* canDoAcceptIOChanges = "acceptIOChanges"; ///< Host supports #ioChanged ()
 	const char* canDoSizeWindow = "sizeWindow"; ///< used by VSTGUI
 	const char* canDoOffline = "offline"; ///< Host supports offline feature
@@ -304,7 +325,7 @@ VstIntPtr AudioEffectX::dispatcher (VstInt32 opcode, VstInt32 index, VstIntPtr v
 */
 void AudioEffectX::resume ()
 {
-	if (cEffect.flags & effFlagsIsSynth || canDo ("receiveVstMidiEvent") == 1)
+	if (cEffect.flags & effFlagsIsSynth || canDo ((char*)PlugCanDos::canDoReceiveVstMidiEvent) == 1)
 		DECLARE_VST_DEPRECATED (wantEvents) ();
 }
 
@@ -367,9 +388,12 @@ bool AudioEffectX::sendVstEventsToHost (VstEvents* events)
 /*!
 	\fn VstInt32 AudioEffectX::processEvents (VstEvents* events)
 
-	\return	0 means 'wants no more'...else return 1!
+	\return	return value is ignored
 
-	\sa VstEvents, VstMidiEvents, wantEvents()
+	\remarks	Events are always related to the current audio block. For each process cycle, processEvents() is called 
+			<b>once</b> before a processReplacing() call (if new events are available).
+	
+	\sa VstEvents, VstMidiEvent
 */
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -538,7 +562,7 @@ VstInt32 AudioEffectX::getOutputLatency ()
 	\sa getOutputProperties()
 	\note Example
 	<pre>
-	bool MyPlug::getInputProperties (long index, VstPinProperties* properties)
+	bool MyPlug::getInputProperties (VstInt32 index, VstPinProperties* properties)
 	{
 		bool returnCode = false;
 		if (index < kNumInputs)
@@ -562,7 +586,7 @@ VstInt32 AudioEffectX::getOutputLatency ()
 	\sa getInputProperties()
 	\note Example 1
 	<pre>
-	bool MyPlug::getOutputProperties (long index, VstPinProperties* properties)
+	bool MyPlug::getOutputProperties (VstInt32 index, VstPinProperties* properties)
 	{
 		bool returnCode = false;
 		if (index < kNumOutputs)
@@ -577,7 +601,7 @@ VstInt32 AudioEffectX::getOutputLatency ()
 
 	\note Example 2 : plug-in with 1 mono, 1 stereo and one 5.1 outputs (kNumOutputs = 9):
 	<pre>
-	bool MyPlug::getOutputProperties (long index, VstPinProperties* properties)
+	bool MyPlug::getOutputProperties (VstInt32 index, VstPinProperties* properties)
 	{
 		bool returnCode = false;
 		if (index >= 0 && index < kNumOutputs)
@@ -752,10 +776,10 @@ VstInt32 AudioEffectX::offlineGetCurrentMetaPass ()
 //-----------------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------------
-void AudioEffectX::DECLARE_VST_DEPRECATED (setOutputSamplerate) (float sampleRate)
+void AudioEffectX::DECLARE_VST_DEPRECATED (setOutputSamplerate) (float _sampleRate)
 {
 	if (audioMaster)
-		audioMaster (&cEffect, DECLARE_VST_DEPRECATED (audioMasterSetOutputSampleRate), 0, 0, 0, sampleRate);
+		audioMaster (&cEffect, DECLARE_VST_DEPRECATED (audioMasterSetOutputSampleRate), 0, 0, 0, _sampleRate);
 }
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -1305,7 +1329,7 @@ bool AudioEffectX::DECLARE_VST_DEPRECATED (getChunkFile) (void* nativePath)
 	{ 
 		// scan shell for subplugins
 		char tempName[64] = {0}; 
-		long plugUniqueID = 0;
+		VstInt32 plugUniqueID = 0;
 		while ((plugUniqueID = effect->dispatchEffect (effShellGetNextPlugin, 0, 0, tempName)) != 0)
 		{ 
 			// subplug needs a name 
@@ -1330,14 +1354,14 @@ bool AudioEffectX::DECLARE_VST_DEPRECATED (getChunkFile) (void* nativePath)
 	// at start (instanciation) reset the index for the getNextShellPlugin call.
 	myPluginShell::index = 0;
 	// implementation of getNextShellPlugin (char* name);
-	long myPluginShell::getNextShellPlugin (char* name)
+	VstInt32 myPluginShell::getNextShellPlugin (char* name)
 	{
 		strcpy (name, MyNameTable[index]);
 		return MyUniqueIDTable[index++];
 	}
 	....
 	//---From the plugin-Shell Side: when instanciation-----
-	long uniqueID = host->getCurrentUniqueID ();
+	VstInt32 uniqueID = host->getCurrentUniqueID ();
 	if (uniqueID == 0) // the host instanciates the shell
 	{}
 	else // host try to instanciate one of my subplugin...identified by the uniqueID

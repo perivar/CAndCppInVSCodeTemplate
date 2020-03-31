@@ -8,7 +8,7 @@
 #ifndef __Freeverb_H
 #define __Freeverb_H
 
-#include "audioeffectx.h"
+#include "public.sdk/source/vst2.x/audioeffectx.h"
 #include "revmodel.hpp"
 
 enum

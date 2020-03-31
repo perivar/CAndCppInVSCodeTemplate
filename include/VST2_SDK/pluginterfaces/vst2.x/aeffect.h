@@ -1,18 +1,41 @@
-//-------------------------------------------------------------------------------------------------------
-// VST Plug-Ins SDK
-// Version 2.4		$Date: 2006/02/13 12:04:43 $
+//------------------------------------------------------------------------
+// Project     : VST SDK
+// Version     : 2.4
 //
-// Category     : VST 2.x Interfaces
-// Filename     : aeffect.h
-// Created by   : Steinberg Media Technologies
-// Description  : Definition of AEffect structure
-//
-// © 2006, Steinberg Media Technologies, All Rights Reserved
-//-------------------------------------------------------------------------------------------------------
+// Category    : VST 2.x Interfaces
+// Filename    : pluginterfaces/vst2.x/aeffect.h
+// Created by  : Steinberg, 01/2004
+// Description : Definition of AEffect structure (VST 1.0)
+// 
+//-----------------------------------------------------------------------------
+// LICENSE
+// (c) 2018, Steinberg Media Technologies GmbH, All Rights Reserved
+//-----------------------------------------------------------------------------
+// This Software Development Kit may not be distributed in parts or its entirety  
+// without prior written agreement by Steinberg Media Technologies GmbH. 
+// This SDK must not be used to re-engineer or manipulate any technology used  
+// in any Steinberg or Third-party application or software module, 
+// unless permitted by law.
+// Neither the name of the Steinberg Media Technologies nor the names of its
+// contributors may be used to endorse or promote products derived from this 
+// software without specific prior written permission.
+// 
+// THIS SDK IS PROVIDED BY STEINBERG MEDIA TECHNOLOGIES GMBH "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL STEINBERG MEDIA TECHNOLOGIES GMBH BE LIABLE FOR ANY DIRECT, 
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+// OF THE POSSIBILITY OF SUCH DAMAGE.
+//----------------------------------------------------------------------------------
 
 #ifndef __aeffect__
 #define __aeffect__
 
+//-------------------------------------------------------------------------------------------------------
 // gcc based compiler, or CodeWarrior on Mac OS X
 #if ((defined(__GNUC__) && (defined(__APPLE_CPP__) || defined(__APPLE_CC__))) || (defined (__MWERKS__) && defined (__MACH__)))
 	#ifndef TARGET_API_MAC_CARBON
@@ -25,15 +48,29 @@
 	#endif
 #endif
 
+#ifdef _WIN32
+	#ifndef WIN32
+	#define WIN32	1
+	#endif
+#endif
+
 #if TARGET_API_MAC_CARBON
 	#ifdef __LP64__
 		#pragma options align=power
 	#else
 		#pragma options align=mac68k
 	#endif
-#endif
-#if defined __BORLANDC__
+	#define VSTCALLBACK
+#elif defined __BORLANDC__
 	#pragma -a8
+	#pragma options push -a8
+#elif defined(__GNUC__)
+    #pragma pack(push,8)
+	#if defined(__linux__)
+		#define VSTCALLBACK
+	#else
+		#define VSTCALLBACK __cdecl
+	#endif
 #elif defined(WIN32) || defined(__FLAT__) || defined CBUILDER
 	#pragma pack(push)
 	#pragma pack(8)
@@ -53,7 +90,9 @@
 #define VST_2_1_EXTENSIONS 1 ///< Version 2.1 extensions (08-06-2000)
 #define VST_2_2_EXTENSIONS 1 ///< Version 2.2 extensions (08-06-2001)
 #define VST_2_3_EXTENSIONS 1 ///< Version 2.3 extensions (20-05-2003)
+#ifndef VST_2_4_EXTENSIONS
 #define VST_2_4_EXTENSIONS 1 ///< Version 2.4 extensions (01-01-2006)
+#endif
 
 /** Current VST Version */
 #if VST_2_4_EXTENSIONS
@@ -89,15 +128,17 @@
 // Integral Types
 //-------------------------------------------------------------------------------------------------------
 
+typedef char VstInt8;				///< 8 bit integer type
+
 #ifdef WIN32
-typedef short VstInt16;				///< 16 bit integer type
-typedef int VstInt32;				///< 32 bit integer type
-typedef __int64 VstInt64;			///< 64 bit integer type
+	typedef short VstInt16;			///< 16 bit integer type
+	typedef int VstInt32;			///< 32 bit integer type
+	typedef __int64 VstInt64;		///< 64 bit integer type
 #else
-#include <stdint.h>
-typedef int16_t VstInt16;			///< 16 bit integer type
-typedef int32_t VstInt32;			///< 32 bit integer type
-typedef int64_t VstInt64;			///< 64 bit integer type
+	#include <stdint.h>
+	typedef int16_t VstInt16;		///< 16 bit integer type
+	typedef int32_t VstInt32;		///< 32 bit integer type
+	typedef int64_t VstInt64;		///< 64 bit integer type
 #endif
 
 //-------------------------------------------------------------------------------------------------------
@@ -114,8 +155,9 @@ typedef VstInt32 VstIntPtr;			///< platform-dependent integer type, same size as
 // Misc. Definition
 //-------------------------------------------------------------------------------------------------------
 #undef CCONST
-struct AEffect;
+typedef struct AEffect AEffect;
 
+//-------------------------------------------------------------------------------------------------------
 /// @cond ignore
 typedef	VstIntPtr (VSTCALLBACK *audioMasterCallback) (AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
 typedef VstIntPtr (VSTCALLBACK *AEffectDispatcherProc) (AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
@@ -162,7 +204,7 @@ struct AEffect
 	VstIntPtr resvd1;		///< reserved for Host, must be 0
 	VstIntPtr resvd2;		///< reserved for Host, must be 0
 	
-	VstInt32 initialDelay;	///< for algorithms which need input in the first place (Group delay or latency). This value should be initialized in a resume state.
+	VstInt32 initialDelay;	///< for algorithms which need input in the first place (Group delay or latency in Samples). This value should be initialized in a resume state.
 	
 	VstInt32 DECLARE_VST_DEPRECATED (realQualities);	///< \deprecated unused member
 	VstInt32 DECLARE_VST_DEPRECATED (offQualities);		///< \deprecated unused member
@@ -184,7 +226,7 @@ struct AEffect
 	char future[56];		///< reserved for future use (please zero)
 #else
 	char future[60];		///< reserved for future use (please zero)
-#endif
+#endif // VST_2_4_EXTENSIONS
 //-------------------------------------------------------------------------------------------------------
 };
 
@@ -265,7 +307,7 @@ enum AudioMasterOpcodes
 	audioMasterVersion,			///< [return value]: Host VST version (for example 2400 for VST 2.4) @see AudioEffect::getMasterVersion
 	audioMasterCurrentId,		///< [return value]: current unique identifier on shell plug-in  @see AudioEffect::getCurrentUniqueId
 	audioMasterIdle,			///< no arguments  @see AudioEffect::masterIdle
-	audioMasterPinConnected		///< [return value]: 0=true, 1=false [index]: pin index [value]: 0=input, 1=output  @see AudioEffect::isInputConnected @see AudioEffect::isOutputConnected
+	DECLARE_VST_DEPRECATED (audioMasterPinConnected) ///< \deprecated deprecated in VST 2.4 r2
 //-------------------------------------------------------------------------------------------------------
 };
 
@@ -283,10 +325,16 @@ enum VstStringConstants
 //-------------------------------------------------------------------------------------------------------
 };
 
+#ifdef  __cplusplus
+#define VST_INLINE inline
+#else
+#define VST_INLINE 
+#endif
+
 //-------------------------------------------------------------------------------------------------------
 /** String copy taking care of null terminator. */
 //-------------------------------------------------------------------------------------------------------
-inline char* vst_strncpy (char* dst, const char* src, size_t maxLen)
+VST_INLINE char* vst_strncpy (char* dst, const char* src, size_t maxLen)
 {
 	char* result = strncpy (dst, src, maxLen);
 	dst[maxLen] = 0;
@@ -296,13 +344,14 @@ inline char* vst_strncpy (char* dst, const char* src, size_t maxLen)
 //-------------------------------------------------------------------------------------------------------
 /** String concatenation taking care of null terminator. */
 //-------------------------------------------------------------------------------------------------------
-inline char* vst_strncat (char* dst, const char* src, size_t maxLen)
+VST_INLINE char* vst_strncat (char* dst, const char* src, size_t maxLen)
 {
 	char* result = strncat (dst, src, maxLen);
 	dst[maxLen] = 0;
 	return result;
 }
 
+#ifdef  __cplusplus
 //-------------------------------------------------------------------------------------------------------
 /** Cast #VstIntPtr to pointer. */
 //-------------------------------------------------------------------------------------------------------
@@ -320,6 +369,7 @@ template <class T> inline VstIntPtr ToVstPtr (T* ptr)
 	VstIntPtr* address = (VstIntPtr*)&ptr;
 	return *address;
 }
+#endif // __cplusplus
 
 //-------------------------------------------------------------------------------------------------------
 /** Structure used for #effEditGetRect. */
@@ -337,10 +387,10 @@ struct ERect
 //-------------------------------------------------------------------------------------------------------
 #if TARGET_API_MAC_CARBON
 	#pragma options align=reset
-#elif defined(WIN32) || defined(__FLAT__)
+#elif defined(WIN32) || defined(__FLAT__) || defined(__GNUC__)
 	#pragma pack(pop)
 #elif defined __BORLANDC__
 	#pragma -a-
 #endif
 
-#endif	// __aeffect__
+#endif // __aeffect__

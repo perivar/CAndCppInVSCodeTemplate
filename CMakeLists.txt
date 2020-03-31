@@ -12,7 +12,7 @@ include(Freeverb)
 set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
 
 # folder to the cmake module files
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake/modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmake/modules")
 
 # call the SMTG_VST3_SDK.cmake file
 include(SMTG_VST3_SDK)
@@ -21,7 +21,7 @@ project(vstsdk)
 
 setupPlatformToolset()
 
-set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
 
 # Here you can define where the VST 3 SDK is located
 set(SDK_ROOT "${ROOT}")
@@ -93,7 +93,7 @@ project(vstsdk)
 
 setupPlatformToolset()
 
-set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
 
 # Here you can define where the VST 3 SDK is located
 set(SDK_ROOT "${ROOT}")

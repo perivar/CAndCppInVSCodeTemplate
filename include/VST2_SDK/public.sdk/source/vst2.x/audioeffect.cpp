@@ -1,14 +1,36 @@
-//-------------------------------------------------------------------------------------------------------
-// VST Plug-Ins SDK
-// Version 2.4       $Date: 2006/01/31 10:04:22 $
+//------------------------------------------------------------------------
+// Project     : VST SDK
+// Version     : 2.4
 //
-// Category     : VST 2.x Classes
-// Filename     : audioeffect.cpp
-// Created by   : Steinberg Media Technologies
-// Description  : Class AudioEffect (VST 1.0)
-//
-// © 2005, Steinberg Media Technologies, All Rights Reserved
-//-------------------------------------------------------------------------------------------------------
+// Category    : VST 2.x Classes
+// Filename    : public.sdk/source/vst2.x/audioeffect.cpp
+// Created by  : Steinberg, 01/2004
+// Description : Class AudioEffect (VST 1.0).
+// 
+//-----------------------------------------------------------------------------
+// LICENSE
+// (c) 2018, Steinberg Media Technologies GmbH, All Rights Reserved
+//-----------------------------------------------------------------------------
+// This Software Development Kit may not be distributed in parts or its entirety  
+// without prior written agreement by Steinberg Media Technologies GmbH. 
+// This SDK must not be used to re-engineer or manipulate any technology used  
+// in any Steinberg or Third-party application or software module, 
+// unless permitted by law.
+// Neither the name of the Steinberg Media Technologies nor the names of its
+// contributors may be used to endorse or promote products derived from this 
+// software without specific prior written permission.
+// 
+// THIS SDK IS PROVIDED BY STEINBERG MEDIA TECHNOLOGIES GMBH "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL STEINBERG MEDIA TECHNOLOGIES GMBH BE LIABLE FOR ANY DIRECT, 
+// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+// OF THE POSSIBILITY OF SUCH DAMAGE.
+//----------------------------------------------------------------------------------
 
 #include "audioeffect.h"
 #include "aeffeditor.h"
@@ -136,9 +158,9 @@ AudioEffect::~AudioEffect ()
 }
 
 //-------------------------------------------------------------------------------------------------------
-void AudioEffect::setEditor (AEffEditor* editor)
+void AudioEffect::setEditor (AEffEditor* _editor)
 {
-	this->editor = editor;
+	editor = _editor;
 	if (editor) 
 		cEffect.flags |= effFlagsHasEditor;
 	else 
@@ -232,38 +254,20 @@ void AudioEffect::masterIdle ()
 }
 
 //-------------------------------------------------------------------------------------------------------
-/*!
-	There is no negotiation currently, thus numInputs must not change at any time. A VST plug-in is taken to
-	be a device with a fixed number of i/o pins. How these are beeing used depends on the application.
-	
-	\param input The index of the input, starting at 0 (e.g. left=0, right=1).
-	\return The input's state
-
-	This method should be called from resume() rather than from the constructor or from process function.
-*/
-bool AudioEffect::isInputConnected (VstInt32 input)
+bool AudioEffect::DECLARE_VST_DEPRECATED (isInputConnected) (VstInt32 input)
 {
 	VstInt32 ret = 0;
 	if (audioMaster)
-		ret = (VstInt32)audioMaster (&cEffect, audioMasterPinConnected, input, 0, 0, 0);
+		ret = (VstInt32)audioMaster (&cEffect, DECLARE_VST_DEPRECATED (audioMasterPinConnected), input, 0, 0, 0);
 	return ret ? false : true;		// return value is 0 for true
 }
 
 //-------------------------------------------------------------------------------------------------------
-/*!
-	There is no negotiation currently, thus numOutputs must not change at any time. A VST plug-in is taken to
-	be a device with a fixed number of i/o pins. How these are beeing used depends on the application.
-	
-	\param output The index of the output, starting at 0 (e.g. left=0, right=1).
-	\return The output's state
-
-	This method should be called from resume() rather than from the constructor or from process function.
-*/
-bool AudioEffect::isOutputConnected (VstInt32 output)
+bool AudioEffect::DECLARE_VST_DEPRECATED (isOutputConnected) (VstInt32 output)
 {
 	VstInt32 ret = 0;
 	if (audioMaster)
-		ret = (VstInt32)audioMaster (&cEffect, audioMasterPinConnected, output, 1, 0, 0);
+		ret = (VstInt32)audioMaster (&cEffect, DECLARE_VST_DEPRECATED (audioMasterPinConnected), output, 1, 0, 0);
 	return ret ? false : true;		// return value is 0 for true
 }
 
@@ -406,11 +410,11 @@ void AudioEffect::dB2string (float value, char* text, VstInt32 maxLen)
 */
 void AudioEffect::Hz2string (float samples, char* text, VstInt32 maxLen)
 {
-	float sampleRate = getSampleRate ();
+	float _sampleRate = getSampleRate ();
 	if (!samples)
 		float2string (0, text, maxLen);
 	else
-		float2string (sampleRate / samples, text, maxLen);
+		float2string (_sampleRate / samples, text, maxLen);
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -450,7 +454,7 @@ void AudioEffect::float2string (float value, char* text, VstInt32 maxLen)
 			return;
 		}
 	}
-	else if( v > 99999999.)
+	else if (v > 99999999.)
 	{
 		vst_strncpy (string, "Huge!", 31);
 		return;
@@ -521,13 +525,13 @@ void AudioEffect::int2string (VstInt32 value, char* text, VstInt32 maxLen)
 		vst_strncpy (text, "", maxLen);
 
 	bool state = false;
-	for(VstInt32 div = 100000000; div >= 1; div /= 10)
+	for (VstInt32 div = 100000000; div >= 1; div /= 10)
 	{
 		VstInt32 digit = value / div;
 		value -= digit * div;
 		if (state || digit > 0)
 		{
-			char temp[2] = {'0' + (char)digit, '\0'};
+			char temp[2] = {static_cast<char>('0' + (char)digit), '\0'};
 			vst_strncat (text, temp, maxLen);
 			state = true;
 		}

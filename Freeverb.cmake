@@ -55,20 +55,16 @@ list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
 # set(CMAKE_RC_COMPILE_OBJECT
 # "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 
-set(FREEVERB_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
 # build the SDK as a static library
-set(SDK_2_4_ROOT "${FREEVERB_ROOT}/vst.2.4.sdk")
+set(VST_SDK_2_4_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK")
 add_library(SDK2_4 STATIC
-    ${SDK_2_4_ROOT}/aeffeditor.h
-    ${SDK_2_4_ROOT}/audioeffect.cpp
-    ${SDK_2_4_ROOT}/audioeffect.h
-    ${SDK_2_4_ROOT}/audioeffectx.cpp
-    ${SDK_2_4_ROOT}/audioeffectx.h
-    ${SDK_2_4_ROOT}/vstplugmain.cpp
-    ${SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffect.h
-    ${SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffectx.h
-    ${SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
+    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffect.cpp
+    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffectx.cpp    
+    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp
+    
+    ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffect.h
+    ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffectx.h
+    ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
 )
 
 # define output directory
@@ -84,7 +80,7 @@ set_target_properties(SDK2_4 PROPERTIES
 # bring in the headers for the library
 target_include_directories(SDK2_4
   PUBLIC
-  ${SDK_2_4_ROOT}
+  ${VST_SDK_2_4_ROOT}
 )
 
 # compile options per target
@@ -94,7 +90,7 @@ target_compile_options(SDK2_4
 )
 
 # build the Components as a static library
-set(FREEVERB_COMPONENT_ROOT "${FREEVERB_ROOT}/freeverb.components")
+set(FREEVERB_COMPONENT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/freeverb.components")
 add_library (FREEVERB_COMPONENTS STATIC
   ${FREEVERB_COMPONENT_ROOT}/allpass.cpp
   ${FREEVERB_COMPONENT_ROOT}/allpass.hpp
@@ -175,7 +171,7 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
 )
 
 # Bring the headers, such as aeffeditor.h into the project
-target_include_directories(${PLUGIN_NAME} PUBLIC ${SDK_2_4_ROOT})
+target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
 target_include_directories(${PLUGIN_NAME} PUBLIC ${FREEVERB_COMPONENT_ROOT})
 
 # link to the sdk and components libraries
