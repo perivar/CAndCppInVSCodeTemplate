@@ -125,7 +125,8 @@ int main (int argc, char* argv[])
 		return -1;
 	}
 
-	const char* fileName = "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST2\\freeverb.dll";
+	// const char* fileName = "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST2\\freeverb.dll";
+	const char* fileName = "C:\\Users\\perner\\My Projects\\CAndCppInVSCodeTemplate\\build\\VST2\\ADelay.dll";
 	//const char* fileName = "adelay.dll";
 	//const char* fileName = "surrounddelay.dll";
 	//const char* fileName = "vstxsynth.dll";

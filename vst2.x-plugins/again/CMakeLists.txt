@@ -14,6 +14,17 @@ set(PLUGIN_NAME AGain)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# # check that the required SDK2 libraries are already built 
+# find_library(VST2_SDK_FRAMEWORK SDK2_4 REQUIRED)
+
+# message(STATUS "VST2 static libraries found: 
+#     ${VST2_SDK_FRAMEWORK}
+# " )
+
+# if(NOT VST2_SDK_FRAMEWORK OR NOT EXISTS ${VST2_SDK_FRAMEWORK})
+#   message(FATAL_ERROR "Error! VST2 SDK library not found")
+# endif()
+
 # this is the general configuration
 # disabled - use flags per target instead by using target_compile_options()
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
@@ -93,37 +104,36 @@ add_library(${PLUGIN_NAME} MODULE
 	  ${RESOURCE_SRCS}
 )
 
-# define output directory
 set_target_properties(${PLUGIN_NAME} PROPERTIES
+  # define output directories
   ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
   LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/VST2 # note ! using VST2 directory for MODULE plugins
   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/VST2 # note ! using VST2 directory for SHARED plugins
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
 
-# ensure we don't add the 'lib' prefix and change the suffix to .vst
-set_target_properties(${PLUGIN_NAME} PROPERTIES 
   # stop CMake from prepending `lib` to library names
   PREFIX ""
 
   # For vst2's keep the dll suffix
   # SUFFIX ".dll"
-
+  
   # export no symbols by default
   C_VISIBILITY_PRESET hidden
   CXX_VISIBILITY_PRESET hidden
   VISIBILITY_INLINES_HIDDEN 1
+
+  # set cxx standard
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
 )
 
 # Bring the headers, such as aeffeditor.h into the project
 target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
 
-# link to the sdk and components libraries
+# target the libraries needed
 # target_link_libraries(${PLUGIN_NAME} 
-#   PRIVATE 
-#   SDK2_4 
+#   PRIVATE
+#   ${VST2_SDK_FRAMEWORK}
 # )
 
 # set link flags per target

@@ -3,13 +3,17 @@ cmake_minimum_required(VERSION 3.5)
 # set verbose
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# call the CMakeLists.txt file in the freeverb directory
+# # call the CMakeLists.txt file in the freeverb directory
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
 
-# call the CMakeLists.txt file in the minihost directory
+# # call the CMakeLists.txt file in the minihost directory
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
 
+# # call the CMakeLists.txt file in the again directory
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
+
+# call the CMakeLists.txt file in the adelay directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
 return()
 
 # target path (SMTG_PLUGIN_TARGET_PATH)

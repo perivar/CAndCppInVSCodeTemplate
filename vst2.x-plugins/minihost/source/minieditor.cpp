@@ -7,7 +7,7 @@
 // Created by   : Steinberg
 // Description  : VST Mini Host Editor
 //
-// © 2006, Steinberg Media Technologies, All Rights Reserved
+// ï¿½ 2006, Steinberg Media Technologies, All Rights Reserved
 //-------------------------------------------------------------------------------------------------------
 
 #include "pluginterfaces/vst2.x/aeffectx.h"
@@ -43,7 +43,7 @@ bool checkEffectEditor (AEffect* effect)
 	if ((effect->flags & effFlagsHasEditor) == 0)
 	{
 		printf ("This plug does not have an editor!\n");
-		return false;
+		// return false;
 	}
 
 #if _WIN32

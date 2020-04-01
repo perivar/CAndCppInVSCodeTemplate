@@ -1,5 +1,32 @@
+# NOTE THIS VST PLUGIN REQUIRES THE VST SDK LIBS TO HAVE BIN BUILT BEFORE BEING USIED!
 cmake_minimum_required (VERSION 3.5)
-project (freeverb)
+
+# Adds a resource for a target 
+#
+# The resource which gets copied into the targets Resource Bundle directory.
+#
+# @param target cmake target
+# @param input_file resource file
+# @param ARGV2 destination subfolder
+function(add_plugin_resource target input_file)
+    set(destination_folder "${CMAKE_BINARY_DIR}/VST2")
+    if(ARGV2)
+        set(destination_folder "${destination_folder}/${ARGV2}")
+    endif()
+    if(NOT EXISTS ${destination_folder})
+        add_custom_command(TARGET ${target} PRE_LINK
+          COMMAND ${CMAKE_COMMAND} -E make_directory
+          "${destination_folder}"
+        )
+    endif()
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_LIST_DIR}/${input_file}
+        ${destination_folder}
+    )
+endfunction()
+
+project (ADelay)
 
 message(STATUS  "Building on ${CMAKE_SYSTEM_NAME}")
 message(STATUS  "Build type: ${CMAKE_BUILD_TYPE}")
@@ -10,9 +37,38 @@ message(STATUS  "Binary dir: ${CMAKE_BINARY_DIR}")
 message(STATUS  "Project binary dir: ${PROJECT_BINARY_DIR}")
 
 # Name your plugin here
-set(PLUGIN_NAME freeverb)
+set(PLUGIN_NAME ADelay)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# check that the required SDK3 libraries are already built 
+find_library(VST3_SDK_BASE_FRAMEWORK base REQUIRED)
+find_library(VST3_SDK_FRAMEWORK sdk REQUIRED)
+find_library(VST3_SDK_VSTGUI_SUPPORT_FRAMEWORK vstgui_support REQUIRED)
+find_library(VST3_SDK_VSTGUI_FRAMEWORK vstgui REQUIRED)
+
+message(STATUS "VST3 / VSTGUI4 static libraries found: 
+    ${VST3_SDK_BASE_FRAMEWORK}
+    ${VST3_SDK_FRAMEWORK}
+    ${VST3_SDK_VSTGUI_SUPPORT_FRAMEWORK}
+    ${VST3_SDK_VSTGUI_FRAMEWORK}
+" )
+
+if(NOT VST3_SDK_BASE_FRAMEWORK)
+  message(FATAL_ERROR "VST3 SDK base library not found")
+endif()
+
+if(NOT VST3_SDK_FRAMEWORK)
+  message(FATAL_ERROR "VST3 SDK library not found")
+endif()
+
+if(NOT VST3_SDK_VSTGUI_SUPPORT_FRAMEWORK)
+  message(FATAL_ERROR "VST3 gui support library not found")
+endif()
+
+if(NOT VST3_SDK_VSTGUI_FRAMEWORK)
+  message(FATAL_ERROR "VST3 gui  library not found")
+endif()
 
 # this is the general configuration
 # disabled - use flags per target instead by using target_compile_options()
@@ -22,7 +78,6 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PLUGIN_COMPILE_FLAGS)
 
 # flags used for Debug, Release and Tracer builds
-# Macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVST_API -DWIN32 -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -D_CRT_SECURE_NO_DEPRECATE")
 
 # TODO: use generator expressions instead $<$<CONFIG:RELEASE>:-O2->
@@ -56,15 +111,15 @@ list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 # set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-# set(CMAKE_RC_COMPILER_INIT windres)
-# ENABLE_LANGUAGE(RC)
-# set(CMAKE_RC_COMPILE_OBJECT
-# "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
+find_program(WINDRES_EXECUTABLE NAMES windres)
+set(CMAKE_RC_COMPILER_INIT ${WINDRES_EXECUTABLE})
+enable_language(RC)
+# set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> \"-I${CMAKE_SOURCE_DIR}/data/pkg\" -i <SOURCE> -o <OBJECT>")
+set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 
-# build the SDK as a static library
-
-set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK")
-add_library(SDK2_4 STATIC
+# Add VST 2.4 SDK
+set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK"  CACHE PATH "Path to VST 2.4 SDK")
+set(VSTSDK2_4_PLUGIN_SOURCE
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffect.cpp
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffectx.cpp    
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp # VST2 plugins must implement createEffectInstance and export __declspec(dllexport) VSTPluginMain
@@ -74,84 +129,50 @@ add_library(SDK2_4 STATIC
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
 )
 
-# define output directory
-set_target_properties(SDK2_4 PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
+# Add VSTGUI SDK
+set(VSTSDKGUI_DIR "${CMAKE_SOURCE_DIR}/include/VST3_SDK/vstgui4/vstgui" CACHE PATH "Path to VSTGUI SDK")
+set(VSTSDKGUI_PLUGIN_SOURCE
+    ${VSTSDKGUI_DIR}/plugin-bindings/aeffguieditor.cpp
+    ${VSTSDKGUI_DIR}/plugin-bindings/aeffguieditor.h
 
-# bring in the headers for the library
-target_include_directories(SDK2_4
-  PUBLIC
-  ${VST_SDK_2_4_ROOT}
+    # only on WIN32
+    ${VSTSDKGUI_DIR}/vstgui_win32.cpp 
 )
+set(VSTSDKGUI_INCLUDE_DIR ${VSTSDKGUI_DIR})
 
-# compile options per target
-target_compile_options(SDK2_4
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
-)
-
-# build the freeverb components as a static library
-set(FREEVERB_COMPONENT_ROOT "${CMAKE_SOURCE_DIR}/include/freeverb.components")
-add_library (FREEVERB_COMPONENTS STATIC
-  ${FREEVERB_COMPONENT_ROOT}/allpass.cpp
-  ${FREEVERB_COMPONENT_ROOT}/allpass.hpp
-  ${FREEVERB_COMPONENT_ROOT}/comb.cpp
-  ${FREEVERB_COMPONENT_ROOT}/comb.hpp
-  ${FREEVERB_COMPONENT_ROOT}/revmodel.cpp
-  ${FREEVERB_COMPONENT_ROOT}/revmodel.hpp
-  ${FREEVERB_COMPONENT_ROOT}/tuning.h
-)
-
-# define output directory
-set_target_properties(FREEVERB_COMPONENTS PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
-
-# bring in the headers for the library
-target_include_directories(FREEVERB_COMPONENTS
-  PUBLIC
-  ${FREEVERB_COMPONENT_ROOT}
-)
-
-# compile options per target
-target_compile_options(FREEVERB_COMPONENTS
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
-)
 
 # set plugin root and plugin sources
-set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
+set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/vst2.x-plugins/adelay")
 set(PLUGIN_SRCS
-  ${PLUGIN_ROOT}/freeverb.cpp
-  ${PLUGIN_ROOT}/freeverb.hpp
-  ${PLUGIN_ROOT}/FreeverbMain.cpp
-#   ${PLUGIN_ROOT}/Freeverb4.def
+  ${PLUGIN_ROOT}/adelaymain.cpp
+  ${PLUGIN_ROOT}/adelay.cpp
+  # ${PLUGIN_ROOT}/surrounddelay.cpp
+  ${PLUGIN_ROOT}/editor/sdeditor.cpp
+  ${VSTSDK2_4_PLUGIN_SOURCE}
+  ${VSTSDKGUI_PLUGIN_SOURCE}
 )
 
 # set plugin resources
 set(RESOURCE_SRCS
-  
+  "${PLUGIN_ROOT}/editor/resources/bmp00128.bmp"
+  "${PLUGIN_ROOT}/editor/resources/bmp00129.bmp"
+  "${PLUGIN_ROOT}/editor/resources/bmp00130.bmp"
+  "${PLUGIN_ROOT}/editor/resources/surrounddelay.rc"
 )
 
 # for the DEF file check GENERATE_EXPORT_HEADER
 # http://gernotklingler.com/blog/creating-using-shared-libraries-different-compilers-different-operating-systems/
 
 # create a VST using MODULE or SHARED
-add_library(${PLUGIN_NAME} SHARED
+add_library(${PLUGIN_NAME} MODULE
 	  ${PLUGIN_SRCS}
 	  ${RESOURCE_SRCS}
 )
+
+# add_plugin_resource(${PLUGIN_NAME} "${PLUGIN_ROOT}/editor/resources/bmp00128.bmp")
+# add_plugin_resource(${PLUGIN_NAME} "${PLUGIN_ROOT}/editor/resources/bmp00129.bmp")
+# add_plugin_resource(${PLUGIN_NAME} "${PLUGIN_ROOT}/editor/resources/bmp00130.bmp")
+# add_plugin_resource(${PLUGIN_NAME} "${PLUGIN_ROOT}/editor/resources/surrounddelay.rc")
 
 set_target_properties(${PLUGIN_NAME} PROPERTIES
   # define output directories
@@ -178,13 +199,19 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
 
 # Bring the headers, such as aeffeditor.h into the project
 target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
-target_include_directories(${PLUGIN_NAME} PUBLIC ${FREEVERB_COMPONENT_ROOT})
+target_include_directories(${PLUGIN_NAME} PUBLIC ${VSTSDKGUI_INCLUDE_DIR})
 
-# link to the sdk and components libraries
+# target the libraries needed
 target_link_libraries(${PLUGIN_NAME} 
-  PRIVATE 
-  SDK2_4 
-  FREEVERB_COMPONENTS
+  ${VST3_SDK_BASE_FRAMEWORK}
+  ${VST3_SDK_FRAMEWORK}
+  ${VST3_SDK_VSTGUI_SUPPORT_FRAMEWORK}
+  ${VST3_SDK_VSTGUI_FRAMEWORK}
+  windowscodecs 
+  d2d1 
+  dwrite 
+  shlwapi
+  dwmapi
 )
 
 # set link flags per target
@@ -194,10 +221,12 @@ target_link_options(${PLUGIN_NAME}
 )
 
 # set definitions per target
-# target_compile_definitions(${PLUGIN_NAME} 
-#   PUBLIC
-#   VSTGUI_LIVE_EDITING=1 
-# )
+target_compile_definitions(${PLUGIN_NAME} 
+  PUBLIC
+  ENABLE_UNIT_TESTS=1 
+  VSTGUI_LIVE_EDITING=1 
+  VSTGUI_ENABLE_DEPRECATED_METHODS=0
+)
 
 # set compile options per target
 target_compile_options(${PLUGIN_NAME} 

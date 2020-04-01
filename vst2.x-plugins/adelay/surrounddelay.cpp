@@ -7,7 +7,7 @@
 // Created by   : Steinberg Media Technologies
 // Description  : Simple Surround Delay plugin with Editor using VSTGUI
 //
-// © 2006, Steinberg Media Technologies, All Rights Reserved
+// ï¿½ 2006, Steinberg Media Technologies, All Rights Reserved
 //-------------------------------------------------------------------------------------------------------
 
 #ifndef __surrounddelay__
@@ -55,7 +55,8 @@ SurroundDelay::SurroundDelay (audioMasterCallback audioMaster)
 	setUniqueID ('SDlE');	// this should be unique, use the Steinberg web page for plugin Id registration
 
 	// create the editor
-	editor = new SDEditor (this);
+	// PIN: TODO - what to do about this?
+	// editor = new SDEditor (this);
 
 	resume ();
 }
@@ -168,5 +169,5 @@ void SurroundDelay::setParameter (VstInt32 index, float value)
 	ADelay::setParameter (index, value);
 
 	if (editor)
-		((AEffGUIEditor*)editor)->setParameter (index, value);
+		((VSTGUI::AEffGUIEditor*)editor)->setParameter (index, value);
 }
