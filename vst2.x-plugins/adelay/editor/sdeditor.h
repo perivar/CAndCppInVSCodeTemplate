@@ -7,18 +7,21 @@
 // Created by   : Steinberg Media Technologies
 // Description  : Simple Surround Delay plugin with Editor using VSTGUI
 //
-// ï¿½ 2006, Steinberg Media Technologies, All Rights Reserved
+// © 2006, Steinberg Media Technologies, All Rights Reserved
 //-------------------------------------------------------------------------------------------------------
 
 #ifndef __sdeditor__
 #define __sdeditor__
 
-#ifndef __aeffguieditor__
-#include "../../vstgui4/vstgui/plugin-bindings/aeffguieditor.h"
+
+// include VSTGUI
+#ifndef __vstgui__
+#include "vstgui.sf/vstgui/vstgui.h"
 #endif
 
+
 //-----------------------------------------------------------------------------
-class SDEditor : public VSTGUI::AEffGUIEditor, public VSTGUI::IControlListener
+class SDEditor : public AEffGUIEditor, public CControlListener
 {
 public:
 	SDEditor (AudioEffect* effect);
@@ -29,20 +32,20 @@ public:
 	virtual void close ();
 
 	virtual void setParameter (VstInt32 index, float value);
-	virtual void valueChanged (VSTGUI::CDrawContext* context, VSTGUI::CControl* control);
+	virtual void valueChanged (CDrawContext* context, CControl* control);
 
 private:
 	// Controls
-	VSTGUI::CVerticalSlider* delayFader;
-	VSTGUI::CVerticalSlider* feedbackFader;
-	VSTGUI::CVerticalSlider* volumeFader;
+	CVerticalSlider* delayFader;
+	CVerticalSlider* feedbackFader;
+	CVerticalSlider* volumeFader;
 
-	VSTGUI::CParamDisplay* delayDisplay;
-	VSTGUI::CParamDisplay* feedbackDisplay;
-	VSTGUI::CParamDisplay* volumeDisplay;
+	CParamDisplay* delayDisplay;
+	CParamDisplay* feedbackDisplay;
+	CParamDisplay* volumeDisplay;
 
 	// Bitmap
-	VSTGUI::CBitmap* hBackground;
+	CBitmap* hBackground;
 };
 
 #endif

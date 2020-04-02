@@ -40,10 +40,21 @@ extern AudioEffect* createEffectInstance (audioMasterCallback audioMaster);
 
 extern "C" {
 
-#if defined (__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-	#define VST_EXPORT	__attribute__ ((visibility ("default")))
+// PIN: 01.04.2020 - Added __declspec(dllexport) so that the methods are exported in the DLL using g++ on Windows (MSYS2)
+// #if defined (__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+// 	#define VST_EXPORT	__attribute__ ((visibility ("default")))
+// #else
+// 	#define VST_EXPORT
+// #endif
+
+#if defined (__GNUC__)
+  #ifdef WIN32
+    #define VST_EXPORT __declspec(dllexport)
+  #else
+    #define VST_EXPORT   __attribute__ ((visibility ("default")))
+  #endif
 #else
-	#define VST_EXPORT
+  #define VST_EXPORT
 #endif
 
 //------------------------------------------------------------------------

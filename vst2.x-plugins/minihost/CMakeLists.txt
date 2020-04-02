@@ -60,8 +60,6 @@ list(APPEND PLUGIN_LINKER_FLAGS "-static" "-static-libgcc" "-static-libstdc++")
 # set(CMAKE_RC_COMPILE_OBJECT
 # "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 
-# build the SDK as a static library
-
 # Add VST 2.4 SDK
 set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK"  CACHE PATH "Path to VST 2.4 SDK")
 set(VSTSDK2_4_PLUGIN_SOURCE

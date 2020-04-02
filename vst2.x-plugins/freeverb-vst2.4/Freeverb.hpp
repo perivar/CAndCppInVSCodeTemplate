@@ -12,16 +12,21 @@
 #include "revmodel.hpp"
 
 enum
-  {
-    KMode, KRoomSize, KDamp, KWidth, KWet, KDry,
-    KNumParams
-  };
+{
+  KMode,
+  KRoomSize,
+  KDamp,
+  KWidth,
+  KWet,
+  KDry,
+  KNumParams
+};
 
 class Freeverb : public AudioEffectX
 {
 public:
   Freeverb(audioMasterCallback audioMaster);
-  virtual void setSampleRate (float sampleRate);
+  virtual void setSampleRate(float sampleRate);
   virtual void process(float **inputs, float **outputs, VstInt32 sampleFrames);
   virtual void processReplacing(float **inputs, float **outputs, VstInt32 sampleFrames);
   virtual void setProgramName(char *name);
@@ -33,13 +38,14 @@ public:
   virtual void getParameterName(VstInt32 index, char *text);
   virtual void suspend();
   virtual void resume();
-  virtual bool getEffectName (char* name);
-  virtual bool getVendorString (char* text);
-  virtual bool getProductString (char* text);
-  virtual VstInt32 canDo(char* text);
+  virtual bool getEffectName(char *name);
+  virtual bool getVendorString(char *text);
+  virtual bool getProductString(char *text);
+  virtual VstInt32 canDo(char *text);
+
 private:
-  revmodel	model;
-  char		programName[32];
+  revmodel model;
+  char programName[32];
 };
 
 #endif

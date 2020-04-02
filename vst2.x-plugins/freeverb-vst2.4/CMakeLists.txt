@@ -61,73 +61,29 @@ list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
 # set(CMAKE_RC_COMPILE_OBJECT
 # "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 
-# build the SDK as a static library
-
-set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK")
-add_library(SDK2_4 STATIC
+# Add VST 2.4 SDK
+set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK"  CACHE PATH "Path to VST 2.4 SDK")
+set(VSTSDK2_4_PLUGIN_SOURCE
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffect.cpp
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffectx.cpp    
-    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp # VST2 plugins must implement createEffectInstance and export __declspec(dllexport) VSTPluginMain
+    # disable since freeverb have it's own main method: FreeverbMain.cpp
+    # ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp # VST2 plugins must implement createEffectInstance and export __declspec(dllexport) VSTPluginMain
     
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffect.h
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffectx.h
     ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
 )
 
-# define output directory
-set_target_properties(SDK2_4 PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
-
-# bring in the headers for the library
-target_include_directories(SDK2_4
-  PUBLIC
-  ${VST_SDK_2_4_ROOT}
-)
-
-# compile options per target
-target_compile_options(SDK2_4
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
-)
-
-# build the freeverb components as a static library
+# Add the freeverb components 
 set(FREEVERB_COMPONENT_ROOT "${CMAKE_SOURCE_DIR}/include/freeverb.components")
-add_library (FREEVERB_COMPONENTS STATIC
+set(FREEVERB_COMPONENTS_SOURCE
   ${FREEVERB_COMPONENT_ROOT}/allpass.cpp
-  ${FREEVERB_COMPONENT_ROOT}/allpass.hpp
+  # ${FREEVERB_COMPONENT_ROOT}/allpass.hpp
   ${FREEVERB_COMPONENT_ROOT}/comb.cpp
-  ${FREEVERB_COMPONENT_ROOT}/comb.hpp
+  # ${FREEVERB_COMPONENT_ROOT}/comb.hpp
   ${FREEVERB_COMPONENT_ROOT}/revmodel.cpp
-  ${FREEVERB_COMPONENT_ROOT}/revmodel.hpp
-  ${FREEVERB_COMPONENT_ROOT}/tuning.h
-)
-
-# define output directory
-set_target_properties(FREEVERB_COMPONENTS PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-  CXX_EXTENSIONS OFF
-)
-
-# bring in the headers for the library
-target_include_directories(FREEVERB_COMPONENTS
-  PUBLIC
-  ${FREEVERB_COMPONENT_ROOT}
-)
-
-# compile options per target
-target_compile_options(FREEVERB_COMPONENTS
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
+  # ${FREEVERB_COMPONENT_ROOT}/revmodel.hpp
+  # ${FREEVERB_COMPONENT_ROOT}/tuning.h
 )
 
 # set plugin root and plugin sources
@@ -136,7 +92,9 @@ set(PLUGIN_SRCS
   ${PLUGIN_ROOT}/freeverb.cpp
   ${PLUGIN_ROOT}/freeverb.hpp
   ${PLUGIN_ROOT}/FreeverbMain.cpp
-#   ${PLUGIN_ROOT}/Freeverb4.def
+  # ${PLUGIN_ROOT}/Freeverb4.def
+  ${VSTSDK2_4_PLUGIN_SOURCE}
+  ${FREEVERB_COMPONENTS_SOURCE}  
 )
 
 # set plugin resources
@@ -181,11 +139,11 @@ target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
 target_include_directories(${PLUGIN_NAME} PUBLIC ${FREEVERB_COMPONENT_ROOT})
 
 # link to the sdk and components libraries
-target_link_libraries(${PLUGIN_NAME} 
-  PRIVATE 
-  SDK2_4 
-  FREEVERB_COMPONENTS
-)
+# target_link_libraries(${PLUGIN_NAME} 
+#   PRIVATE 
+#   SDK2_4 
+#   FREEVERB_COMPONENTS
+# )
 
 # set link flags per target
 target_link_options(${PLUGIN_NAME} 

@@ -43,7 +43,7 @@ bool checkEffectEditor (AEffect* effect)
 	if ((effect->flags & effFlagsHasEditor) == 0)
 	{
 		printf ("This plug does not have an editor!\n");
-		// return false;
+		return false;
 	}
 
 #if _WIN32

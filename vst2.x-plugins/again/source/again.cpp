@@ -7,7 +7,7 @@
 // Created by   : Steinberg Media Technologies
 // Description  : Stereo plugin which applies Gain [-oo, 0dB]
 //
-// © 2006, Steinberg Media Technologies, All Rights Reserved
+// ï¿½ 2006, Steinberg Media Technologies, All Rights Reserved
 //-------------------------------------------------------------------------------------------------------
 
 #include "again.h"

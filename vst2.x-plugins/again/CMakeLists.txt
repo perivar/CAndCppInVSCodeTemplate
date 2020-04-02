@@ -33,6 +33,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PLUGIN_COMPILE_FLAGS)
 
 # flags used for Debug, Release and Tracer builds
+# Macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVST_API -DWIN32 -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -D_CRT_SECURE_NO_DEPRECATE")
 
 # TODO: use generator expressions instead $<$<CONFIG:RELEASE>:-O2->
@@ -66,10 +67,11 @@ list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 # set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-# set(CMAKE_RC_COMPILER_INIT windres)
-# ENABLE_LANGUAGE(RC)
-# set(CMAKE_RC_COMPILE_OBJECT
-# "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
+# Configuration for resources files
+find_program(WINDRES_EXECUTABLE NAMES windres)
+set(CMAKE_RC_COMPILER_INIT ${WINDRES_EXECUTABLE})
+enable_language(RC)
+set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <FLAGS> -O coff <DEFINES> -i <SOURCE> -o <OBJECT>")
 
 # Add VST 2.4 SDK
 set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK"  CACHE PATH "Path to VST 2.4 SDK")

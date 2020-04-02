@@ -7,7 +7,7 @@
 // Created by   : Steinberg Media Technologies
 // Description  : Simple Surround Delay plugin with Editor using VSTGUI
 //
-// ï¿½ 2006, Steinberg Media Technologies, All Rights Reserved
+// © 2006, Steinberg Media Technologies, All Rights Reserved
 //-------------------------------------------------------------------------------------------------------
 
 #ifndef __surrounddelay__

@@ -13,7 +13,17 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
 
 # call the CMakeLists.txt file in the adelay directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
+
+# call the CMakeLists.txt file in the minimal host directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minimal_vst2x_host")
+
+# call the CMakeLists.txt file in the vstxsynth directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/vstxsynth")
+
+# call the CMakeLists.txt file in the Revitar directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/Revitar")
+
 return()
 
 # target path (SMTG_PLUGIN_TARGET_PATH)
