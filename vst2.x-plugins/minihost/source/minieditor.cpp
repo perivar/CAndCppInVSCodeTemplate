@@ -16,150 +16,151 @@
 #include <windows.h>
 #elif TARGET_API_MAC_CARBON
 #include <Carbon/Carbon.h>
-static pascal OSStatus windowHandler (EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void* inUserData);
-static pascal void idleTimerProc (EventLoopTimerRef inTimer, void* inUserData);
+static pascal OSStatus windowHandler(EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void *inUserData);
+static pascal void idleTimerProc(EventLoopTimerRef inTimer, void *inUserData);
 #endif
 
 #include <stdio.h>
 
 #if _WIN32
 //-------------------------------------------------------------------------------------------------------
-struct MyDLGTEMPLATE: DLGTEMPLATE
+struct MyDLGTEMPLATE : DLGTEMPLATE
 {
 	WORD ext[3];
-	MyDLGTEMPLATE ()
+	MyDLGTEMPLATE()
 	{
-		memset (this, 0, sizeof (*this));
+		memset(this, 0, sizeof(*this));
 	};
 };
 
-static INT_PTR CALLBACK EditorProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-static AEffect* theEffect = 0;
+static INT_PTR CALLBACK EditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+static AEffect *theEffect = 0;
 #endif
 
 //-------------------------------------------------------------------------------------------------------
-bool checkEffectEditor (AEffect* effect)
+bool checkEffectEditor(AEffect *effect)
 {
 	if ((effect->flags & effFlagsHasEditor) == 0)
 	{
-		printf ("This plug does not have an editor!\n");
+		printf("This plug does not have an editor!\n");
 		return false;
 	}
 
 #if _WIN32
 	theEffect = effect;
 
-	MyDLGTEMPLATE t;	
-	t.style = WS_POPUPWINDOW|WS_DLGFRAME|DS_MODALFRAME|DS_CENTER;
+	MyDLGTEMPLATE t;
+	t.style = WS_POPUPWINDOW | WS_DLGFRAME | DS_MODALFRAME | DS_CENTER;
 	t.cx = 100;
 	t.cy = 100;
-	DialogBoxIndirectParam (GetModuleHandle (0), &t, 0, (DLGPROC)EditorProc, (LPARAM)effect);
+	DialogBoxIndirectParam(GetModuleHandle(0), &t, 0, (DLGPROC)EditorProc, (LPARAM)effect);
 
 	theEffect = 0;
 #elif TARGET_API_MAC_CARBON
 	WindowRef window;
 	Rect mRect = {0, 0, 300, 300};
-	OSStatus err = CreateNewWindow (kDocumentWindowClass, kWindowCloseBoxAttribute | kWindowCompositingAttribute | kWindowAsyncDragAttribute | kWindowStandardHandlerAttribute, &mRect, &window);
+	OSStatus err = CreateNewWindow(kDocumentWindowClass, kWindowCloseBoxAttribute | kWindowCompositingAttribute | kWindowAsyncDragAttribute | kWindowStandardHandlerAttribute, &mRect, &window);
 	if (err != noErr)
 	{
-		printf ("HOST> Could not create mac window !\n");
+		printf("HOST> Could not create mac window !\n");
 		return false;
 	}
 	static EventTypeSpec eventTypes[] = {
-		{ kEventClassWindow, kEventWindowClose }
-	};
-	InstallWindowEventHandler (window, windowHandler, GetEventTypeCount (eventTypes), eventTypes, window, NULL);
+		{kEventClassWindow, kEventWindowClose}};
+	InstallWindowEventHandler(window, windowHandler, GetEventTypeCount(eventTypes), eventTypes, window, NULL);
 
-	printf ("HOST> Open editor...\n");
-	effect->dispatcher (effect, effEditOpen, 0, 0, window, 0);
-	ERect* eRect = 0;
-	printf ("HOST> Get editor rect..\n");
-	effect->dispatcher (effect, effEditGetRect, 0, 0, &eRect, 0);
+	printf("HOST> Open editor...\n");
+	effect->dispatcher(effect, effEditOpen, 0, 0, window, 0);
+	ERect *eRect = 0;
+	printf("HOST> Get editor rect..\n");
+	effect->dispatcher(effect, effEditGetRect, 0, 0, &eRect, 0);
 	if (eRect)
 	{
 		int width = eRect->right - eRect->left;
 		int height = eRect->bottom - eRect->top;
 		Rect bounds;
-		GetWindowBounds (window, kWindowContentRgn, &bounds);
+		GetWindowBounds(window, kWindowContentRgn, &bounds);
 		bounds.right = bounds.left + width;
 		bounds.bottom = bounds.top + height;
-		SetWindowBounds (window, kWindowContentRgn, &bounds); 
+		SetWindowBounds(window, kWindowContentRgn, &bounds);
 	}
-	RepositionWindow (window, NULL, kWindowCenterOnMainScreen);
-	ShowWindow (window);
+	RepositionWindow(window, NULL, kWindowCenterOnMainScreen);
+	ShowWindow(window);
 
 	EventLoopTimerRef idleEventLoopTimer;
-	InstallEventLoopTimer (GetCurrentEventLoop (), kEventDurationSecond / 25., kEventDurationSecond / 25., idleTimerProc, effect, &idleEventLoopTimer);
+	InstallEventLoopTimer(GetCurrentEventLoop(), kEventDurationSecond / 25., kEventDurationSecond / 25., idleTimerProc, effect, &idleEventLoopTimer);
 
-	RunAppModalLoopForWindow (window);
-	RemoveEventLoopTimer (idleEventLoopTimer);
-	
-	printf ("HOST> Close editor..\n");
-	effect->dispatcher (effect, effEditClose, 0, 0, 0, 0);
-	ReleaseWindow (window);
+	RunAppModalLoopForWindow(window);
+	RemoveEventLoopTimer(idleEventLoopTimer);
+
+	printf("HOST> Close editor..\n");
+	effect->dispatcher(effect, effEditClose, 0, 0, 0, 0);
+	ReleaseWindow(window);
 #endif
 	return true;
 }
 
 #if _WIN32
 //-------------------------------------------------------------------------------------------------------
-INT_PTR CALLBACK EditorProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK EditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	AEffect* effect = theEffect;
+	AEffect *effect = theEffect;
 
-	switch(msg)
+	switch (msg)
 	{
-		//-----------------------
-		case WM_INITDIALOG :
-		{
-			SetWindowText (hwnd, "VST Editor");
-			SetTimer (hwnd, 1, 20, 0);
+	//-----------------------
+	case WM_INITDIALOG:
+	{
+		SetWindowText(hwnd, "VST Editor");
+		SetTimer(hwnd, 1, 20, 0);
 
-			if (effect)
+		if (effect)
+		{
+			printf("HOST> Open editor...\n");
+			effect->dispatcher(effect, effEditOpen, 0, 0, hwnd, 0);
+
+			printf("HOST> Get editor rect..\n");
+			ERect *eRect = 0;
+			effect->dispatcher(effect, effEditGetRect, 0, 0, &eRect, 0);
+			if (eRect)
 			{
-				printf ("HOST> Open editor...\n");
-				effect->dispatcher (effect, effEditOpen, 0, 0, hwnd, 0);
+				int width = eRect->right - eRect->left;
+				int height = eRect->bottom - eRect->top;
+				if (width < 100)
+					width = 100;
+				if (height < 100)
+					height = 100;
 
-				printf ("HOST> Get editor rect..\n");
-				ERect* eRect = 0;
-				effect->dispatcher (effect, effEditGetRect, 0, 0, &eRect, 0);
-				if (eRect)
-				{
-					int width = eRect->right - eRect->left;
-					int height = eRect->bottom - eRect->top;
-					if (width < 100)
-						width = 100;
-					if (height < 100)
-						height = 100;
+				RECT wRect;
+				SetRect(&wRect, 0, 0, width, height);
+				AdjustWindowRectEx(&wRect, GetWindowLong(hwnd, GWL_STYLE), FALSE, GetWindowLong(hwnd, GWL_EXSTYLE));
+				width = wRect.right - wRect.left;
+				height = wRect.bottom - wRect.top;
 
-					RECT wRect;
-					SetRect (&wRect, 0, 0, width, height);
-					AdjustWindowRectEx (&wRect, GetWindowLong (hwnd, GWL_STYLE), FALSE, GetWindowLong (hwnd, GWL_EXSTYLE));
-					width = wRect.right - wRect.left;
-					height = wRect.bottom - wRect.top;
-
-					SetWindowPos (hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);
-				}
+				SetWindowPos(hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE);
 			}
-		}	break;
+		}
+	}
+	break;
 
-		//-----------------------
-		case WM_TIMER :
-			if (effect)
-				effect->dispatcher (effect, effEditIdle, 0, 0, 0, 0);
-			break;
+	//-----------------------
+	case WM_TIMER:
+		if (effect)
+			effect->dispatcher(effect, effEditIdle, 0, 0, 0, 0);
+		break;
 
-		//-----------------------
-		case WM_CLOSE :
-		{
-			KillTimer (hwnd, 1);
+	//-----------------------
+	case WM_CLOSE:
+	{
+		KillTimer(hwnd, 1);
 
-			printf ("HOST> Close editor..\n");
-			if (effect)
-				effect->dispatcher (effect, effEditClose, 0, 0, 0, 0);
+		printf("HOST> Close editor..\n");
+		if (effect)
+			effect->dispatcher(effect, effEditClose, 0, 0, 0, 0);
 
-			EndDialog (hwnd, IDOK);
-		}	break;
+		EndDialog(hwnd, IDOK);
+	}
+	break;
 	}
 
 	return 0;
@@ -167,34 +168,34 @@ INT_PTR CALLBACK EditorProc (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 #elif TARGET_API_MAC_CARBON
 //-------------------------------------------------------------------------------------------------------
-pascal void idleTimerProc (EventLoopTimerRef inTimer, void *inUserData)
+pascal void idleTimerProc(EventLoopTimerRef inTimer, void *inUserData)
 {
-	AEffect* effect = (AEffect*)inUserData;
-	effect->dispatcher (effect, effEditIdle, 0, 0, 0, 0);
+	AEffect *effect = (AEffect *)inUserData;
+	effect->dispatcher(effect, effEditIdle, 0, 0, 0, 0);
 }
 
 //-------------------------------------------------------------------------------------------------------
-pascal OSStatus windowHandler (EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void *inUserData)
+pascal OSStatus windowHandler(EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void *inUserData)
 {
 	OSStatus result = eventNotHandledErr;
-	WindowRef window = (WindowRef) inUserData;
-	UInt32 eventClass = GetEventClass (inEvent);
-	UInt32 eventKind = GetEventKind (inEvent);
+	WindowRef window = (WindowRef)inUserData;
+	UInt32 eventClass = GetEventClass(inEvent);
+	UInt32 eventKind = GetEventKind(inEvent);
 
 	switch (eventClass)
 	{
-		case kEventClassWindow:
+	case kEventClassWindow:
+	{
+		switch (eventKind)
 		{
-			switch (eventKind)
-			{
-				case kEventWindowClose:
-				{
-					QuitAppModalLoopForWindow (window);
-					break;
-				}
-			}
+		case kEventWindowClose:
+		{
+			QuitAppModalLoopForWindow(window);
 			break;
 		}
+		}
+		break;
+	}
 	}
 
 	return result;
