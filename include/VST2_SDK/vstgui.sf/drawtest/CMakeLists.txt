@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.5)
 
-project (VstGuiSFDrawTest)
+project (VstGUISFDrawTest)
 
 message(STATUS  "Building on ${CMAKE_SYSTEM_NAME}")
 message(STATUS  "Build type: ${CMAKE_BUILD_TYPE}")
@@ -11,7 +11,7 @@ message(STATUS  "Binary dir: ${CMAKE_BINARY_DIR}")
 message(STATUS  "Project binary dir: ${PROJECT_BINARY_DIR}")
 
 # Name your plugin here
-set(PLUGIN_NAME VstGuiSFDrawTest)
+set(PLUGIN_NAME VstGUISFDrawTest)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
