@@ -38,7 +38,7 @@ extern "C" AEffect *main_macho (audioMasterCallback audioMaster);
 
 #else
 #define main VSTPluginMain
-AEffect *main (audioMasterCallback audioMaster);
+extern "C" __declspec(dllexport) AEffect *main (audioMasterCallback audioMaster);
 #endif
 
 //------------------------------------------------------------------------

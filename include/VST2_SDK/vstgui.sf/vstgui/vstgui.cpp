@@ -14,7 +14,7 @@
 //
 //-----------------------------------------------------------------------------
 // VSTGUI LICENSE
-// © 2004, Steinberg Media Technologies, All Rights Reserved
+// ï¿½ 2004, Steinberg Media Technologies, All Rights Reserved
 //-----------------------------------------------------------------------------
 // Redistribution and use in source and binary forms, with or without modification,
 // are permitted provided that the following conditions are met:
@@ -738,6 +738,7 @@ void CDrawContext::setLineStyle (CLineStyle style)
 	lineStyle = style;
 
 #if WINDOWS
+    
 	switch (lineStyle) 
 	{
 	case kLineOnOffDash: 
@@ -747,11 +748,24 @@ void CDrawContext::setLineStyle (CLineStyle style)
 		iPenStyle = PS_SOLID;
 		break;
 	}
+
+    HANDLE newPen{nullptr};
+	if  (iPenStyle  == PS_DOT) 
+	{
+		DWORD userStyle[4]= { frameWidth , frameWidth * 4, frameWidth, frameWidth * 4 }; // dotted
+		// DWORD userStyle[4]= { frameWidth * 4, frameWidth * 2, frameWidth * 4, frameWidth * 2 }; // dashed
+		LOGBRUSH logBrush;
+		logBrush.lbColor = RGB (frameColor.red, frameColor.green, frameColor.blue);
+		logBrush.lbStyle = BS_SOLID;
+
+		newPen = ExtCreatePen(PS_GEOMETRIC | PS_USERSTYLE | PS_ENDCAP_FLAT | PS_JOIN_BEVEL, frameWidth, &logBrush, sizeof(userStyle)/sizeof(userStyle[0]), userStyle );
+	} else {
+		LOGPEN logPen = {iPenStyle, {frameWidth, frameWidth}, 
+					RGB (frameColor.red, frameColor.green, frameColor.blue)};
 	
-	LOGPEN logPen = {iPenStyle, {frameWidth, frameWidth}, 
-					 RGB (frameColor.red, frameColor.green, frameColor.blue)};
-	
-	HANDLE newPen = CreatePenIndirect (&logPen);
+	    newPen = CreatePenIndirect (&logPen);
+	}
+
 	SelectObject ((HDC)pSystemContext, newPen);
 	if (pPen)
 		DeleteObject (pPen);
@@ -816,16 +830,29 @@ void CDrawContext::setLineWidth (CCoord width)
 	frameWidth = width;
 	
 #if WINDOWS
-	LOGPEN logPen = {iPenStyle, {frameWidth, frameWidth},
-					 RGB (frameColor.red, frameColor.green, frameColor.blue)};
+    HANDLE newPen{nullptr};
+	if  (iPenStyle  == PS_DOT) 
+	{
+		DWORD userStyle[4]= { frameWidth , frameWidth * 4, frameWidth, frameWidth * 4 }; // dotted
+		// DWORD userStyle[4]= { frameWidth * 4, frameWidth * 2, frameWidth * 4, frameWidth * 2 }; // dashed
+		LOGBRUSH logBrush;
+		logBrush.lbColor = RGB (frameColor.red, frameColor.green, frameColor.blue);
+		logBrush.lbStyle = BS_SOLID;
+
+		newPen = ExtCreatePen(PS_GEOMETRIC | PS_USERSTYLE | PS_ENDCAP_FLAT | PS_JOIN_BEVEL, frameWidth, &logBrush, sizeof(userStyle)/sizeof(userStyle[0]), userStyle );
+	} else {
+		LOGPEN logPen = {iPenStyle, {frameWidth, frameWidth}, 
+					RGB (frameColor.red, frameColor.green, frameColor.blue)};
 	
-	HANDLE newPen = CreatePenIndirect (&logPen);
+	    newPen = CreatePenIndirect (&logPen);
+	}
+	
 	SelectObject ((HDC)pSystemContext, newPen);
 	if (pPen)
 		DeleteObject (pPen);
 	pPen = newPen;
 	
-#elif MAC
+#elif MAC				
 	#if QUARTZ
 	if (gCGContext)
 		CGContextSetLineWidth (gCGContext, width);
@@ -6962,7 +6989,9 @@ bool CBitmap::loadFromResource (long resourceID)
 						if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
 							png_set_gray_to_rgb (png_ptr);
 						if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
-							png_set_gray_1_2_4_to_8 (png_ptr);
+							// PIN: 03.04.2020 changed to png_set_expand_gray_1_2_4_to_8
+							// png_set_gray_1_2_4_to_8 (png_ptr);
+							png_set_expand_gray_1_2_4_to_8(png_ptr);
 						if (png_get_valid (png_ptr, info_ptr, PNG_INFO_tRNS))
 							png_set_tRNS_to_alpha (png_ptr);
 						else
