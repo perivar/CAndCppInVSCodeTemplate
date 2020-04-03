@@ -752,6 +752,8 @@ void CDrawContext::setLineStyle (CLineStyle style)
     HANDLE newPen{nullptr};
 	if  (iPenStyle  == PS_DOT) 
 	{
+		// PIN: 03.04.2020
+		// Due to a limitation of GDI in Windows a standard pen does not support width larger than 1
 		DWORD userStyle[4]= { frameWidth , frameWidth * 4, frameWidth, frameWidth * 4 }; // dotted
 		// DWORD userStyle[4]= { frameWidth * 4, frameWidth * 2, frameWidth * 4, frameWidth * 2 }; // dashed
 		LOGBRUSH logBrush;
@@ -833,6 +835,8 @@ void CDrawContext::setLineWidth (CCoord width)
     HANDLE newPen{nullptr};
 	if  (iPenStyle  == PS_DOT) 
 	{
+		// PIN: 03.04.2020
+		// Due to a limitation of GDI in Windows a standard pen does not support width larger than 1
 		DWORD userStyle[4]= { frameWidth , frameWidth * 4, frameWidth, frameWidth * 4 }; // dotted
 		// DWORD userStyle[4]= { frameWidth * 4, frameWidth * 2, frameWidth * 4, frameWidth * 2 }; // dashed
 		LOGBRUSH logBrush;

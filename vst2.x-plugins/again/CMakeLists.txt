@@ -144,6 +144,9 @@ target_link_options(${PLUGIN_NAME}
   ${PLUGIN_LINKER_FLAGS}
 )
 
+# vst's has lot's off warnings about multichar and narrowing - hide those
+list(APPEND PLUGIN_COMPILE_FLAGS "-Wno-multichar" "-Wno-narrowing" "-Wno-write-strings")      
+
 # set compile options per target
 target_compile_options(${PLUGIN_NAME} 
   PUBLIC 
