@@ -110,7 +110,7 @@ set(RESOURCE_SRCS
 # for the DEF file check GENERATE_EXPORT_HEADER
 # http://gernotklingler.com/blog/creating-using-shared-libraries-different-compilers-different-operating-systems/
 
-# create a VST using MODULE or SHARED
+# create a VST using MODULE
 add_library(${PLUGIN_NAME} MODULE
 	  ${PLUGIN_SRCS}
 	  ${RESOURCE_SRCS}
@@ -163,9 +163,9 @@ target_link_options(${PLUGIN_NAME}
 # set definitions per target
 target_compile_definitions(${PLUGIN_NAME} 
   # PRIVATE -DUNICODE
-  PRIVATE -D_WIN32_WINNT=0x602
+  PRIVATE -D_WIN32_WINNT=0x602  # minimum operating system version your code supports = Windows 8
   PRIVATE -DWIN32
-  # _CRT_SECURE_NO_DEPRECATE # Macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
+  # _CRT_SECURE_NO_DEPRECATE    # macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
 )
 
 # set compile options per target

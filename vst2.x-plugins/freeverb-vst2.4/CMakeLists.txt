@@ -105,8 +105,8 @@ set(RESOURCE_SRCS
 # for the DEF file check GENERATE_EXPORT_HEADER
 # http://gernotklingler.com/blog/creating-using-shared-libraries-different-compilers-different-operating-systems/
 
-# create a VST using MODULE or SHARED
-add_library(${PLUGIN_NAME} SHARED
+# create a VST using MODULE
+add_library(${PLUGIN_NAME} MODULE
 	  ${PLUGIN_SRCS}
 	  ${RESOURCE_SRCS}
 )
