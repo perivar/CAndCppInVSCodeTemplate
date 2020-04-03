@@ -24,8 +24,11 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/vstxsynth")
 # call the CMakeLists.txt file in the Revitar directory
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/Revitar")
 
-# call the CMakeLists.txt file in the drawtest directory
+# call the CMakeLists.txt file in the vstgui.sf drawtest directory
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/drawtest")
+
+# call the CMakeLists.txt file in the vstgui_360_rc2 tutorial directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui/tutorial")
 
 return()
 

@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.5)
 
-project (Revitar2)
+project (VSTGUI360Tutorial)
 
 message(STATUS  "Building on ${CMAKE_SYSTEM_NAME}")
 message(STATUS  "Build type: ${CMAKE_BUILD_TYPE}")
@@ -11,7 +11,7 @@ message(STATUS  "Binary dir: ${CMAKE_BINARY_DIR}")
 message(STATUS  "Project binary dir: ${PROJECT_BINARY_DIR}")
 
 # Name your plugin here
-set(PLUGIN_NAME Revitar2)
+set(PLUGIN_NAME VSTGUI360Tutorial)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -49,7 +49,7 @@ list(APPEND PLUGIN_LINKER_FLAGS "-static" "-static-libgcc" "-static-libstdc++")
 # Note! this must be disabled for command line apps (non vsts)
 # set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--subsystem,windows")
 # set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--subsystem,windows")
-list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
+# list(APPEND PLUGIN_LINKER_FLAGS "-Wl,--subsystem,windows")
 
 # export no symbols by default
 # instead of global flags, set per target in the set_target_properties() method
@@ -76,32 +76,50 @@ set(VSTSDK2_4_PLUGIN_SOURCE
 )
 
 # Add VSTGUI.SF SDK
-set(VSTSDKGUI_DIR "${CMAKE_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/vstgui" CACHE PATH "Path to VSTGUI.SF SDK")
-set(VSTSDKGUI_PLUGIN_SOURCE
-    ${VSTSDKGUI_DIR}/aeffguieditor.cpp
-    ${VSTSDKGUI_DIR}/cfileselector.cpp
-    ${VSTSDKGUI_DIR}/cscrollview.cpp
-    ${VSTSDKGUI_DIR}/ctabview.cpp
-    # ${VSTSDKGUI_DIR}/plugguieditor.cpp # removed to avoid error: redefinition of 'struct ERect' errors
-    ${VSTSDKGUI_DIR}/vstcontrols.cpp
-    ${VSTSDKGUI_DIR}/vstgui.cpp
+# set(VSTSDKGUI_DIR "${CMAKE_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/vstgui" CACHE PATH "Path to VSTGUI.SF SDK")
+# set(VSTSDKGUI_PLUGIN_SOURCE
+#     ${VSTSDKGUI_DIR}/aeffguieditor.cpp
+#     ${VSTSDKGUI_DIR}/cfileselector.cpp
+#     ${VSTSDKGUI_DIR}/cscrollview.cpp
+#     ${VSTSDKGUI_DIR}/ctabview.cpp
+#     # ${VSTSDKGUI_DIR}/plugguieditor.cpp # removed to avoid error: redefinition of 'struct ERect' errors
+#     ${VSTSDKGUI_DIR}/vstcontrols.cpp
+#     ${VSTSDKGUI_DIR}/vstgui.cpp
+# )
+# set(VSTSDKGUI_INCLUDE_DIR ${VSTSDKGUI_DIR})
+
+# Add VSTGUI 3.6.0 rc2 SDK
+set(VSTSDKGUI_360_DIR "${CMAKE_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui" CACHE PATH "Path to VSTGUI_360_rc2 SDK")
+set(VSTSDKGUI_360_PLUGIN_SOURCE
+    ${VSTSDKGUI_360_DIR}/aeffguieditor.cpp
+    # ${VSTSDKGUI_360_DIR}/cdatabrowser.cpp
+    # ${VSTSDKGUI_360_DIR}/cfileselector.cpp
+    # ${VSTSDKGUI_360_DIR}/cscrollview.cpp
+    # ${VSTSDKGUI_360_DIR}/ctabview.cpp
+    # ${VSTSDKGUI_360_DIR}/ctooltipsupport.cpp
+    # ${VSTSDKGUI_360_DIR}/cvstguitimer.cpp
+    # ${VSTSDKGUI_360_DIR}/plugguieditor.cpp # removed to avoid error: redefinition of 'struct ERect' errors
+    ${VSTSDKGUI_360_DIR}/vstcontrols.cpp
+    ${VSTSDKGUI_360_DIR}/vstgui.cpp
+    # ${VSTSDKGUI_360_DIR}/vstguidebug.cpp
+    # ${VSTSDKGUI_360_DIR}/winfileselector.cpp
 )
-set(VSTSDKGUI_INCLUDE_DIR ${VSTSDKGUI_DIR})
+set(VSTSDKGUI_360_INCLUDE_DIR ${VSTSDKGUI_360_DIR})
 
 # set plugin root and plugin sources
-set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/vst2.x-plugins/Revitar")
+set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui/tutorial")
 set(PLUGIN_SRCS
-  ${PLUGIN_ROOT}/Revitar.cpp
-  ${PLUGIN_ROOT}/RevEditor.cpp
-  ${PLUGIN_ROOT}/presets.cpp
-  ${PLUGIN_ROOT}/controls.cpp
-  ${VSTSDK2_4_PLUGIN_SOURCE}
-  ${VSTSDKGUI_PLUGIN_SOURCE}
+    # ${PLUGIN_ROOT}/source/TutorialEditor.cpp # without mouseover handle
+    ${PLUGIN_ROOT}/source/Tutorial2Editor.cpp # with mouseover handle
+    ${PLUGIN_ROOT}/source/TutorialVST2Effect.cpp
+    ${VSTSDK2_4_PLUGIN_SOURCE}
+    # ${VSTSDKGUI_PLUGIN_SOURCE}
+    ${VSTSDKGUI_360_PLUGIN_SOURCE}
 )
 
 # set plugin resources
 set(RESOURCE_SRCS
-  "${PLUGIN_ROOT}/Revitar.rc"
+    ${PLUGIN_ROOT}/win/tutorial.rc
 )
 
 # for the DEF file check GENERATE_EXPORT_HEADER
@@ -138,39 +156,47 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
 
 # Bring the headers, such as aeffeditor.h into the project
 target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x)
-target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
-target_include_directories(${PLUGIN_NAME} PUBLIC ${VSTSDKGUI_INCLUDE_DIR})
+# target_include_directories(${PLUGIN_NAME} PUBLIC ${VSTSDKGUI_INCLUDE_DIR})
+target_include_directories(${PLUGIN_NAME} PUBLIC ${VSTSDKGUI_360_INCLUDE_DIR})
 
 # target the libraries needed
-# target_link_libraries(${PLUGIN_NAME} 
-#   windowscodecs 
-#   d2d1 
-#   dwrite 
-#   shlwapi
-#   dwmapi
-# )
+find_library(LIBPNG_FRAMEWORK libpng REQUIRED)
+# find_library(ZLIB_FRAMEWORK zlib REQUIRED)
+target_link_libraries(${PLUGIN_NAME} 
+    ${LIBPNG_FRAMEWORK}
+    # ${ZLIB_FRAMEWORK}    
+)
 
 # set link flags per target
 target_link_options(${PLUGIN_NAME} 
-  PRIVATE 
-  ${PLUGIN_LINKER_FLAGS}
+    PRIVATE 
+    ${PLUGIN_LINKER_FLAGS}
 )
 
 # set definitions per target
 target_compile_definitions(${PLUGIN_NAME} 
-  # PRIVATE -DUNICODE
-  # PRIVATE -D_WIN32_WINNT=0x602
-  PRIVATE -DWIN32
-  # _CRT_SECURE_NO_DEPRECATE # Macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
+    # PRIVATE -DUNICODE
+    # PRIVATE -D_WIN32_WINNT=0x602
+    PRIVATE -DVSTGUI_USES_UTF8=0 # to get rid of wchar / char issues since it sets UNICODE=0
+    PRIVATE -DWIN32
+    PRIVATE -DGDIPLUS=0 # for vstgui version 3.6
+    PRIVATE -DUSE_LIBPNG=1
+    # PRIVATE -DVSTGUI_ENABLE_DEPRECATED_METHODS=0
+    # _CRT_SECURE_NO_DEPRECATE # Macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
 )
 
 # vst's has lot's off warnings about multichar and narrowing - hide those
 # list(APPEND PLUGIN_COMPILE_FLAGS "-Wno-multichar" "-Wno-narrowing" "-Wno-write-strings")      
-list(APPEND PLUGIN_COMPILE_FLAGS "-fpermissive") # change errors like cast from 'fxProgram*' to 'long int' loses precision to warnings
 
 # set compile options per target
 target_compile_options(${PLUGIN_NAME} 
-  PUBLIC 
-  ${PLUGIN_COMPILE_FLAGS}
+    PUBLIC 
+    ${PLUGIN_COMPILE_FLAGS}
 )
+
+# target_compile_features(${PLUGIN_NAME} 
+#     PRIVATE cxx_auto_type
+#     PRIVATE cxx_nullptr
+#     PRIVATE cxx_range_for
+# )
