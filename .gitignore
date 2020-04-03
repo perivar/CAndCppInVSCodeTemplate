@@ -1,2 +1,3 @@
 *.exe
 /build
+/vst3-plugins/build

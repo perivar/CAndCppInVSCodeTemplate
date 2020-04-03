@@ -34,7 +34,6 @@ if(SMTG_ADD_VSTGUI)
     target_include_directories(${target} PRIVATE ${VSTGUI_ROOT}/vstgui4)
 
     # PIN 31.03.2020 - add libraries vstgui and the missing windows libraries
-    # target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
     set(VST_LIBS)
     list(APPEND VST_LIBS base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
     list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")

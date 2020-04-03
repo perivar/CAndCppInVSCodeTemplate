@@ -46,6 +46,8 @@ macro(setupPlatformToolset)
         add_definitions(-D_UNICODE)
 
         # Changed by PIN: 25.02.2020
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar")
+        
         # ORIGINAL:
         # add_compile_options(/fp:fast)                   # Floating Point Model
         # add_compile_options($<$<CONFIG:Release>:/Oi>)   # Enable Intrinsic Functions (Yes)

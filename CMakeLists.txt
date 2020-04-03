@@ -3,107 +3,105 @@ cmake_minimum_required(VERSION 3.5)
 # set verbose
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# # call the CMakeLists.txt file in the freeverb directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
+# # # call the CMakeLists.txt file in the freeverb directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
 
-# # call the CMakeLists.txt file in the minihost directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
+# # # call the CMakeLists.txt file in the minihost directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
 
-# # call the CMakeLists.txt file in the again directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
+# # # call the CMakeLists.txt file in the again directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
 
-# call the CMakeLists.txt file in the adelay directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
+# # call the CMakeLists.txt file in the adelay directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
 
-# call the CMakeLists.txt file in the minimal host directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minimal_vst2x_host")
+# # call the CMakeLists.txt file in the minimal host directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minimal_vst2x_host")
 
-# call the CMakeLists.txt file in the vstxsynth directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/vstxsynth")
+# # call the CMakeLists.txt file in the vstxsynth directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/vstxsynth")
 
-# call the CMakeLists.txt file in the Revitar directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/Revitar")
+# # call the CMakeLists.txt file in the Revitar directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/Revitar")
 
-# call the CMakeLists.txt file in the vstgui.sf drawtest directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/drawtest")
+# # call the CMakeLists.txt file in the vstgui.sf drawtest directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/drawtest")
 
-# call the CMakeLists.txt file in the vstgui_360_rc2 tutorial directory
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui/tutorial")
+# # call the CMakeLists.txt file in the vstgui_360_rc2 tutorial directory
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui/tutorial")
 
-return()
+# return()
 
-# target path (SMTG_PLUGIN_TARGET_PATH)
-set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
+# # target path (SMTG_PLUGIN_TARGET_PATH)
+# set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
 
-# folder to the cmake module files
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmake/modules")
+# # folder to the cmake module files
+# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmake/modules")
 
-# call the SMTG_VST3_SDK.cmake file
-include(SMTG_VST3_SDK)
+# # call the SMTG_VST3_SDK.cmake file
+# include(SMTG_VST3_SDK)
 
-project(vstsdk)
+# project(vstsdk)
 
-setupPlatformToolset()
+# setupPlatformToolset()
 
-set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
+# set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
 
-# Here you can define where the VST 3 SDK is located
-set(SDK_ROOT "${ROOT}")
-set(public_sdk_SOURCE_DIR ${SDK_ROOT}/public.sdk)
-set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
+# # Here you can define where the VST 3 SDK is located
+# set(SDK_ROOT "${ROOT}")
+# set(public_sdk_SOURCE_DIR ${SDK_ROOT}/public.sdk)
+# set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
 
-# disable deprecated methods
-set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
+# # disable deprecated methods
+# set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
 
-# disable all vstgui tools and examples
-set(VSTGUI_STANDALONE OFF)
-set(VSTGUI_STANDALONE_EXAMPLES OFF)
-set(VSTGUI_TOOLS OFF)
-set(VSTGUI_DISABLE_UNITTESTS ON)
+# # disable all vstgui tools and examples
+# set(VSTGUI_STANDALONE OFF)
+# set(VSTGUI_STANDALONE_EXAMPLES OFF)
+# set(VSTGUI_TOOLS OFF)
+# set(VSTGUI_DISABLE_UNITTESTS ON)
 
-# disable validator
-set(SMTG_RUN_VST_VALIDATOR OFF)
+# # disable validator
+# set(SMTG_RUN_VST_VALIDATOR OFF)
 
-# Here you can define where the VSTGUI is located
-if(SMTG_ADD_VSTGUI)
-    set(VSTGUI_ROOT "${ROOT}")
-    setupVstGuiSupport()
-endif()
+# # Here you can define where the VSTGUI is located
+# if(SMTG_ADD_VSTGUI)
+#     set(VSTGUI_ROOT "${ROOT}")
+#     setupVstGuiSupport()
+# endif()
 
-include_directories(${ROOT} ${SDK_ROOT})
+# include_directories(${ROOT} ${SDK_ROOT})
 
-set(SDK_IDE_LIBS_FOLDER FOLDER "Libraries")
+# set(SDK_IDE_LIBS_FOLDER FOLDER "Libraries")
 
-#---Add base libraries---------------------------
-set(VST_SDK TRUE) # used for Base module which provides only a subset of Base for VST-SDK
-add_subdirectory(${SDK_ROOT}/pluginterfaces)
-add_subdirectory(${SDK_ROOT}/base)
-add_subdirectory(${SDK_ROOT}/public.sdk)
-add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/interappaudio)
+# #---Add base libraries---------------------------
+# set(VST_SDK TRUE) # used for Base module which provides only a subset of Base for VST-SDK
+# add_subdirectory(${SDK_ROOT}/pluginterfaces)
+# add_subdirectory(${SDK_ROOT}/base)
+# add_subdirectory(${SDK_ROOT}/public.sdk)
+# add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/interappaudio)
 
-# add VST examples
-set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
-add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/again)
-add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/mda-vst3)
-add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/hostchecker)
+# # add VST examples
+# set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
+# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/again)
+# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/mda-vst3)
+# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/hostchecker)
 
-# Add hosting examples, it includes the validator
-set(SDK_IDE_HOSTING_EXAMPLES_FOLDER FOLDER "HostingExamples")
-add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/validator)
-add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/editorhost)
+# # Add hosting examples, it includes the validator
+# set(SDK_IDE_HOSTING_EXAMPLES_FOLDER FOLDER "HostingExamples")
+# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/validator)
+# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/editorhost)
 
-return()
+# return()
 
 # https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
 cmake_minimum_required (VERSION 3.4.3)
-
-set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
 
 #-------------------------------------------------------------------------------
 # Includes
 #-------------------------------------------------------------------------------
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/cmake/modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmake/modules")
 
 include(SMTG_VST3_SDK)
 
@@ -123,6 +121,15 @@ set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
 set(SDK_ROOT "${ROOT}")
 set(public_sdk_SOURCE_DIR ${SDK_ROOT}/public.sdk)
 set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
+
+# disable deprecated methods
+set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
+
+# disable all vstgui tools and examples
+set(VSTGUI_STANDALONE OFF)
+set(VSTGUI_STANDALONE_EXAMPLES OFF)
+set(VSTGUI_TOOLS OFF)
+set(VSTGUI_DISABLE_UNITTESTS ON)
 
 # Here you can define where the VSTGUI is located
 if(SMTG_ADD_VSTGUI)

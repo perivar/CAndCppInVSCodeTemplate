@@ -25,8 +25,10 @@ else()
 endif()
 
 # here you can define the VST3 plug-ins folder (it will be created)
-smtg_get_default_vst3_path(DEFAULT_VST3_FOLDER)
-set(SMTG_PLUGIN_TARGET_PATH "${DEFAULT_VST3_FOLDER}" CACHE PATH "Here you can redefine the VST3 plug-ins folder")
+# smtg_get_default_vst3_path(DEFAULT_VST3_FOLDER)
+# PIN 03.04.2020 set default vst folder
+set(SMTG_PLUGIN_TARGET_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../VstPlugins")
+# set(SMTG_PLUGIN_TARGET_PATH "${DEFAULT_VST3_FOLDER}" CACHE PATH "Here you can redefine the VST3 plug-ins folder")
 if (NOT ${SMTG_PLUGIN_TARGET_PATH} STREQUAL "")
     # PIN 10.02.2020
     # the add directory command will fail if not running as administrator since the default plugin path is 'C:\Program Files\Common Files' 
@@ -39,7 +41,9 @@ if (NOT ${SMTG_PLUGIN_TARGET_PATH} STREQUAL "")
 endif()
 
 # Here you can add Your own VST3 plug-ins folder (by default we add the HelloWorld included in my_plugins folder)
-set(SMTG_MYPLUGINS_SRC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../my_plugins" CACHE PATH "Here you can add Your VST3 plug-ins folder")
+# set(SMTG_MYPLUGINS_SRC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../my_plugins" CACHE PATH "Here you can add Your VST3 plug-ins folder")
+# PIN: 04.04.2020 changed myplugin src path
+set(SMTG_MYPLUGINS_SRC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vst3-plugins" CACHE PATH "Here you can add Your VST3 plug-ins folder")
 
 if(EXISTS ${SMTG_MYPLUGINS_SRC_PATH})
     message(STATUS "SMTG_MYPLUGINS_SRC_PATH is set to : " ${SMTG_MYPLUGINS_SRC_PATH})
@@ -48,7 +52,9 @@ else()
 endif()
 
 if(SMTG_WIN)
-    set(DEFAULT_ICON_PATH ${CMAKE_CURRENT_SOURCE_DIR}/doc/artwork/VST_Logo_Steinberg.ico)
+    # PIN: 03.04.2020 - changed the default icon path
+    # set(DEFAULT_ICON_PATH ${CMAKE_CURRENT_SOURCE_DIR}/doc/artwork/VST_Logo_Steinberg.ico)
+    set(DEFAULT_ICON_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/doc/artwork/VST_Logo_Steinberg.ico)
     set(MSG_ICON_PATH "Path to the package icon (VST_Logo_Steinberg.ico) for Windows")
     if(EXISTS ${DEFAULT_ICON_PATH})
         set(SMTG_PACKAGE_ICON_PATH ${DEFAULT_ICON_PATH} CACHE FILEPATH ${MSG_ICON_PATH})
