@@ -124,7 +124,6 @@ void Application::init (HINSTANCE instance, LPWSTR commandLine)
 		if (!needCommandUpdate)
 		{
 			needCommandUpdate = true;
-			// PIN (used to be disabled):
 			Async::schedule (Async::mainQueue (), [this] () { onCommandUpdate (); });
 		}
 	};
@@ -192,7 +191,6 @@ void Application::showAlertForWindow (const AlertBoxForWindowConfig& config)
 		    auto parentWinWindow = toWin32Window (parentWindow);
 		    vstgui_assert (parentWinWindow);
 		    parentWinWindow->setModalWindow (nullptr);
-			// PIN (used to be disabled):
 		    Async::schedule (Async::mainQueue (), [callback, r, parentWindow] () {
 			    if (callback)
 				    callback (r);
@@ -253,7 +251,6 @@ void Application::onCommandUpdate ()
 //------------------------------------------------------------------------
 void Application::quit ()
 {
-	// PIN (used to be disabled):
 	Async::schedule (Async::mainQueue (), [] () {
 		auto windows = IApplication::instance ().getWindows (); // Yes, copy the window list
 		for (auto& w : windows)

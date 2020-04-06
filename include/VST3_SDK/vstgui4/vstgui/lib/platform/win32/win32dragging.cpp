@@ -728,7 +728,6 @@ void Win32DragBitmapWindow::createWindow ()
 	SetWindowLongPtr (hwnd, GWLP_USERDATA, (__int3264) (LONG_PTR) this);
 
 	MARGINS margin = { -1 };
-	// PIN (used to be disabled):
 	auto res = DwmExtendFrameIntoClientArea (hwnd, &margin);
 	vstgui_assert (res == S_OK);
 }

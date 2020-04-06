@@ -97,6 +97,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
 cmake_minimum_required (VERSION 3.4.3)
 
+# set verbose
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 #-------------------------------------------------------------------------------
 # Includes
 #-------------------------------------------------------------------------------
@@ -126,10 +129,10 @@ set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
 set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
 
 # disable all vstgui tools and examples
-set(VSTGUI_STANDALONE OFF)
-set(VSTGUI_STANDALONE_EXAMPLES OFF)
-set(VSTGUI_TOOLS OFF)
-set(VSTGUI_DISABLE_UNITTESTS ON)
+set(VSTGUI_STANDALONE ON)
+set(VSTGUI_STANDALONE_EXAMPLES ON)
+# set(VSTGUI_TOOLS OFF)
+# set(VSTGUI_DISABLE_UNITTESTS ON)
 
 # Here you can define where the VSTGUI is located
 if(SMTG_ADD_VSTGUI)

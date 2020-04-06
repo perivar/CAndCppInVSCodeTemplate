@@ -307,6 +307,38 @@ target_compile_definitions(${target} ${VSTGUI_COMPILE_DEFINITIONS})
 # PIN 10.03.2020 - change version to 17
 vstgui_set_cxx_version(${target} 17)
 
+# PIN 06.04.2020 - add missing opengl libs
+find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
+find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
+find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
+find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
+find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
+find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
+find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
+find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
+
+message(STATUS "Windows opengl libraries found: 
+    ${FREEGLUT_FRAMEWORK}
+    ${OPENGL32_FRAMEWORK}
+    ${GLU32_FRAMEWORK}
+    ${GLEW32_FRAMEWORK}
+    ${GDI32_FRAMEWORK}
+    ${DWMAPI_FRAMEWORK}
+    ${D2D1_FRAMEWORK}
+    ${DWRITE_FRAMEWORK}
+" )
+
+target_link_libraries(${target} PRIVATE 
+    ${FREEGLUT_FRAMEWORK}
+    ${OPENGL32_FRAMEWORK}
+    ${GLU32_FRAMEWORK}
+    ${GLEW32_FRAMEWORK}
+    ${GDI32_FRAMEWORK}
+    ${DWMAPI_FRAMEWORK}
+    ${D2D1_FRAMEWORK}
+    ${DWRITE_FRAMEWORK}
+)
+
 vstgui_source_group_by_folder(${target})
 
 if(LINUX)

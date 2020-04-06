@@ -7,10 +7,8 @@
 #if WINDOWS && VSTGUI_OPENGL_SUPPORT
 
 // PIN: GCC toolchain doesn't support autolinking
-#ifdef _MSC_VER
 #pragma comment (lib,"opengl32.lib")
 #pragma comment (lib,"glu32.lib")
-#endif
 
 #include "win32frame.h"
 #include "win32support.h"
@@ -25,10 +23,10 @@ static TCHAR gGLWindowClassName[100];
 //-----------------------------------------------------------------------------
 Win32OpenGLView::Win32OpenGLView (Win32Frame* win32Frame)
 : win32Frame (win32Frame)
-, view (0)
-, windowHandle (0)
-, deviceContext (0)
-, openGLContext (0)
+, view (nullptr)
+, windowHandle (nullptr)
+, deviceContext (nullptr)
+, openGLContext (nullptr)
 {
 	initWindowClass ();
 	InitializeCriticalSection (&lock);
@@ -56,10 +54,10 @@ void Win32OpenGLView::initWindowClass ()
 		windowClass.cbClsExtra  = 0; 
 		windowClass.cbWndExtra  = 0; 
 		windowClass.hInstance   = GetInstance ();
-		windowClass.hIcon = 0; 
+		windowClass.hIcon = nullptr; 
 
 		windowClass.hCursor = LoadCursor (NULL, IDC_ARROW);
-		windowClass.lpszMenuName  = 0; 
+		windowClass.lpszMenuName  = nullptr; 
 		windowClass.lpszClassName = gGLWindowClassName; 
 		RegisterClass (&windowClass);
 	}
@@ -168,7 +166,7 @@ bool Win32OpenGLView::createWindow (PixelFormat* pixelFormat)
 		deviceContext = GetDC (windowHandle);
 		if (deviceContext && setupPixelFormt (pixelFormat))
 		{
-			// openGLContext = wglCreateContext (deviceContext);
+			openGLContext = wglCreateContext (deviceContext);
 			return true;
 		}
 		remove ();
@@ -197,15 +195,15 @@ void Win32OpenGLView::remove ()
 	{
 		if (openGLContext)
 		{
-			// if (wglGetCurrentContext () == openGLContext)
-			// 	wglMakeCurrent (0, 0);
+			if (wglGetCurrentContext () == openGLContext)
+				wglMakeCurrent (nullptr, nullptr);
 			ReleaseDC (windowHandle, deviceContext);
-			// wglDeleteContext (openGLContext);
-			openGLContext = 0;
+			wglDeleteContext (openGLContext);
+			openGLContext = nullptr;
 		}
 		SetWindowLongPtr (windowHandle, GWLP_USERDATA, (LONG_PTR)NULL);
 		DestroyWindow (windowHandle);
-		windowHandle = 0;
+		windowHandle = nullptr;
 	}
 }
 
@@ -235,7 +233,7 @@ bool Win32OpenGLView::makeContextCurrent ()
 {
 	if (openGLContext && deviceContext)
 	{
-		// return wglMakeCurrent (deviceContext, openGLContext) ? true : false;
+		return wglMakeCurrent (deviceContext, openGLContext) ? true : false;
 	}
 	return false;
 }
@@ -259,7 +257,7 @@ void Win32OpenGLView::swapBuffers ()
 {
 	if (deviceContext)
 	{
-		// wglMakeCurrent (deviceContext, 0);
+		wglMakeCurrent (deviceContext, nullptr);
 		SwapBuffers (deviceContext);
 	}
 }

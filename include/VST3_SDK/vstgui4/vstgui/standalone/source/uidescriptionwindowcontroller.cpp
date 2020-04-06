@@ -764,7 +764,6 @@ struct WindowController::EditImpl : WindowController::Impl
 		}
 		else
 		{
-			// PIN (used to be disabled):
 			Async::schedule (Async::mainQueue (), [this] () { window->close (); });
 		}
 	}
@@ -790,7 +789,6 @@ struct WindowController::EditImpl : WindowController::Impl
 			return;
 		if (force || uiEditController->getUndoManager ()->isSavePosition () == false)
 		{
-			// PIN (used to be disabled):
 			if (uiEditController->getUndoManager ()->isSavePosition () == false)
 				Detail::saveSharedUIDescription ();
 			int32_t flags = UIDescription::kWriteImagesIntoXMLFile |
@@ -849,7 +847,6 @@ struct WindowController::EditImpl : WindowController::Impl
 		{
 			uiDesc->setController (this);
 			uiEditController = new UIEditController (uiDesc);
-			// PIN (used to be disabled):
 			auto view = uiEditController->createEditView ();
 			auto viewSize = view->getViewSize ().getSize ();
 			frame->getTransform ().transform (viewSize);

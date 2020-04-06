@@ -468,7 +468,6 @@ inline SharedPointer<I> shared (I* p) noexcept { return SharedPointer<I> (p, tru
 template <class I, typename ...Args>
 inline SharedPointer<I> makeOwned (Args&& ...args)
 {
-	// PIN (used to be disabled):
 	return SharedPointer<I> (new I (std::forward<Args>(args)...), false);
 }
 

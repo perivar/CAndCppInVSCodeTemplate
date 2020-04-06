@@ -413,7 +413,6 @@ static CPoint getRectSize (const RECT& r)
 void Window::makeTransparent ()
 {
 	MARGINS margin = {-1};
-	// PIN (used to be disabled):
 	auto res = DwmExtendFrameIntoClientArea (hwnd, &margin);
 	vstgui_assert (res == S_OK);
 }
@@ -594,7 +593,6 @@ LRESULT CALLBACK Window::proc (UINT message, WPARAM wParam, LPARAM lParam)
 				case WM_CREATE:
 				{
 					auto child = reinterpret_cast<HWND> (lParam);
-					// PIN (used to be disabled):
 					SetWindowSubclass (child, childWindowProc, 0,
 					                   reinterpret_cast<DWORD_PTR> (this));
 					break;
@@ -602,8 +600,6 @@ LRESULT CALLBACK Window::proc (UINT message, WPARAM wParam, LPARAM lParam)
 				case WM_DESTROY:
 				{
 					auto child = reinterpret_cast<HWND> (lParam);
-
-					// PIN (used to be disabled):
 					RemoveWindowSubclass (child, childWindowProc, 0);
 					break;
 				}
@@ -660,19 +656,16 @@ LRESULT CALLBACK childWindowProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM
 		{
 			case WM_CREATE:
 			{
-				// PIN (used to be disabled):
 				auto child = reinterpret_cast<HWND> (lParam);
 				SetWindowSubclass (child, childWindowProc, 0, reinterpret_cast<DWORD_PTR> (window));
 				break;
 			}
 			case WM_DESTROY:
 			{
-				// PIN (used to be disabled):
 				auto child = reinterpret_cast<HWND> (lParam);
 				RemoveWindowSubclass (child, childWindowProc, 0);
 				break;
 			}
-			// PIN (used to be disabled):
 			default: return DefSubclassProc (hWnd, message, wParam, lParam);
 		}
 	}
@@ -696,7 +689,6 @@ LRESULT CALLBACK childWindowProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			case Window::HandleCommandResult::CommandUnknown: break;
 		}
 	}
-	// PIN (used to be disabled):
 	return DefSubclassProc (hWnd, message, wParam, lParam);
 }
 
@@ -881,6 +873,7 @@ void Window::show ()
 	clientRect.bottom = static_cast<LONG> (initialSize.y * dpiScale);
 	AdjustWindowRectEx (&clientRect, dwStyle, hasMenu, exStyle);
 
+	delegate->onShow ();
 	LONG width = clientRect.right - clientRect.left;
 	LONG height = clientRect.bottom - clientRect.top;
 	SetWindowPos (hwnd, HWND_TOP, 0, 0, width, height,
@@ -903,7 +896,6 @@ void Window::hide ()
 void Window::close ()
 {
 	auto self = shared_from_this ();
-	// PIN (used to be disabled):
 	auto call = [self] () {
 		self->onQuit (); // TODO: rename method !
 	};

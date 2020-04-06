@@ -56,7 +56,6 @@ public:
 private:
 	void createNewDocument ()
 	{
-		// PIN (used to be disabled):
 		Async::schedule (Async::mainQueue (), [] () {
 			auto commandHandler =
 			    IApplication::instance ().getDelegate ().dynamicCast<ICommandHandler> ();
@@ -67,7 +66,6 @@ private:
 
 	void openDocument ()
 	{
-		// PIN (used to be disabled):
 		Async::schedule (Async::mainQueue (), [] () {
 			auto commandHandler =
 			    IApplication::instance ().getDelegate ().dynamicCast<ICommandHandler> ();

@@ -27,5 +27,6 @@ elseif(SMTG_WIN)
     add_compile_options(/wd4996)
     add_compile_options(/GR)
     # too much warnings in the AAX SDK!!
-add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    # PIN: 06.04.2020 - _CRT_SECURE_NO_WARNINGS is not relevant for MINGW
+    # add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
