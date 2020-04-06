@@ -91,6 +91,8 @@ namespace Steinberg
 //------------------------------------------------------------------
 // Char / Strings
 	typedef char char8;
+
+// PIN 06.04.2020 - changed this old section to the below
 // #ifdef _NATIVE_WCHAR_T_DEFINED
 // 	typedef __wchar_t char16;
 // #elif SMTG_CPP11
@@ -108,6 +110,7 @@ namespace Steinberg
 #else
 	typedef int16 char16;
 #endif
+
 
 #ifdef UNICODE
 	typedef char16 tchar;

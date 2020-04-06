@@ -35,7 +35,9 @@
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
+// PIN 06.04.2020 - added <algorithm> to include find
 #include <algorithm>
+
 #include "window.h"
 #include "public.sdk/source/vst/hosting/stringconvert.h"
 

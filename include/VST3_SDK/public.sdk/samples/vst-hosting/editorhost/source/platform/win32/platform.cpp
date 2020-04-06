@@ -42,6 +42,8 @@
 #include <Windows.h>
 #include <string>
 #include <vector>
+
+// PIN 06.04.2020 - added <algorithm> to include find
 #include <algorithm>
 
 //------------------------------------------------------------------------
