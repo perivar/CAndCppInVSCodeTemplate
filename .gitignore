@@ -1,3 +1,6 @@
 *.exe
 /build
 /vst3-plugins/build
+*.ilk
+*.obj
+*.pdb

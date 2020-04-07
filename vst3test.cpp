@@ -221,7 +221,7 @@ main(int argc, char *argv[])
 
     printf("Press Enter. ");
     static char readBuf[256];
-    gets(readBuf);
-
+    fgets(readBuf, sizeof(readBuf), stdin);
+    
     return rc;
 }
