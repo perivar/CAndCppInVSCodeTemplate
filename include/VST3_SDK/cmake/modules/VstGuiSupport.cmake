@@ -10,9 +10,14 @@ macro(setupVstGuiSupport)
     if(SMTG_BUILD_UNIVERSAL_BINARY)
         set(VSTGUI_STANDALONE OFF)
         set(VSTGUI_TOOLS OFF)
-    elseif(SMTG_WIN AND CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set(VSTGUI_STANDALONE OFF)
-        set(VSTGUI_TOOLS OFF)
+
+    # PIN: 07.03.2020 - tried to get cl to compile the examples
+    # elseif(MINGW)
+    #     # keep the vstgui examples
+    # elseif(SMTG_WIN AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    #     set(VSTGUI_STANDALONE OFF)
+    #     set(VSTGUI_TOOLS OFF)
+    
     else()
         set(VSTGUI_STANDALONE ON)
     endif()
@@ -54,7 +59,7 @@ macro(setupVstGuiSupport)
         endif()
     endif()
 
-    if(SMTG_WIN)
+    if(MINGW)
         # PIN ensure that the find library also finds windows dll's 
         # the standard find_library` command does no longer consider .dll files to be linkable libraries. 
         # all dynamic link libraries are expected to provide separate .dll.a or .lib import libraries.
@@ -116,25 +121,7 @@ macro(setupVstGuiSupport)
             ${SHLWAPI_FRAMEWORK}
             ${WINDOWSCODECS_FRAMEWORK}        
         )
-
-        # link_libraries(
-        #     uuid          # IID_<> variables
-
-        #     freeglut      # Freeglut is dynamically linked 
-        #     opengl32      # OpenGL Library
-        #     glu32         # OpenGL Utility Library
-        #     glew32        # OpenGL Extension Wrangler Library 
-        #     gdi32         # OpenGL pixel format functions & SwapBuffers
-        #     dwmapi        # Desktop Window Manager (DWM) 
-
-        #     d2d1          # Direct2D library 
-        #     dwrite        # DirectX Typography Services
-
-        #     comctl32      # The Common Controls Library - provider of the more interesting window controls
-        #     shlwapi       # Shell Light-Weight Application Programming Interface 
-        #     windowscodecs        
-        # )
-        endif()
+    endif()
 
     if(SMTG_WIN AND SMTG_CREATE_BUNDLE_FOR_WINDOWS)
         target_compile_definitions(vstgui_support PUBLIC SMTG_MODULE_IS_BUNDLE=1)

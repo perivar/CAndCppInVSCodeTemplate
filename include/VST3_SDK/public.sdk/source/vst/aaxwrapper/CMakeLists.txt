@@ -24,9 +24,11 @@ smtg_setup_universal_binary(${target})
 if(XCODE)
     add_compile_options(-Wno-incompatible-ms-struct)
 elseif(SMTG_WIN)
-    add_compile_options(/wd4996)
-    add_compile_options(/GR)
-    # too much warnings in the AAX SDK!!
-    # PIN: 06.04.2020 - _CRT_SECURE_NO_WARNINGS is not relevant for MINGW
-    # add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    if(NOT MINGW)
+        add_compile_options(/wd4996)
+        add_compile_options(/GR)
+        # too much warnings in the AAX SDK!!
+        # PIN: 06.04.2020 - _CRT_SECURE_NO_WARNINGS is not relevant for MINGW
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    endif()
 endif()

@@ -104,15 +104,17 @@ bool Win32DraggingSession::setBitmap (const SharedPointer<CBitmap>& bitmap, CPoi
 {
 	if (!dragBitmapWindow && bitmap)
 	{
-		// dragBitmapWindow = std::make_unique<Win32DragBitmapWindow> (bitmap,
-		//                                                             offset);
-		// if (!mouseObserver)
-		// 	mouseObserver = std::make_unique<Win32MouseObserverWhileDragging> ();
-
 		// Changed by PIN: 05.03.2020
-		dragBitmapWindow = std::unique_ptr<Win32DragBitmapWindow> (new Win32DragBitmapWindow(bitmap, offset));
-		if (!mouseObserver)
-			mouseObserver = std::unique_ptr<Win32MouseObserverWhileDragging> (new Win32MouseObserverWhileDragging());
+		#if !defined(__MINGW32__)
+			dragBitmapWindow = std::make_unique<Win32DragBitmapWindow> (bitmap,
+																		offset);
+			if (!mouseObserver)
+				mouseObserver = std::make_unique<Win32MouseObserverWhileDragging> ();
+		#else
+			dragBitmapWindow = std::unique_ptr<Win32DragBitmapWindow> (new Win32DragBitmapWindow(bitmap, offset));
+			if (!mouseObserver)
+				mouseObserver = std::unique_ptr<Win32MouseObserverWhileDragging> (new Win32MouseObserverWhileDragging());
+		#endif
 
 		mouseObserver->registerCallback ([&] () { dragBitmapWindow->mouseChanged (); });
 	}
@@ -129,12 +131,14 @@ bool Win32DraggingSession::doDrag (const DragDescription& dragDescription, const
 	auto lastCursor = frame->getLastSetCursor ();
 	frame->setMouseCursor (kCursorNotAllowed);
 
-	// if (callback)
-	// 	mouseObserver = std::make_unique<Win32MouseObserverWhileDragging> ();
-
 	// Changed by PIN: 05.03.2020
+	#if !defined(__MINGW32__)
+		if (callback)
+			mouseObserver = std::make_unique<Win32MouseObserverWhileDragging> ();
+	#else
 	if (callback)
 		mouseObserver = std::unique_ptr<Win32MouseObserverWhileDragging> (new Win32MouseObserverWhileDragging());
+	#endif
 
 	if (callback)
 	{

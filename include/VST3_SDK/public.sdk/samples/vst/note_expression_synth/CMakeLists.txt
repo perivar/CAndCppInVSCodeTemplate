@@ -26,7 +26,11 @@ if(SMTG_ADD_VSTGUI)
     target_include_directories(${target} PUBLIC ${VSTGUI_ROOT}/vstgui4)
 
     # PIN 10.03.2020 - add libraries vstgui and the missing windows libraries
-    target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+    if(MINGW)
+        target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+    else()
+        target_link_libraries(${target} PRIVATE base sdk vstgui_support)
+    endif()
 
     smtg_add_vst3_resource(${target} "resource/note_expression_synth.uidesc")
     smtg_add_vst3_resource(${target} "resource/about.png")

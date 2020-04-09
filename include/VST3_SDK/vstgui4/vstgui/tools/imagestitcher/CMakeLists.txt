@@ -19,21 +19,21 @@ set(${TargetName}_RESOURCES
 )
 
 # Changed by PIN: 07.03.2020
-# if(MSVC)
-#   SET(${TargetName}_SOURCE_FILES
-#     ${${TargetName}_SOURCE_FILES}
-#     ${WIN32_PLUG_EXPORT_DEF}
-#     "resource/imagestitcher.rc"
-#   )
-#   set(APP_PROPERTIES
-#     LINK_FLAGS "/SUBSYSTEM:windows /INCLUDE:wWinMain"
-#   )
-#   set(${TargetName}_RESOURCES ${${TargetName}_RESOURCES}
-#     "resource/imagestitcher.rc"
-#   )
-# endif()
+if(MSVC)
+  SET(${TargetName}_SOURCE_FILES
+    ${${TargetName}_SOURCE_FILES}
+    ${WIN32_PLUG_EXPORT_DEF}
+    "resource/imagestitcher.rc"
+  )
+  set(APP_PROPERTIES
+    LINK_FLAGS "/SUBSYSTEM:windows /INCLUDE:wWinMain"
+  )
+  set(${TargetName}_RESOURCES ${${TargetName}_RESOURCES}
+    "resource/imagestitcher.rc"
+  )
+endif()
 
-if(SMTG_WIN)
+if(MINGW)
   SET(${TargetName}_SOURCE_FILES
     ${${TargetName}_SOURCE_FILES}
     ${WIN32_PLUG_EXPORT_DEF}
@@ -47,7 +47,9 @@ endif()
 vstgui_add_executable(${TargetName} "${${TargetName}_sources}")
 
 # PIN 10.03.2020 - add libraries vstgui and windowscodecs
-target_link_libraries(${TargetName} vstgui windowscodecs)
+if(MINGW)
+  target_link_libraries(${TargetName} vstgui windowscodecs)
+endif()
 
 vstgui_add_resources(${TargetName} "${${TargetName}_RESOURCES}")
 vstgui_set_target_infoplist(${TargetName} "resource/Info.plist")

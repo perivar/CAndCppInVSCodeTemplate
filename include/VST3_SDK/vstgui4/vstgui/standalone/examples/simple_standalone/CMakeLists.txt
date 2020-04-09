@@ -15,7 +15,9 @@ set(simple_standalone_resources
 vstgui_add_executable(${target} "${${target}_sources}" )
 
 # PIN 10.03.2020 - add libraries vstgui and windowscodecs
-target_link_libraries(${target} vstgui windowscodecs)
+if(MINGW)
+  target_link_libraries(${target} vstgui windowscodecs)
+endif()
 
 vstgui_add_resources(${target} "${simple_standalone_resources}")
 vstgui_set_target_infoplist(${target} "resource/Info.plist")

@@ -101,35 +101,10 @@ add_compile_options($<$<CONFIG:Release>:-DRELEASE=1>)
 add_compile_options($<$<CONFIG:RelWithDebInfo>:-DRELEASE=1>)
 
 if(SMTG_WIN)
-    # Changed by PIN: 25.02.2020
-
-    # turn on all warnings
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-    
-    # -Wl,--no-undefined linker option can be used when building shared library, undefined symbols will be shown as linker errors.
-    # add subsystem windows to modules and shared libraries
-    set(common_linker_flags "-Wl,--no-undefined -Wl,--subsystem,windows")
-    set(CMAKE_MODULE_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Module Library Linker Flags")
-    set(CMAKE_SHARED_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Shared Library Linker Flags")
-
-    # The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
-    # set CXX standard to 17
-    set(CMAKE_CXX_STANDARD 17) # C++17...
-    set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
-    set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
-
-    # ORIGINAL:
-    # add_compile_options(/MP)                            # Multi-processor Compilation
-    # if(NOT ${CMAKE_GENERATOR} MATCHES "ARM")
-    #     add_compile_options($<$<CONFIG:Debug>:/ZI>)     # Program Database for Edit And Continue
-    # endif()
-    # if(SMTG_USE_STATIC_CRT)
-    #     add_compile_options($<$<CONFIG:Debug>:/MTd>)    # Runtime Library: /MTd = MultiThreaded Debug Runtime
-    #     add_compile_options($<$<CONFIG:Release>:/MT>)   # Runtime Library: /MT  = MultiThreaded Runtime
-    # else()
-    #     add_compile_options($<$<CONFIG:Debug>:/MDd>)    # Runtime Library: /MDd = MultiThreadedDLL Debug Runtime
-    #     add_compile_options($<$<CONFIG:Release>:/MD>)   # Runtime Library: /MD  = MultiThreadedDLL Runtime
-    # endif()
+    # Changed by PIN: 09.04.2020
+    # Since this cmake file is loaded before any of the platform variables is set,
+    # it's imppossble to know whether we are compiling on windows using MSVC or MINGW.
+    # Therefore this is moved to the setupPlatformToolset macro
 endif()
 
 # Add colors to clang output when using Ninja

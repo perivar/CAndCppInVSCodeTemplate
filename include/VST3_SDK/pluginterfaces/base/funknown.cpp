@@ -83,9 +83,9 @@ namespace FUnknownPrivate {
 //------------------------------------------------------------------------
 int32 PLUGIN_API atomicAdd (int32& var, int32 d)
 {
-#if SMTG_OS_WINDOWS && !__MINGW32__
-	return InterlockedExchangeAdd ((&var, d) + d;
-#elif __MINGW32__		
+#if SMTG_OS_WINDOWS && !defined(__MINGW32__)
+	return InterlockedExchangeAdd (&var, d) + d;
+#elif defined(__MINGW32__)
 	// Changed by PIN: 25.02.2020
 	return InterlockedExchangeAdd (reinterpret_cast<long volatile*>(&var), d) + d;
 #elif SMTG_OS_MACOS

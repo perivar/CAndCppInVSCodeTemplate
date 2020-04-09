@@ -49,9 +49,11 @@
 #if SMTG_OS_WINDOWS
 #include <windows.h>
 // Changed by PIN: 25.02.2020
-// #pragma warning (disable : 4244)
-// #pragma warning (disable : 4267)
-// #pragma warning (disable : 4996)
+#ifdef _MSC_VER
+#pragma warning (disable : 4244)
+#pragma warning (disable : 4267)
+#pragma warning (disable : 4996)
+#endif
 
 #if DEVELOPMENT
 #include <crtdbg.h>

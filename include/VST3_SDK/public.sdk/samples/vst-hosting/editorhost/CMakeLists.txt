@@ -76,9 +76,11 @@ if(SMTG_ADD_VST3_HOSTING_SAMPLES)
         )
         set(editorhost_PLATFORM_LIBS
         )
-        set(APP_PROPERTIES
-            # LINK_FLAGS "/SUBSYSTEM:windows"
-        )
+        if(MSVC)
+            set(APP_PROPERTIES
+                LINK_FLAGS "/SUBSYSTEM:windows"
+            )
+        endif()
     endif()
 
     set(target editorhost)

@@ -10,14 +10,14 @@ endif(LINUX)
 function(vstgui_add_executable target sources)
 
   # Changed by PIN: 04.03.2020
-  # if(MSVC)
-  #   add_executable(${target} WIN32 ${sources})
-  #   set_target_properties(${target} PROPERTIES LINK_FLAGS "/INCLUDE:wWinMain")
-  #   get_target_property(OUTPUTDIR ${target} RUNTIME_OUTPUT_DIRECTORY)
-  #   set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${OUTPUTDIR}/${target}")
-  # endif(MSVC)
+  if(MSVC)
+    add_executable(${target} WIN32 ${sources})
+    set_target_properties(${target} PROPERTIES LINK_FLAGS "/INCLUDE:wWinMain")
+    get_target_property(OUTPUTDIR ${target} RUNTIME_OUTPUT_DIRECTORY)
+    set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${OUTPUTDIR}/${target}")
+  endif(MSVC)
 
-  if(SMTG_WIN)
+  if(MINGW)
     add_executable(${target} WIN32 ${sources})
     get_target_property(OUTPUTDIR ${target} RUNTIME_OUTPUT_DIRECTORY)
     set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${OUTPUTDIR}/${target}")
@@ -69,28 +69,11 @@ function(vstgui_add_executable target sources)
         ${WINDOWSCODECS_FRAMEWORK}
     " )
 
-    # set(PLATFORM_LIBRARIES
-    #     "uuid"          # IID_<> variables
-    #     "freeglut"      # Freeglut is dynamically linked 
-    #     "opengl32"      # OpenGL Library
-    #     "glu32"         # OpenGL Utility Library
-    #     "glew32"        # OpenGL Extension Wrangler Library 
-    #     "gdi32"         # OpenGL pixel format functions & SwapBuffers
-    #     "dwmapi"        # Desktop Window Manager (DWM) 
-    #     "d2d1"          # Direct2D library 
-    #     "dwrite"        # DirectX Typography Services
-    #     "comctl32"      # The Common Controls Library - provider of the more interesting window controls
-    #     "shlwapi"       # Shell Light-Weight Application Programming Interface 
-    #     "windowscodecs"        
-    # )
-    # message(STATUS "Linking with: ${PLATFORM_LIBRARIES}")
-
     # ensure the vst gui sources finds eachother modules
     target_link_libraries(${target}
       vstgui
       vstgui_uidescription
       vstgui_standalone
-      # ${PLATFORM_LIBRARIES}
       ${UUID_FRAMEWORK}
       ${FREEGLUT_FRAMEWORK}
       ${OPENGL32_FRAMEWORK}
@@ -103,9 +86,8 @@ function(vstgui_add_executable target sources)
       ${COMCTL32_FRAMEWORK}
       ${SHLWAPI_FRAMEWORK}
       ${WINDOWSCODECS_FRAMEWORK}        
-  )
-
-  endif(SMTG_WIN)
+    )
+  endif(MINGW)
 
   if(LINUX)
     add_executable(${target} ${sources})
@@ -191,13 +173,7 @@ endfunction()
 ###########################################################################################
 function(vstgui_set_target_rcfile target rcfile)
   # Changed by PIN: 07.03.2020
-  # if(MSVC)
-  #   target_sources(${target} PRIVATE ${rcfile})
-  # endif(MSVC)
-
-  # PIN; Disabled since windres throws errors on Windows using MSYS2
-  if(SMTG_WIN)
-
+  if(MINGW)
     # check if the rcfile is empty to avoid windres errors
     file(READ ${rcfile} rcfile_content)
     if(NOT ${rcfile_content} STREQUAL "")
@@ -206,6 +182,8 @@ function(vstgui_set_target_rcfile target rcfile)
       # call windres with the resource fil
       target_sources(${target} PRIVATE ${rcfile})
     endif()
-  endif(SMTG_WIN)
+  else()
+    target_sources(${target} PRIVATE ${rcfile})
+  endif(MINGW)
 
 endfunction()

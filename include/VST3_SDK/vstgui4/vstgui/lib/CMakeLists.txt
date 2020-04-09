@@ -308,36 +308,44 @@ target_compile_definitions(${target} ${VSTGUI_COMPILE_DEFINITIONS})
 vstgui_set_cxx_version(${target} 17)
 
 # PIN 06.04.2020 - add missing opengl libs
-find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
-find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
-find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
-find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
-find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
-find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
-find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
-find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
+if(MINGW)
+    # PIN ensure that the find library also finds windows dll's 
+    # the standard find_library` command does no longer consider .dll files to be linkable libraries. 
+    # all dynamic link libraries are expected to provide separate .dll.a or .lib import libraries.
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll" ".dll.a" ".a" ".lib")
+    # set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH} ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES}")
 
-message(STATUS "Windows opengl libraries found: 
-    ${FREEGLUT_FRAMEWORK}
-    ${OPENGL32_FRAMEWORK}
-    ${GLU32_FRAMEWORK}
-    ${GLEW32_FRAMEWORK}
-    ${GDI32_FRAMEWORK}
-    ${DWMAPI_FRAMEWORK}
-    ${D2D1_FRAMEWORK}
-    ${DWRITE_FRAMEWORK}
-" )
+    find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
+    find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
+    find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
+    find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
+    find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
+    find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
+    find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
+    find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
 
-target_link_libraries(${target} PRIVATE 
-    ${FREEGLUT_FRAMEWORK}
-    ${OPENGL32_FRAMEWORK}
-    ${GLU32_FRAMEWORK}
-    ${GLEW32_FRAMEWORK}
-    ${GDI32_FRAMEWORK}
-    ${DWMAPI_FRAMEWORK}
-    ${D2D1_FRAMEWORK}
-    ${DWRITE_FRAMEWORK}
-)
+    message(STATUS "Windows opengl libraries found: 
+        ${FREEGLUT_FRAMEWORK}
+        ${OPENGL32_FRAMEWORK}
+        ${GLU32_FRAMEWORK}
+        ${GLEW32_FRAMEWORK}
+        ${GDI32_FRAMEWORK}
+        ${DWMAPI_FRAMEWORK}
+        ${D2D1_FRAMEWORK}
+        ${DWRITE_FRAMEWORK}
+    " )
+
+    target_link_libraries(${target} PRIVATE 
+        ${FREEGLUT_FRAMEWORK}
+        ${OPENGL32_FRAMEWORK}
+        ${GLU32_FRAMEWORK}
+        ${GLEW32_FRAMEWORK}
+        ${GDI32_FRAMEWORK}
+        ${DWMAPI_FRAMEWORK}
+        ${D2D1_FRAMEWORK}
+        ${DWRITE_FRAMEWORK}
+    )
+endif()
 
 vstgui_source_group_by_folder(${target})
 

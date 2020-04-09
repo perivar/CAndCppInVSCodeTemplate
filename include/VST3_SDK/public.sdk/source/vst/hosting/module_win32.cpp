@@ -50,7 +50,9 @@
 #include <iostream>
 #include <filesystem>
 
-// #pragma comment(lib, "Shell32")
+#ifdef _MSC_VER
+#pragma comment(lib, "Shell32")
+#endif
 
 //------------------------------------------------------------------------
 extern "C"

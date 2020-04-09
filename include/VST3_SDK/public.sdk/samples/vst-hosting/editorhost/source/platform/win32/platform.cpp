@@ -159,9 +159,26 @@ void Platform::run(LPWSTR lpCmdLine, HINSTANCE hInstance)
 // int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
 // int WINAPI wWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd);
 
+#if !defined(__MINGW32__)
 // Original:
-// int APIENTRY wWinMain (_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
-//                        _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+int APIENTRY wWinMain (_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
+                       _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+{
+#if !SMTG_OS_WINDOWS_ARM
+	HRESULT hr = CoInitialize (nullptr);
+	if (FAILED (hr))
+		return FALSE;
+#endif
+
+	Steinberg::Vst::EditorHost::Platform::instance ().run (lpCmdLine, instance);
+
+#if !SMTG_OS_WINDOWS_ARM
+	CoUninitialize ();
+#endif
+
+	return 0;
+}
+#else
 // New:
 int APIENTRY WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 					 _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -172,11 +189,14 @@ int APIENTRY WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 		return FALSE;
 #endif
 
+#if WINDOWS && !defined(__MINGW32__)
+	Steinberg::Vst::EditorHost::Platform::instance().run(lpCmdLine, instance);
+#elif defined(__MINGW32__)
 	// PIN - convert char * to wchar_t *
 	static WCHAR lpCmdLine_copy[1024] = L"";
 	mbstowcs(lpCmdLine_copy, lpCmdLine, strlen(lpCmdLine) + 1);
-
 	Steinberg::Vst::EditorHost::Platform::instance().run(lpCmdLine_copy, instance);
+#endif
 
 #if !SMTG_OS_WINDOWS_ARM
 	CoUninitialize();
@@ -184,3 +204,4 @@ int APIENTRY WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 
 	return 0;
 }
+#endif

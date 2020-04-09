@@ -17,14 +17,14 @@ if(CMAKE_HOST_APPLE)
 endif()
 
 # PIN 10.03.2020 - add libraries vstgui and the missing windows libraries
-if(SMTG_WIN)
+if(MINGW)
   set(${TargetName}_PLATFORM_LIBS
-  "vstgui"
-  "windowscodecs"
-  "d2d1"
-  "dwrite"
-  "shlwapi"
-  "dwmapi"
+      "vstgui"
+      "windowscodecs"
+      "d2d1"
+      "dwrite"
+      "shlwapi"
+      "dwmapi"
   )
 endif()
 

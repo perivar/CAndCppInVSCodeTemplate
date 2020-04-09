@@ -257,29 +257,40 @@ function(smtg_make_plugin_package target extension)
         else()
             set(PLUGIN_PACKAGE_PATH ${PLUGIN_BINARY_DIR}/$<$<CONFIG:Debug>:Debug>$<$<CONFIG:Release>:Release>/${PLUGIN_PACKAGE_NAME})
         endif()
+
+        # Changed by PIN: 31.03.2020 
         set_target_properties(${target} PROPERTIES 
             SUFFIX                      .${PLUGIN_EXTENSION}
-            # Changed by PIN: 31.03.2020 
-            # This is a MVC property - when disabling this for g++ it's important that the GetPluginFactory symbol
-            # is exported by #define EXPORT_FACTORY	__declspec(dllexport) in pluginfactory.h
-            # LINK_FLAGS                  /EXPORT:GetPluginFactory
-            
-            # Stop CMake from prepending `lib` to library names
-            PREFIX                      ""
-
             SMTG_PLUGIN_PACKAGE_PATH    ${PLUGIN_PACKAGE_PATH}
-        )
+        )        
+        if (MSVC)
+            set_target_properties(${target} PROPERTIES 
+                LINK_FLAGS                  /EXPORT:GetPluginFactory
+            )        
+        endif()
+        if (MINGW)
+            set_target_properties(${target} PROPERTIES 
+                # This is a MVC property - when disabling this for g++ it's important that the GetPluginFactory symbol
+                # is exported by #define EXPORT_FACTORY	__declspec(dllexport) in pluginfactory.h
+                # LINK_FLAGS                  /EXPORT:GetPluginFactory
+
+                # Stop CMake from prepending `lib` to library names
+                PREFIX                      ""
+            )   
+        endif()
 
         # ORIGINAL:
-        # In order not to have the PDB inside the plug-in package in release builds, we specify a different location.
-        # if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        #     set(WIN_PDB WIN_PDB32)
-        # else()
-        #     set(WIN_PDB WIN_PDB64)
-        # endif()
-        # set_target_properties(${target} PROPERTIES
-        #     PDB_OUTPUT_DIRECTORY        ${PROJECT_BINARY_DIR}/${WIN_PDB}
-        # )
+        if (MSVC)
+            # In order not to have the PDB inside the plug-in package in release builds, we specify a different location.
+            if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+                set(WIN_PDB WIN_PDB32)
+            else()
+                set(WIN_PDB WIN_PDB64)
+            endif()
+            set_target_properties(${target} PROPERTIES
+                PDB_OUTPUT_DIRECTORY        ${PROJECT_BINARY_DIR}/${WIN_PDB}
+            )
+        endif()
 
         # Create Bundle on Windows
         if(SMTG_CREATE_BUNDLE_FOR_WINDOWS)
@@ -310,17 +321,17 @@ function(smtg_make_plugin_package target extension)
         # Disable warning LNK4221: "This object file does not define any previously undefined public symbols...".
         # Enable "Generate Debug Information" in release config by setting "/Zi" and "/DEBUG" flags.
         # Changed by PIN: 07.03.2020
-        # if(MSVC)
-        #     target_compile_options(${target} 
-        #         PRIVATE 
-        #             /wd4221
-        #             $<$<CONFIG:RELEASE>:/Zi>
-        #     )
-        #     set_property(TARGET ${target} 
-        #         APPEND PROPERTY 
-        #             LINK_FLAGS_RELEASE /DEBUG
-        #     )
-        # endif()
+        if(MSVC)
+            target_compile_options(${target} 
+                PRIVATE 
+                    /wd4221
+                    $<$<CONFIG:RELEASE>:/Zi>
+            )
+            set_property(TARGET ${target} 
+                APPEND PROPERTY 
+                    LINK_FLAGS_RELEASE /DEBUG
+            )
+        endif()
     elseif(SMTG_LINUX)
         smtg_get_linux_architecture_name() # Sets var LINUX_ARCHITECTURE_NAME
         message(STATUS "Linux architecture name is ${LINUX_ARCHITECTURE_NAME}.")

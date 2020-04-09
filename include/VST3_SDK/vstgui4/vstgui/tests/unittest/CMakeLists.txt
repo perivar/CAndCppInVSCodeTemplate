@@ -100,15 +100,7 @@ endif()
 
 ##########################################################################################
 # Changed by PIN: 07.03.2020
-# if(MSVC)
-# 	set(${target}_sources
-# 		${${target}_sources}
-# 		"${VSTGUI_TEST_BASE}lib/platform_helper_win32.cpp"
-# 		"${VSTGUI_TEST_BASE}../../vstgui_win32.cpp"
-# 	)
-# endif()
-
-if(SMTG_WIN)
+if(MSVC OR MINGW)
 	set(${target}_sources
 		${${target}_sources}
 		"${VSTGUI_TEST_BASE}lib/platform_helper_win32.cpp"
@@ -117,16 +109,16 @@ if(SMTG_WIN)
 endif()
 
 # PIN 15.03.2020 - add libraries vstgui and the missing windows libraries
-if(SMTG_WIN)
-  set(${target}_PLATFORM_LIBS
-  "vstgui"
-  "windowscodecs"
-  "d2d1"
-  "dwrite"
-  "shlwapi"
-  "dwmapi"
-  "comctl32"
-  )
+if(MINGW)
+	set(${target}_PLATFORM_LIBS
+		"vstgui"
+		"windowscodecs"
+		"d2d1"
+		"dwrite"
+		"shlwapi"
+		"dwmapi"
+		"comctl32"
+	)
 endif()
 
 ##########################################################################################

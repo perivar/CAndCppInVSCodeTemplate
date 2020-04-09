@@ -39,7 +39,9 @@ if(SMTG_AAX_SDK_PATH AND SMTG_ADD_VSTGUI)
         target_sources(${target} PRIVATE ../again/resource/again.rc)
         # remove warnings from VST2
         # PIN: 06.04.2020 - _CRT_SECURE_NO_WARNINGS is not relevant for MINGW
-        # add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+        if(NOT MINGW)
+            add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+        endif()
     endif()
 
 endif()

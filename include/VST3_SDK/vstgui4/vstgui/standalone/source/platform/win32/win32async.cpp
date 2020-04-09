@@ -9,8 +9,11 @@
 #include <mutex>
 
 // Changed by PIN: 04.03.2020 to use Threading Building Blocks instead
-// #include <ppltasks.h>
-#include "tbb/task.h"
+#ifdef _MSC_VER
+	#include <ppltasks.h>
+#else
+	#include "tbb/task.h"
+#endif
 
 //------------------------------------------------------------------------
 namespace VSTGUI {
@@ -85,7 +88,7 @@ void postAsyncMainTask (Async::Task&& t)
 }
 
 // Changed by PIN: 05.03.2020
-/*
+#ifdef _MSC_VER
 //------------------------------------------------------------------------
 struct TaskWrapper : std::enable_shared_from_this<TaskWrapper>
 {
@@ -103,13 +106,14 @@ struct TaskWrapper : std::enable_shared_from_this<TaskWrapper>
 	Async::Task task;
 	std::shared_ptr<concurrency::task<void>> f;
 };
-*/
+#endif
 
 //------------------------------------------------------------------------
 } // Win32
 } // Platform
 
 // added 
+#if defined(__MINGW32__)
 //------------------------------------------------------------------------
 namespace Async {
 
@@ -151,11 +155,11 @@ void schedule (QueuePtr queue, Task&& task)
 
 //------------------------------------------------------------------------
 } // Async
-
+#endif
 
 // ORIGINAL
 //------------------------------------------------------------------------
-/*
+#ifdef _MSC_VER
 namespace Async {
 
 //------------------------------------------------------------------------
@@ -252,7 +256,7 @@ void schedule (QueuePtr queue, Task&& task)
 //------------------------------------------------------------------------
 
 } // Async
-*/
+#endif
 
 } // Standalone
 } // VSTGUI

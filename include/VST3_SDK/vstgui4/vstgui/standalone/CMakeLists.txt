@@ -107,11 +107,7 @@ endif()
 
 ##########################################################################################
 # Changed by PIN: 04.03.2020
-# if(MSVC)
-#     set(${target}_sources ${${target}_common_sources} ${${target}_win32_sources})
-# endif()
-
-if(SMTG_WIN)
+if(MSVC OR MINGW)
     set(${target}_sources ${${target}_common_sources} ${${target}_win32_sources})
 endif()
 
@@ -146,6 +142,6 @@ if(LINUX)
 endif()
 
 # PIN 10.03.2020 - add libraries vstgui and windowscodecs
-if(SMTG_WIN)
+if(MINGW)
     target_link_libraries(${target} PRIVATE vstgui_uidescription vstgui windowscodecs)
 endif()

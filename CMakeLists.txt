@@ -129,6 +129,12 @@ set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
 set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
 
 # disable all vstgui tools and examples
+# set(VSTGUI_STANDALONE OFF)
+# set(VSTGUI_STANDALONE_EXAMPLES OFF)
+# set(VSTGUI_TOOLS OFF)
+# set(VSTGUI_DISABLE_UNITTESTS ON)
+
+# enable vstgui examples and tools
 set(VSTGUI_STANDALONE ON)
 set(VSTGUI_STANDALONE_EXAMPLES ON)
 # set(VSTGUI_TOOLS OFF)
@@ -214,6 +220,8 @@ if(SMTG_ADD_VSTGUI)
     endif()
 endif()
 
+# Output useful variables
+
 if(SMTG_ADD_VST3_HOSTING_SAMPLES)
     message("-- SMTG_ADD_VST3_HOSTING_SAMPLES is set.")
 else()
@@ -223,3 +231,21 @@ endif()
 if(SDK_ROOT)
     message("-- SDK_ROOT is set to : ${SDK_ROOT}")
 endif()
+
+message("-- Using CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
+
+if(MINGW)
+    message("-- MINGW is set to ${MINGW}.")
+else()
+    message("-- MINGW is NOT set!")
+endif()
+
+if(MSVC)
+    message("-- MSVC is set to ${MSVC}.")
+else()
+    message("-- MSVC is NOT set!")
+endif()
+
+message("-- CMAKE_CXX_PLATFORM_ID: ${CMAKE_CXX_PLATFORM_ID}")
+message("-- CMAKE_SIZEOF_VOID_P: ${CMAKE_SIZEOF_VOID_P}")
+message("-- MSVC_TOOLSET_VERSION: ${MSVC_TOOLSET_VERSION}")

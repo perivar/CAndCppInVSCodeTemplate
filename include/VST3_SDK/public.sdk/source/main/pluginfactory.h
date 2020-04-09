@@ -118,13 +118,16 @@ extern CPluginFactory* gPluginFactory;
 
 //------------------------------------------------------------------------
 // changed by PIN 28.03.2020
-#if SMTG_OS_WINDOWS
-	// TODO: PIN what about the dllexport entry (dllmain.cpp)?
-	#define EXPORT_FACTORY	__declspec(dllexport)
-#elif defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-	#define EXPORT_FACTORY	__attribute__ ((visibility ("default")))
+#if defined (__GNUC__)
+  #ifdef WIN32
+    #define EXPORT_FACTORY __declspec(dllexport)
+  #elif defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+	#define EXPORT_FACTORY   __attribute__ ((visibility ("default")))
+  #else
+    #define EXPORT_FACTORY
+  #endif
 #else
-	#define EXPORT_FACTORY
+  #define EXPORT_FACTORY
 #endif
 
 //------------------------------------------------------------------------

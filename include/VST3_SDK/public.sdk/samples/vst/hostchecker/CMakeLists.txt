@@ -34,10 +34,14 @@ if(SMTG_ADD_VSTGUI)
     target_include_directories(${target} PRIVATE ${VSTGUI_ROOT}/vstgui4)
 
     # PIN 31.03.2020 - add libraries vstgui and the missing windows libraries
-    set(VST_LIBS)
-    list(APPEND VST_LIBS base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
-    list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
-    target_link_libraries(${target} ${VST_LIBS})
+    if(MINGW)
+        set(VST_LIBS)
+        list(APPEND VST_LIBS base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+        list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
+        target_link_libraries(${target} ${VST_LIBS})
+    else()
+        target_link_libraries(${target} PRIVATE base sdk vstgui_support)
+    endif()
 
     smtg_add_vst3_resource(${target} resource/hostchecker.uidesc)
     smtg_add_vst3_resource(${target} resource/bypass.png)

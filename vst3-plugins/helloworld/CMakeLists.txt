@@ -16,10 +16,14 @@ smtg_add_vst3plugin(${target} ${SDK_ROOT} ${plug_sources})
 set_target_properties(${target} PROPERTIES ${SDK_IDE_MYPLUGINS_FOLDER})
 
 # PIN 04.04.2020 - add libraries vstgui and the missing windows libraries
-set(VST_LIBS)
-list(APPEND VST_LIBS base sdk windowscodecs d2d1 dwrite shlwapi)
-list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
-target_link_libraries(${target} ${VST_LIBS})
+if(MINGW)
+    set(VST_LIBS)
+    list(APPEND VST_LIBS base sdk windowscodecs d2d1 dwrite shlwapi)
+    list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
+    target_link_libraries(${target} ${VST_LIBS})
+else()
+    target_link_libraries(${target} PRIVATE base sdk)
+endif()
 
 if(MAC)
     smtg_set_bundle(${target} INFOPLIST "${CMAKE_CURRENT_LIST_DIR}/resource/Info.plist" PREPROCESS)

@@ -317,9 +317,28 @@ void* hInstance = nullptr; // for VSTGUI
 // int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd);
 // int WINAPI wWinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd);
 
+#if !defined(__MINGW32__)
 // Original:
-// int APIENTRY wWinMain (_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
-//                       _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+int APIENTRY wWinMain (_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
+                       _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+{
+	HeapSetInformation (NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+
+	HRESULT hr = OleInitialize (nullptr);
+	if (FAILED (hr))
+		return FALSE;
+
+	hInstance = instance;
+
+	VSTGUI::useD2DHardwareRenderer (true);
+	VSTGUI::Standalone::Platform::Win32::Application app;
+	app.init (instance, lpCmdLine);
+	app.run ();
+
+	OleUninitialize ();
+	return 0;
+}
+#else
 // New:
 int APIENTRY WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 					 _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -345,3 +364,4 @@ int APIENTRY WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
 	OleUninitialize ();
 	return 0;
 }
+#endif

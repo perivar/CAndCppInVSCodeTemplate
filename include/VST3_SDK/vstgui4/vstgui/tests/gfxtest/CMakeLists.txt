@@ -42,32 +42,29 @@ endif()
 
 ##########################################################################################
 # Changed by PIN: 07.03.2020
-# if(MSVC)
-#   set(gfxtest_resources
-#     "resource/gfxtest.rc"
-#   )
-#   set(APP_PROPERTIES
-#     LINK_FLAGS "/SUBSYSTEM:windows /INCLUDE:wWinMain"
-#   )
-# endif()
-
-if(SMTG_WIN)
+if(MSVC OR MINGW)
   set(gfxtest_resources
     "resource/gfxtest.rc"
   )
 endif()
 
-# PIN 15.03.2020 - add libraries vstgui and the missing windows libraries
-if(SMTG_WIN)
-  set(${target}_PLATFORM_LIBS
-  "vstgui"
-  "windowscodecs"
-  "d2d1"
-  "dwrite"
-  "shlwapi"
-  "dwmapi"
-  "comctl32"
+if(MSVC)  
+  set(APP_PROPERTIES
+    LINK_FLAGS "/SUBSYSTEM:windows /INCLUDE:wWinMain"
   )
+endif()
+
+# PIN 15.03.2020 - add libraries vstgui and the missing windows libraries
+if(MINGW)
+	set(${target}_PLATFORM_LIBS
+		"vstgui"
+		"windowscodecs"
+		"d2d1"
+		"dwrite"
+		"shlwapi"
+		"dwmapi"
+		"comctl32"
+	)
 endif()
 
 ##########################################################################################
@@ -77,7 +74,6 @@ add_executable(${target}
   ${gfxtest_resources}
 )
 
-# Changed by PIN: 15.03.2020
 target_link_libraries(${target}
 	vstgui
   	vstgui_uidescription
@@ -89,7 +85,7 @@ target_link_libraries(${target}
 vstgui_set_cxx_version(${target} 17)
 
 # PIN 15.03.2020 - copy Resource files as well
-if(SMTG_WIN)
+if(MINGW)
 	set(gfxtest_uiresources
 		"resource/Window.uidesc"
 		"resource/DrawDeviceTests.uidesc"
