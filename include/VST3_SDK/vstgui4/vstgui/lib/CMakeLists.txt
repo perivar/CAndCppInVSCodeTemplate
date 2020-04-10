@@ -324,7 +324,7 @@ if(MINGW)
     find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
     find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
 
-    message(STATUS "Windows opengl libraries found: 
+    message(STATUS "Linking vstgui lib with opengl libraries: 
         ${FREEGLUT_FRAMEWORK}
         ${OPENGL32_FRAMEWORK}
         ${GLU32_FRAMEWORK}

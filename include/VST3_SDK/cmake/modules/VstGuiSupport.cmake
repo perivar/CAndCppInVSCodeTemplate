@@ -92,7 +92,7 @@ macro(setupVstGuiSupport)
         find_library(SHLWAPI_FRAMEWORK shlwapi REQUIRED)                # Shell Light-Weight Application Programming Interface 
         find_library(WINDOWSCODECS_FRAMEWORK windowscodecs REQUIRED)
 
-        message(STATUS "Windows libraries found: 
+        message(STATUS "Linking vstgui_support lib with libraries: 
             ${UUID_FRAMEWORK}
             ${FREEGLUT_FRAMEWORK}
             ${OPENGL32_FRAMEWORK}

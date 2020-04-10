@@ -11,6 +11,8 @@ function(vstgui_add_executable target sources)
 
   # Changed by PIN: 04.03.2020
   if(MSVC)
+    # When the WIN32 property is set to true the executable when linked on Windows will be created with a WinMain() entry point instead of just main(). 
+    # This makes it a GUI executable instead of a console application.
     add_executable(${target} WIN32 ${sources})
     set_target_properties(${target} PROPERTIES LINK_FLAGS "/INCLUDE:wWinMain")
     get_target_property(OUTPUTDIR ${target} RUNTIME_OUTPUT_DIRECTORY)
@@ -18,6 +20,8 @@ function(vstgui_add_executable target sources)
   endif(MSVC)
 
   if(MINGW)
+    # When the WIN32 property is set to true the executable when linked on Windows will be created with a WinMain() entry point instead of just main(). 
+    # This makes it a GUI executable instead of a console application.
     add_executable(${target} WIN32 ${sources})
     get_target_property(OUTPUTDIR ${target} RUNTIME_OUTPUT_DIRECTORY)
     set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${OUTPUTDIR}/${target}")
@@ -54,7 +58,7 @@ function(vstgui_add_executable target sources)
     find_library(SHLWAPI_FRAMEWORK shlwapi REQUIRED)                # Shell Light-Weight Application Programming Interface 
     find_library(WINDOWSCODECS_FRAMEWORK windowscodecs REQUIRED)
 
-    message(STATUS "Linking with libraries: 
+    message(STATUS "Linking vstgui executable with libraries (${target}): 
         ${UUID_FRAMEWORK}
         ${FREEGLUT_FRAMEWORK}
         ${OPENGL32_FRAMEWORK}
@@ -70,22 +74,19 @@ function(vstgui_add_executable target sources)
     " )
 
     # ensure the vst gui sources finds eachother modules
-    target_link_libraries(${target}
-      vstgui
-      vstgui_uidescription
-      vstgui_standalone
-      ${UUID_FRAMEWORK}
-      ${FREEGLUT_FRAMEWORK}
-      ${OPENGL32_FRAMEWORK}
-      ${GLU32_FRAMEWORK}
-      ${GLEW32_FRAMEWORK}
-      ${GDI32_FRAMEWORK}
-      ${DWMAPI_FRAMEWORK}
-      ${D2D1_FRAMEWORK}
-      ${DWRITE_FRAMEWORK}
-      ${COMCTL32_FRAMEWORK}
-      ${SHLWAPI_FRAMEWORK}
-      ${WINDOWSCODECS_FRAMEWORK}        
+    set(PLATFORM_LIBRARIES 
+        ${UUID_FRAMEWORK}
+        ${FREEGLUT_FRAMEWORK}
+        ${OPENGL32_FRAMEWORK}
+        ${GLU32_FRAMEWORK}
+        ${GLEW32_FRAMEWORK}
+        ${GDI32_FRAMEWORK}
+        ${DWMAPI_FRAMEWORK}
+        ${D2D1_FRAMEWORK}
+        ${DWRITE_FRAMEWORK}
+        ${COMCTL32_FRAMEWORK}
+        ${SHLWAPI_FRAMEWORK}
+      ${WINDOWSCODECS_FRAMEWORK}              
     )
   endif(MINGW)
 
