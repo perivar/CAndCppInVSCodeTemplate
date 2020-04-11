@@ -43,7 +43,7 @@ macro(setupPlatformToolset)
         endif()
     #------------
     elseif(SMTG_WIN)
-        add_definitions(-D_UNICODE)
+        add_definitions(-DUNICODE -D_UNICODE) # Build as Windows unicode application.
 
         # Changed by PIN: 25.02.2020
         # The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
@@ -59,16 +59,34 @@ macro(setupPlatformToolset)
             # Therefore the setup info is moved here to the setupPlatformToolset macro
                 
             # -Wl,--no-undefined linker option can be used when building shared library, undefined symbols will be shown as linker errors.
-            # add subsystem windows to modules and shared libraries
-            set(common_linker_flags "-Wl,--no-undefined -Wl,--subsystem,windows")
+            set(common_linker_flags "-Wl,--no-undefined")
             set(CMAKE_MODULE_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Module Library Linker Flags")
-            set(CMAKE_SHARED_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Shared Library Linker Flags")            
+            set(CMAKE_SHARED_LINKER_FLAGS "${common_linker_flags}" CACHE STRING "Shared Library Linker Flags")       
 
             # turn on all warnings
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
             # remove multichar warnings
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar")
+
+            #  -municode
+            # This option is available for MinGW-w64 targets.  It causes the
+            # "UNICODE" preprocessor macro to be predefined, and chooses
+            # Unicode-capable runtime startup code.
+            # with the -municode flag:
+            # .... in function `wmain': crt0_w.c:23: undefined reference to `wWinMain'
+            # without this flag:
+            # .... in function `main': crt0_c.c:18: undefined reference to `WinMain'
+            # disabled since we rather would want to set this on each target using 
+            # set_target_properties(${target} PROPERTIES LINK_FLAGS -municode)
+            # or for CMake >=3.13
+            # target_link_options(${target} PRIVATE -municode)
+            # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -municode")
+
+            # Note!  -mwindows should probably not be passed directly; instead, use CMake's built-in WIN32 argument in add_executable
+            # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
+            # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mconsole")
+
         else()     
             add_compile_options(/MP)                            # Multi-processor Compilation
             if(NOT ${CMAKE_GENERATOR} MATCHES "ARM")

@@ -134,11 +134,11 @@ set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
 # set(VSTGUI_TOOLS OFF)
 # set(VSTGUI_DISABLE_UNITTESTS ON)
 
-# enable vstgui examples and tools
+# enable vstgui examples and tools (but not the unittests)
 set(VSTGUI_STANDALONE ON)
 set(VSTGUI_STANDALONE_EXAMPLES ON)
-# set(VSTGUI_TOOLS OFF)
-# set(VSTGUI_DISABLE_UNITTESTS ON)
+set(VSTGUI_TOOLS ON)
+set(VSTGUI_DISABLE_UNITTESTS ON)
 
 # Here you can define where the VSTGUI is located
 if(SMTG_ADD_VSTGUI)

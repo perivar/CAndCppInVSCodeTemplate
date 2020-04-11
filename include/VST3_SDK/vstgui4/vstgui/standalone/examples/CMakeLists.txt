@@ -6,7 +6,7 @@ if (MSVC)
   # set(APP_PROPERTIES  LINK_FLAGS "/SUBSYSTEM:windows /INCLUDE:wWinMain" )  
 
   # this allows the examples to compile, but crashes when run
-  set(APP_PROPERTIES	LINK_FLAGS "/SUBSYSTEM:console /ENTRY:wWinMainCRTStartup" )
+  # set(APP_PROPERTIES	LINK_FLAGS "/SUBSYSTEM:console /ENTRY:wWinMainCRTStartup" )
 endif()
 
 # PIN 08.04.2020

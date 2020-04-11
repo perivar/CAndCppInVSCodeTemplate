@@ -22,7 +22,22 @@ function(vstgui_add_executable target sources)
   if(MINGW)
     # When the WIN32 property is set to true the executable when linked on Windows will be created with a WinMain() entry point instead of just main(). 
     # This makes it a GUI executable instead of a console application.
+    # A WIN32 flag to add_executable means you're going to make it a Windows program, and provide a WinMain function.
+    # This also results in no console window.
     add_executable(${target} WIN32 ${sources})
+
+    #  -municode
+    # This option is available for MinGW-w64 targets.  It causes the
+    # "UNICODE" preprocessor macro to be predefined, and chooses
+    # Unicode-capable runtime startup code.
+    # with the -municode flag:
+    # .... in function `wmain': crt0_w.c:23: undefined reference to `wWinMain'
+    # without this flag:
+    # .... in function `main': crt0_c.c:18: undefined reference to `WinMain'
+    # together with -mwindows this make the entry point wWinMain instead of WinMain
+    # https://gcc.gnu.org/onlinedocs/gcc/x86-Windows-Options.html
+    set_target_properties(${target} PROPERTIES LINK_FLAGS -municode)
+
     get_target_property(OUTPUTDIR ${target} RUNTIME_OUTPUT_DIRECTORY)
     set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${OUTPUTDIR}/${target}")
 
@@ -88,6 +103,7 @@ function(vstgui_add_executable target sources)
         ${SHLWAPI_FRAMEWORK}
       ${WINDOWSCODECS_FRAMEWORK}              
     )
+
   endif(MINGW)
 
   if(LINUX)

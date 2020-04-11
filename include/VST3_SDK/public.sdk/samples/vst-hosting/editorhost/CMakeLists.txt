@@ -84,7 +84,22 @@ if(SMTG_ADD_VST3_HOSTING_SAMPLES)
     endif()
 
     set(target editorhost)
-    add_executable(${target} ${editorhost_sources})
+
+    if(MINGW)
+        # When the WIN32 property is set to true the executable when linked on Windows will be created with a WinMain() entry point instead of just main(). 
+        # This makes it a GUI executable instead of a console application.
+        # A WIN32 flag to add_executable means you're going to make it a Windows program, and provide a WinMain function.
+        # This also results in no console window.
+        # Therefore don't add the WIN32 property as the editorhost is a console application
+        add_executable(${target} ${editorhost_sources})
+
+        # together with -mwindows this make the entry point wWinMain instead of WinMain
+        # https://gcc.gnu.org/onlinedocs/gcc/x86-Windows-Options.html   
+        set_target_properties(${target} PROPERTIES LINK_FLAGS -municode)
+    else()
+        add_executable(${target} ${editorhost_sources})
+    endif()
+
     set_target_properties(${target} PROPERTIES ${SDK_IDE_HOSTING_EXAMPLES_FOLDER})
     target_link_libraries(${target} PRIVATE base sdk ${editorhost_PLATFORM_LIBS})
     smtg_setup_universal_binary(${target})
