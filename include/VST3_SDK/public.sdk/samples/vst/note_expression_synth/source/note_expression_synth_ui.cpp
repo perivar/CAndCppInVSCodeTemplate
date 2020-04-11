@@ -44,6 +44,9 @@
 #include "pluginterfaces/vst/ivstinterappaudio.h"
 #include "pluginterfaces/vst/ivstpluginterfacesupport.h"
 
+// PIN: 11.04.2020 - added #include <cassert> to make sure this file compiles even if NDEBUG is defined
+#include <cassert>
+
 using namespace VSTGUI;
 
 //------------------------------------------------------------------------
