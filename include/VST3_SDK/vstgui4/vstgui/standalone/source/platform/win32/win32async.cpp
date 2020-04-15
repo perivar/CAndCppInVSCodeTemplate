@@ -8,11 +8,11 @@
 #include <memory>
 #include <mutex>
 
-// Changed by PIN: 04.03.2020 to use Threading Building Blocks instead
+// Changed by PIN: 15.04.2020. TODO: Use Threading Building Blocks instead
 #ifdef _MSC_VER
 	#include <ppltasks.h>
 #else
-	#include "tbb/task.h"
+	// #include "tbb/task.h" // not yet implemented
 #endif
 
 //------------------------------------------------------------------------

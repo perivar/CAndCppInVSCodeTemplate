@@ -45,63 +45,18 @@ function(vstgui_add_executable target sources)
     # the standard find_library` command does no longer consider .dll files to be linkable libraries. 
     # all dynamic link libraries are expected to provide separate .dll.a or .lib import libraries.
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll" ".dll.a" ".a" ".lib")
-    # set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH} ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES}")
-
-    find_library(UUID_FRAMEWORK uuid HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                      # IID_<> variables
-    # find_library(FREEGLUT_FRAMEWORK freeglut HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)              # Freeglut is dynamically linked 
-    # find_library(OPENGL32_FRAMEWORK opengl32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)              # OpenGL Library
-    # find_library(GLU32_FRAMEWORK glu32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                    # OpenGL Utility Library
-    # find_library(GLEW32_FRAMEWORK glew32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                  # OpenGL Extension Wrangler Library 
-    # find_library(GDI32_FRAMEWORK gdi32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
-    # find_library(DWMAPI_FRAMEWORK dwmapi HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                  # Desktop Window Manager (DWM)
-    # find_library(D2D1_FRAMEWORK d2d1 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                      # Direct2D library 
-    # find_library(DWRITE_FRAMEWORK dwrite HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                  # DirectX Typography Services
-    # find_library(COMCTL32_FRAMEWORK comctl32 HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)              # The Common Controls Library - provider of the more interesting window controls
-    # find_library(SHLWAPI_FRAMEWORK shlwapi HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)                # Shell Light-Weight Application Programming Interface 
-    # find_library(WINDOWSCODECS_FRAMEWORK windowscodecs HINTS ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} REQUIRED)
-
-    # find_library(UUID_FRAMEWORK uuid REQUIRED)                      # IID_<> variables
-    find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
-    find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
-    find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
-    find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
-    find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
     find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
-    find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
-    find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
     find_library(COMCTL32_FRAMEWORK comctl32 REQUIRED)              # The Common Controls Library - provider of the more interesting window controls
-    find_library(SHLWAPI_FRAMEWORK shlwapi REQUIRED)                # Shell Light-Weight Application Programming Interface 
-    find_library(WINDOWSCODECS_FRAMEWORK windowscodecs REQUIRED)
 
     message(STATUS "Linking vstgui executable with libraries (${target}): 
-        ${UUID_FRAMEWORK}
-        ${FREEGLUT_FRAMEWORK}
-        ${OPENGL32_FRAMEWORK}
-        ${GLU32_FRAMEWORK}
-        ${GLEW32_FRAMEWORK}
-        ${GDI32_FRAMEWORK}
         ${DWMAPI_FRAMEWORK}
-        ${D2D1_FRAMEWORK}
-        ${DWRITE_FRAMEWORK}
         ${COMCTL32_FRAMEWORK}
-        ${SHLWAPI_FRAMEWORK}
-        ${WINDOWSCODECS_FRAMEWORK}
     " )
 
     # ensure the vst gui sources finds eachother modules
     set(PLATFORM_LIBRARIES 
-        ${UUID_FRAMEWORK}
-        ${FREEGLUT_FRAMEWORK}
-        ${OPENGL32_FRAMEWORK}
-        ${GLU32_FRAMEWORK}
-        ${GLEW32_FRAMEWORK}
-        ${GDI32_FRAMEWORK}
-        ${DWMAPI_FRAMEWORK}
-        ${D2D1_FRAMEWORK}
-        ${DWRITE_FRAMEWORK}
-        ${COMCTL32_FRAMEWORK}
-        ${SHLWAPI_FRAMEWORK}
-      ${WINDOWSCODECS_FRAMEWORK}              
+        ${DWMAPI_FRAMEWORK}     # win32window.cpp
+        ${COMCTL32_FRAMEWORK}   # win32window.cpp
     )
 
   endif(MINGW)

@@ -313,37 +313,33 @@ if(MINGW)
     # the standard find_library` command does no longer consider .dll files to be linkable libraries. 
     # all dynamic link libraries are expected to provide separate .dll.a or .lib import libraries.
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll" ".dll.a" ".a" ".lib")
-    # set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH} ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES}")
 
-    find_library(FREEGLUT_FRAMEWORK freeglut REQUIRED)              # Freeglut is dynamically linked 
     find_library(OPENGL32_FRAMEWORK opengl32 REQUIRED)              # OpenGL Library
     find_library(GLU32_FRAMEWORK glu32 REQUIRED)                    # OpenGL Utility Library
-    find_library(GLEW32_FRAMEWORK glew32 REQUIRED)                  # OpenGL Extension Wrangler Library 
-    find_library(GDI32_FRAMEWORK gdi32 REQUIRED)                    # OpenGL pixel format functions & SwapBuffers
     find_library(DWMAPI_FRAMEWORK dwmapi REQUIRED)                  # Desktop Window Manager (DWM)
     find_library(D2D1_FRAMEWORK d2d1 REQUIRED)                      # Direct2D library 
     find_library(DWRITE_FRAMEWORK dwrite REQUIRED)                  # DirectX Typography Services
+    find_library(SHLWAPI_FRAMEWORK shlwapi REQUIRED)                # Shell Light-Weight Application Programming Interface 
+    find_library(WINDOWSCODECS_FRAMEWORK windowscodecs REQUIRED)
 
     message(STATUS "Linking vstgui lib with opengl libraries: 
-        ${FREEGLUT_FRAMEWORK}
         ${OPENGL32_FRAMEWORK}
         ${GLU32_FRAMEWORK}
-        ${GLEW32_FRAMEWORK}
-        ${GDI32_FRAMEWORK}
         ${DWMAPI_FRAMEWORK}
         ${D2D1_FRAMEWORK}
         ${DWRITE_FRAMEWORK}
+        ${SHLWAPI_FRAMEWORK}
+        ${WINDOWSCODECS_FRAMEWORK}
     " )
 
     target_link_libraries(${target} PRIVATE 
-        ${FREEGLUT_FRAMEWORK}
-        ${OPENGL32_FRAMEWORK}
-        ${GLU32_FRAMEWORK}
-        ${GLEW32_FRAMEWORK}
-        ${GDI32_FRAMEWORK}
-        ${DWMAPI_FRAMEWORK}
-        ${D2D1_FRAMEWORK}
-        ${DWRITE_FRAMEWORK}
+        ${OPENGL32_FRAMEWORK}       # win32openglview.cpp
+        ${GLU32_FRAMEWORK}          # win32openglview.cpp
+        ${DWMAPI_FRAMEWORK}         # win32dragging.cpp
+        ${D2D1_FRAMEWORK}           # win32support.cpp, win32application.cpp
+        ${DWRITE_FRAMEWORK}         # win32support.cpp, win32application.cpp
+        ${SHLWAPI_FRAMEWORK}        # win32support.cpp, win32frame.cpp
+        ${WINDOWSCODECS_FRAMEWORK}  # win32support.cpp
     )
 endif()
 

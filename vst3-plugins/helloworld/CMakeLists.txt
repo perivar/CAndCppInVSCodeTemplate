@@ -18,7 +18,7 @@ set_target_properties(${target} PROPERTIES ${SDK_IDE_MYPLUGINS_FOLDER})
 # PIN 04.04.2020 - add libraries vstgui and the missing windows libraries
 if(MINGW)
     set(VST_LIBS)
-    list(APPEND VST_LIBS base sdk windowscodecs d2d1 dwrite shlwapi)
+    list(APPEND VST_LIBS base sdk)
     list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
     target_link_libraries(${target} ${VST_LIBS})
 else()

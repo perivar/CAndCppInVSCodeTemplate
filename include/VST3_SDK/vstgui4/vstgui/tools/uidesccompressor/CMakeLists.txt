@@ -21,10 +21,6 @@ if(MINGW)
   set(${TargetName}_PLATFORM_LIBS
       "vstgui"
       "windowscodecs"
-      "d2d1"
-      "dwrite"
-      "shlwapi"
-      "dwmapi"
   )
 endif()
 

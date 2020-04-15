@@ -16,7 +16,7 @@ if(SMTG_ADD_VSTGUI)
 
     # PIN 10.03.2020 - add libraries vstgui and the missing windows libraries
     if(MINGW)
-        target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs d2d1 dwrite shlwapi)
+        target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs)
     else()
         target_link_libraries(${target} PRIVATE base sdk vstgui_support)
     endif()

@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "Win32",
+      "name": "x64 MSVC",
       "includePath": ["${workspaceFolder}/**"],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE"],      
       "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.25.28610/bin/Hostx64/x64/cl.exe",
@@ -11,7 +11,7 @@
       "configurationProvider": "vector-of-bool.cmake-tools"
     },
     {
-      "name": "MinGW",
+      "name": "MinGW64 g++",
       "includePath": ["${workspaceFolder}/**"],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
       "compilerPath": "C:/msys64/mingw64/bin/g++.exe",
