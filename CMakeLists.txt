@@ -32,68 +32,6 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # return()
 
-# # target path (SMTG_PLUGIN_TARGET_PATH)
-# set(SMTG_PLUGIN_TARGET_PATH "C:/Users/perner/My Projects/VstPlugins")
-
-# # folder to the cmake module files
-# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmake/modules")
-
-# # call the SMTG_VST3_SDK.cmake file
-# include(SMTG_VST3_SDK)
-
-# project(vstsdk)
-
-# setupPlatformToolset()
-
-# set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
-
-# # Here you can define where the VST 3 SDK is located
-# set(SDK_ROOT "${ROOT}")
-# set(public_sdk_SOURCE_DIR ${SDK_ROOT}/public.sdk)
-# set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
-
-# # disable deprecated methods
-# set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
-
-# # disable all vstgui tools and examples
-# set(VSTGUI_STANDALONE OFF)
-# set(VSTGUI_STANDALONE_EXAMPLES OFF)
-# set(VSTGUI_TOOLS OFF)
-# set(VSTGUI_DISABLE_UNITTESTS ON)
-
-# # disable validator
-# set(SMTG_RUN_VST_VALIDATOR OFF)
-
-# # Here you can define where the VSTGUI is located
-# if(SMTG_ADD_VSTGUI)
-#     set(VSTGUI_ROOT "${ROOT}")
-#     setupVstGuiSupport()
-# endif()
-
-# include_directories(${ROOT} ${SDK_ROOT})
-
-# set(SDK_IDE_LIBS_FOLDER FOLDER "Libraries")
-
-# #---Add base libraries---------------------------
-# set(VST_SDK TRUE) # used for Base module which provides only a subset of Base for VST-SDK
-# add_subdirectory(${SDK_ROOT}/pluginterfaces)
-# add_subdirectory(${SDK_ROOT}/base)
-# add_subdirectory(${SDK_ROOT}/public.sdk)
-# add_subdirectory(${SDK_ROOT}/public.sdk/source/vst/interappaudio)
-
-# # add VST examples
-# set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
-# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/again)
-# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/mda-vst3)
-# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst/hostchecker)
-
-# # Add hosting examples, it includes the validator
-# set(SDK_IDE_HOSTING_EXAMPLES_FOLDER FOLDER "HostingExamples")
-# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/validator)
-# add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting/editorhost)
-
-# return()
-
 # https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
 cmake_minimum_required (VERSION 3.4.3)
 
@@ -105,6 +43,12 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 #-------------------------------------------------------------------------------
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmake/modules")
+
+# call the ASPiK CMakeLists.txt's
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/aspik.projects/DemoSynthPlugin")
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/aspik.projects/DemoVolumePlugin")
+# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/aspik.projects/PluginTemplate")
+# return()
 
 include(SMTG_VST3_SDK)
 

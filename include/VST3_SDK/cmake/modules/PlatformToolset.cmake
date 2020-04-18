@@ -43,7 +43,7 @@ macro(setupPlatformToolset)
         endif()
     #------------
     elseif(SMTG_WIN)
-        add_definitions(-DUNICODE -D_UNICODE) # Build as Windows unicode application.
+        # add_definitions(-DUNICODE -D_UNICODE) # Build as Windows unicode application.
 
         # Changed by PIN: 25.02.2020
         # The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
@@ -55,7 +55,7 @@ macro(setupPlatformToolset)
         # Changed by PIN: 09.04.2020
         if(MINGW)
             # Since the Global.cmake file is loaded before any of the platform variables is set,
-            # it's imppossble to know whether we are compiling on windows using MSVC or MINGW.
+            # it's impossible to know whether we are compiling on windows using MSVC or MINGW.
             # Therefore the setup info is moved here to the setupPlatformToolset macro
                 
             # -Wl,--no-undefined linker option can be used when building shared library, undefined symbols will be shown as linker errors.
@@ -91,7 +91,7 @@ macro(setupPlatformToolset)
             add_compile_options(/MP)                            # Multi-processor Compilation
             if(NOT ${CMAKE_GENERATOR} MATCHES "ARM")
                 # PIN: /Zi is added several other places. Disable /ZI to avoid the Command line warning D9025 : overriding '/Zi' with '/ZI' error
-                # add_compile_options($<$<CONFIG:Debug>:/ZI>)     # Program Database for Edit And Continue
+                add_compile_options($<$<CONFIG:Debug>:/ZI>)     # Program Database for Edit And Continue
             endif()
             if(SMTG_USE_STATIC_CRT)
                 add_compile_options($<$<CONFIG:Debug>:/MTd>)    # Runtime Library: /MTd = MultiThreaded Debug Runtime

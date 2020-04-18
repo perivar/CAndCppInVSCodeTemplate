@@ -103,8 +103,9 @@ add_compile_options($<$<CONFIG:RelWithDebInfo>:-DRELEASE=1>)
 if(SMTG_WIN)
     # Changed by PIN: 09.04.2020
     # Since this cmake file is loaded before any of the platform variables is set,
-    # it's imppossble to know whether we are compiling on windows using MSVC or MINGW.
+    # it's impossible to know whether we are compiling on windows using MSVC or MINGW.
     # Therefore this is moved to the setupPlatformToolset macro
+    message(STATUS "Building on Windows")
 endif()
 
 # Add colors to clang output when using Ninja
