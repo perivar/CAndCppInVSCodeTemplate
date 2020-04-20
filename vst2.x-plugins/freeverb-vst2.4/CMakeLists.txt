@@ -152,10 +152,13 @@ target_link_options(${PLUGIN_NAME}
 )
 
 # set definitions per target
-# target_compile_definitions(${PLUGIN_NAME} 
-#   PUBLIC
-#   VSTGUI_LIVE_EDITING=1 
-# )
+target_compile_definitions(${PLUGIN_NAME} 
+    # PRIVATE -DUNICODE
+    # PRIVATE -D_WIN32_WINNT=0x602  # minimum operating system version your code supports = Windows 8
+    # PRIVATE -DWIN32
+    # _CRT_SECURE_NO_DEPRECATE    # macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
+)
+
 
 # vst's has lot's off warnings about multichar and narrowing - hide those
 list(APPEND PLUGIN_COMPILE_FLAGS "-Wno-multichar" "-Wno-narrowing" "-Wno-write-strings")      
