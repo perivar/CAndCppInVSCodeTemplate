@@ -7,17 +7,13 @@ macro(setupVstGuiSupport)
     if(NOT DEFINED VSTGUI_STANDALONE_EXAMPLES)
         set(VSTGUI_STANDALONE_EXAMPLES OFF)
     endif()
+    
     if(SMTG_BUILD_UNIVERSAL_BINARY)
         set(VSTGUI_STANDALONE OFF)
         set(VSTGUI_TOOLS OFF)
-
-    # PIN: 07.03.2020 - tried to get cl to compile the examples
-    # elseif(MINGW)
-    #     # keep the vstgui examples
-    # elseif(SMTG_WIN AND CMAKE_SIZEOF_VOID_P EQUAL 4)
-    #     set(VSTGUI_STANDALONE OFF)
-    #     set(VSTGUI_TOOLS OFF)
-    
+    elseif(SMTG_WIN AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+        set(VSTGUI_STANDALONE OFF)
+        set(VSTGUI_TOOLS OFF)
     else()
         set(VSTGUI_STANDALONE ON)
     endif()

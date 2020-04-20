@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.5)
+# https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
+cmake_minimum_required (VERSION 3.4.3)
 
 # set verbose
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -32,12 +33,6 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # return()
 
-# https://github.com/steinbergmedia/vst3sdk/blob/master/CMakeLists.txt
-cmake_minimum_required (VERSION 3.4.3)
-
-# set verbose
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
 #-------------------------------------------------------------------------------
 # Includes
 #-------------------------------------------------------------------------------
@@ -52,9 +47,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK/cmak
 
 include(SMTG_VST3_SDK)
 
-# disable vst gui
-# set(SMTG_ADD_VSTGUI 0)
-
 #-------------------------------------------------------------------------------
 # SDK Project
 #-------------------------------------------------------------------------------
@@ -68,6 +60,9 @@ set(ROOT "${CMAKE_CURRENT_SOURCE_DIR}/include/VST3_SDK")
 set(SDK_ROOT "${ROOT}")
 set(public_sdk_SOURCE_DIR ${SDK_ROOT}/public.sdk)
 set(pluginterfaces_SOURCE_DIR ${SDK_ROOT}/pluginterfaces)
+
+# Here you can enable/disable VST GUI elements
+# Note! This must be done before the setupVstGuiSupport macro is called
 
 # disable deprecated methods
 set(VSTGUI_ENABLE_DEPRECATED_METHODS OFF)
@@ -101,6 +96,7 @@ include_directories(${ROOT} ${SDK_ROOT})
 setupCoreAudioSupport()
 setupAaxSupport()
 
+
 #-------------------------------------------------------------------------------
 # Projects
 #-------------------------------------------------------------------------------
@@ -132,6 +128,7 @@ if(EXISTS ${SMTG_MYPLUGINS_SRC_PATH})
     add_subdirectory(${SMTG_MYPLUGINS_SRC_PATH} ${SMTG_MYPLUGINS_BIN_PATH})
 endif()
 
+
 #---Add VST3 examples (plug-ins and hosting)-----
 if(SMTG_ADD_VST3_PLUGINS_SAMPLES)
     set(SDK_IDE_PLUGIN_EXAMPLES_FOLDER FOLDER "PlugInExamples")
@@ -143,6 +140,7 @@ endif()
 # Add hosting examples, it includes the validator
 set(SDK_IDE_HOSTING_EXAMPLES_FOLDER FOLDER "HostingExamples")
 add_subdirectory(${SDK_ROOT}/public.sdk/samples/vst-hosting)
+
 
 #-------------------------------------------------------------------------------
 # IDE sorting
@@ -164,7 +162,10 @@ if(SMTG_ADD_VSTGUI)
     endif()
 endif()
 
+
+#-------------------------------------------------------------------------------
 # Output useful variables
+#-------------------------------------------------------------------------------
 
 if(SMTG_ADD_VST3_HOSTING_SAMPLES)
     message("-- SMTG_ADD_VST3_HOSTING_SAMPLES is set.")
@@ -192,4 +193,7 @@ endif()
 
 message("-- CMAKE_CXX_PLATFORM_ID: ${CMAKE_CXX_PLATFORM_ID}")
 message("-- CMAKE_SIZEOF_VOID_P: ${CMAKE_SIZEOF_VOID_P}")
-message("-- MSVC_TOOLSET_VERSION: ${MSVC_TOOLSET_VERSION}")
+
+if(MSVC_TOOLSET_VERSION)
+    message("-- MSVC_TOOLSET_VERSION: ${MSVC_TOOLSET_VERSION}")
+endif()
