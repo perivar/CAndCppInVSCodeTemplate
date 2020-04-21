@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.5)
-project (freeverb)
+project (molot01)
 
 message(STATUS  "Building on ${CMAKE_SYSTEM_NAME}")
 message(STATUS  "Build type: ${CMAKE_BUILD_TYPE}")
@@ -10,7 +10,7 @@ message(STATUS  "Binary dir: ${CMAKE_BINARY_DIR}")
 message(STATUS  "Project binary dir: ${PROJECT_BINARY_DIR}")
 
 # Name your plugin here
-set(PLUGIN_NAME freeverb)
+set(PLUGIN_NAME molot01)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -66,40 +66,58 @@ set(VST_SDK_2_4_ROOT "${CMAKE_SOURCE_DIR}/include/VST2_SDK"  CACHE PATH "Path to
 set(VSTSDK2_4_PLUGIN_SOURCE
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffect.cpp
     ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/audioeffectx.cpp    
-    # disable since freeverb have it's own main method: FreeverbMain.cpp
-    # ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp # VST2 plugins must implement createEffectInstance and export __declspec(dllexport) VSTPluginMain
+    ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x/vstplugmain.cpp # VST2 plugins must implement createEffectInstance and export __declspec(dllexport) VSTPluginMain
     
-    ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffect.h
-    ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffectx.h
-    ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
+    # ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffect.h
+    # ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/aeffectx.h
+    # ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x/vstfxstore.h
 )
 
-# Add the freeverb components 
-set(FREEVERB_COMPONENT_ROOT "${CMAKE_SOURCE_DIR}/include/freeverb.components")
-set(FREEVERB_COMPONENTS_SOURCE
-  ${FREEVERB_COMPONENT_ROOT}/allpass.cpp
-  # ${FREEVERB_COMPONENT_ROOT}/allpass.hpp
-  ${FREEVERB_COMPONENT_ROOT}/comb.cpp
-  # ${FREEVERB_COMPONENT_ROOT}/comb.hpp
-  ${FREEVERB_COMPONENT_ROOT}/revmodel.cpp
-  # ${FREEVERB_COMPONENT_ROOT}/revmodel.hpp
-  # ${FREEVERB_COMPONENT_ROOT}/tuning.h
+# Add VSTGUI.SF SDK
+set(VSTSDKGUI_DIR "${CMAKE_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/vstgui" CACHE PATH "Path to VSTGUI.SF SDK")
+set(VSTSDKGUI_PLUGIN_SOURCE
+    ${VSTSDKGUI_DIR}/aeffguieditor.cpp
+    ${VSTSDKGUI_DIR}/cfileselector.cpp
+    ${VSTSDKGUI_DIR}/cscrollview.cpp
+    ${VSTSDKGUI_DIR}/ctabview.cpp
+    # ${VSTSDKGUI_DIR}/plugguieditor.cpp # removed to avoid error: redefinition of 'struct ERect' errors
+    ${VSTSDKGUI_DIR}/vstcontrols.cpp
+    ${VSTSDKGUI_DIR}/vstgui.cpp
 )
+set(VSTSDKGUI_INCLUDE_DIR ${VSTSDKGUI_DIR})
+
+# Add VSTGUI 3.6.0 rc2 SDK
+set(VSTSDKGUI_360_DIR "${CMAKE_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui" CACHE PATH "Path to VSTGUI_360_rc2 SDK")
+set(VSTSDKGUI_360_PLUGIN_SOURCE
+    ${VSTSDKGUI_360_DIR}/aeffguieditor.cpp
+    # ${VSTSDKGUI_360_DIR}/cdatabrowser.cpp
+    # ${VSTSDKGUI_360_DIR}/cfileselector.cpp
+    # ${VSTSDKGUI_360_DIR}/cscrollview.cpp
+    # ${VSTSDKGUI_360_DIR}/ctabview.cpp
+    # ${VSTSDKGUI_360_DIR}/ctooltipsupport.cpp
+    # ${VSTSDKGUI_360_DIR}/cvstguitimer.cpp
+    # ${VSTSDKGUI_360_DIR}/plugguieditor.cpp # removed to avoid error: redefinition of 'struct ERect' errors
+    ${VSTSDKGUI_360_DIR}/vstcontrols.cpp
+    ${VSTSDKGUI_360_DIR}/vstgui.cpp
+    # ${VSTSDKGUI_360_DIR}/vstguidebug.cpp
+    # ${VSTSDKGUI_360_DIR}/winfileselector.cpp
+)
+set(VSTSDKGUI_360_INCLUDE_DIR ${VSTSDKGUI_360_DIR})
 
 # set plugin root and plugin sources
-set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
+set(PLUGIN_ROOT "${CMAKE_SOURCE_DIR}/vst2.x-plugins/molot01")
 set(PLUGIN_SRCS
-  ${PLUGIN_ROOT}/freeverb.cpp
-  ${PLUGIN_ROOT}/freeverb.hpp
-  ${PLUGIN_ROOT}/FreeverbMain.cpp
-  # ${PLUGIN_ROOT}/Freeverb4.def
+  ${PLUGIN_ROOT}/molotgui.cpp
+  ${PLUGIN_ROOT}/molotvst.cpp
+  ${PLUGIN_ROOT}/vstparam.cpp
   ${VSTSDK2_4_PLUGIN_SOURCE}
-  ${FREEVERB_COMPONENTS_SOURCE}  
+  ${VSTSDKGUI_PLUGIN_SOURCE}
+  # ${VSTSDKGUI_360_PLUGIN_SOURCE}
 )
 
 # set plugin resources
 set(RESOURCE_SRCS
-  
+  ${PLUGIN_ROOT}/molotgui.rc
 )
 
 # for the DEF file check GENERATE_EXPORT_HEADER
@@ -135,15 +153,19 @@ set_target_properties(${PLUGIN_NAME} PROPERTIES
 )
 
 # Bring the headers, such as aeffeditor.h into the project
+target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT}/public.sdk/source/vst2.x)
+target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT}/pluginterfaces/vst2.x)
 target_include_directories(${PLUGIN_NAME} PUBLIC ${VST_SDK_2_4_ROOT})
-target_include_directories(${PLUGIN_NAME} PUBLIC ${FREEVERB_COMPONENT_ROOT})
+target_include_directories(${PLUGIN_NAME} PUBLIC ${VSTSDKGUI_INCLUDE_DIR})
+# target_include_directories(${PLUGIN_NAME} PUBLIC ${VSTSDKGUI_360_INCLUDE_DIR})
 
-# link to the sdk and components libraries
-# target_link_libraries(${PLUGIN_NAME} 
-#   PRIVATE 
-#   SDK2_4 
-#   FREEVERB_COMPONENTS
-# )
+# target the libraries needed
+find_library(LIBPNG_FRAMEWORK libpng REQUIRED)
+# find_library(ZLIB_FRAMEWORK zlib REQUIRED)
+target_link_libraries(${PLUGIN_NAME} 
+    ${LIBPNG_FRAMEWORK}
+    # ${ZLIB_FRAMEWORK}    
+)
 
 # set link flags per target
 target_link_options(${PLUGIN_NAME} 
@@ -154,9 +176,13 @@ target_link_options(${PLUGIN_NAME}
 # set definitions per target
 target_compile_definitions(${PLUGIN_NAME} 
     # PRIVATE -DUNICODE
-    PRIVATE -D_WIN32_WINNT=0x602  # minimum operating system version your code supports = Windows 8
+    # PRIVATE -D_WIN32_WINNT=0x602
+    # PRIVATE -DVSTGUI_USES_UTF8=0 # to get rid of wchar / char issues since it sets UNICODE=0 in vstgui version 3.6
     PRIVATE -DWIN32
-    # _CRT_SECURE_NO_DEPRECATE    # macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
+    # PRIVATE -DGDIPLUS=0 # for vstgui version 3.6
+    PRIVATE -DUSE_LIBPNG=1
+    # PRIVATE -DVSTGUI_ENABLE_DEPRECATED_METHODS=1 # to enable getMouseButtons() in vstgui version 3.6
+    # _CRT_SECURE_NO_DEPRECATE # Macro _CRT_SECURE_NO_DEPRECATE is specific to Visual Studio. where CRT stands for C- Runtime-Library.
 )
 
 # vst's has lot's off warnings about multichar and narrowing - hide those

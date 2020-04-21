@@ -4,34 +4,37 @@ cmake_minimum_required (VERSION 3.4.3)
 # set verbose
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-# # # call the CMakeLists.txt file in the freeverb directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
+# call the CMakeLists.txt file in the freeverb directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/molot01")
 
-# # # call the CMakeLists.txt file in the minihost directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
+# call the CMakeLists.txt file in the freeverb directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/freeverb-vst2.4")
 
-# # # call the CMakeLists.txt file in the again directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
+# call the CMakeLists.txt file in the minihost directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minihost")
 
-# # call the CMakeLists.txt file in the adelay directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
+# call the CMakeLists.txt file in the again directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/again")
 
-# # call the CMakeLists.txt file in the minimal host directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minimal_vst2x_host")
+# call the CMakeLists.txt file in the adelay directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/adelay")
 
-# # call the CMakeLists.txt file in the vstxsynth directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/vstxsynth")
+# call the CMakeLists.txt file in the minimal host directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/minimal_vst2x_host")
 
-# # call the CMakeLists.txt file in the Revitar directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/Revitar")
+# call the CMakeLists.txt file in the vstxsynth directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/vstxsynth")
 
-# # call the CMakeLists.txt file in the vstgui.sf drawtest directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/drawtest")
+# call the CMakeLists.txt file in the Revitar directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/vst2.x-plugins/Revitar")
 
-# # call the CMakeLists.txt file in the vstgui_360_rc2 tutorial directory
-# add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui/tutorial")
+# call the CMakeLists.txt file in the vstgui.sf drawtest directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui.sf/drawtest")
 
-# return()
+# call the CMakeLists.txt file in the vstgui_360_rc2 tutorial directory
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/include/VST2_SDK/vstgui_360_rc2/vstgui/tutorial")
+
+return()
 
 #-------------------------------------------------------------------------------
 # Includes
