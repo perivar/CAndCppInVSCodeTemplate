@@ -183,7 +183,17 @@ if(LINK_FFTW)
 	endif()
 
 else()
-	target_link_libraries(${target} PRIVATE base sdk vstgui_support)
+
+    # PIN 28.04.2020 - add libraries vstgui and the missing windows libraries
+    if(MINGW)
+        set(VST_LIBS)
+        list(APPEND VST_LIBS base sdk vstgui_support vstgui windowscodecs)
+        list(APPEND VST_LIBS "-static-libstdc++" "-static-libgcc" "-static -lpthread")
+        target_link_libraries(${target} ${VST_LIBS})
+    else()
+		target_link_libraries(${target} PRIVATE base sdk vstgui_support)
+	endif()
+	
 endif()
 
 # --- preprocessor for D2D for windows

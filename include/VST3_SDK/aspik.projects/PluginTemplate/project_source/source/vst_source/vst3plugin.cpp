@@ -162,7 +162,7 @@ tresult PLUGIN_API VST3Plugin::initialize(FUnknown* context)
             memset(m_pParamUpdateQueueArray, 0, sizeof(VSTParamUpdateQueue *) * pluginCore->getPluginParameterCount());
         }
 
-        // --- with custom GUI, theP luginGUI object will handle details
+        // --- with custom GUI, the PluginGUI object will handle details
 		for (unsigned int i = 0; i < pluginCore->getPluginParameterCount(); i++)
         {
             PluginParameter* piParam = pluginCore->getPluginParameterByIndex(i);

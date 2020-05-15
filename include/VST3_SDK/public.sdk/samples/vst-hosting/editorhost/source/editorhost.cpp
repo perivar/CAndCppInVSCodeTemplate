@@ -414,9 +414,12 @@ tresult PLUGIN_API WindowController::resizeView (IPlugView* view, ViewRect* newS
 		return kInternalError;
 	if (resizeViewRecursionGard)
 		return kResultFalse;
+
 	ViewRect r;
 	if (plugView->getSize (&r) != kResultTrue)
 		return kInternalError;
+
+	// PIN 29.04.2020: the Aspik plugins need to disable this check because getSize is always newSize!
 	if (r == *newSize)
 		return kResultTrue;
 

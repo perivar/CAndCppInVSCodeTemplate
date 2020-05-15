@@ -116,7 +116,8 @@ static void printDebugString (const char* string)
 	}
 	else
 	{
-#if SMTG_OS_MACOS
+// PIN 29.04.2020 - don't use OutputDebugStringA in MinGW
+#if SMTG_OS_MACOS || defined(__MINGW32__)
 		fprintf (stderr, "%s", string);
 #elif SMTG_OS_WINDOWS
 		OutputDebugStringA (string);

@@ -21,6 +21,9 @@
 #include <vector>
 #include <stdint.h>
 
+// PIN 28.04.2020 - avoid the 'memset' was not declared in this scope error
+#include <cstring> 
+
 #include "readerwriterqueue.h"
 #include "atomicops.h"
 

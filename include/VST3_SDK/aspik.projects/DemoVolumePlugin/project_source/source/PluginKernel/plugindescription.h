@@ -11,8 +11,8 @@
 #define AU_COCOA_VIEW_STRING STR(AU_COCOA_VIEW_NAME)
 
 // --- AU Plugin Cocoa View Names (flat namespace) 
-#define AU_COCOA_VIEWFACTORY_NAME AUCocoaViewFactory_9A4599059BAE37AA8D58F610860388CF
-#define AU_COCOA_VIEW_NAME AUCocoaView_9A4599059BAE37AA8D58F610860388CF
+#define AU_COCOA_VIEWFACTORY_NAME AUCocoaViewFactory_2145E8A87B073F9CBE99505BADF3B153
+#define AU_COCOA_VIEW_NAME AUCocoaView_2145E8A87B073F9CBE99505BADF3B153
 
 // --- BUNDLE IDs (MacOS Only) 
 const char* kAAXBundleID = "developer.aax.demovolumeplugin.bundleID";
@@ -28,7 +28,7 @@ const char* kAUBundleName = "DemoVolumePlugin";
 const pluginType kPluginType = pluginType::kFXPlugin;
 
 // --- VST3 UUID 
-const char* kVSTFUID = "{9a459905-9bae-37aa-8d58-f610860388cf}";
+const char* kVSTFUID = "{2145e8a8-7b07-3f9c-be99-505badf3b153}";
 
 // --- 4-char codes 
 const int32_t kFourCharCode = 'dvp1';

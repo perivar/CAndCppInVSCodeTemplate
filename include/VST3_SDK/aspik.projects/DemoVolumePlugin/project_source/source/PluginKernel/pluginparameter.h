@@ -25,6 +25,8 @@
 #include "pluginstructures.h"
 #include "guiconstants.h"
 
+// PIN: 28.04.2020 -remove the no matching function for call to find(std::vector) error
+#include <algorithm>
 
 /**
 \class PluginParameter
